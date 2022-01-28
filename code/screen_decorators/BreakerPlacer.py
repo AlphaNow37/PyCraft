@@ -34,7 +34,7 @@ class BreakerPlacerManager:
                     else:
                         ok = any(not block_next.air for block_next in self.map.get_around(x, y))
                     if ok:
-                        self.map.set_case(x, y, "sand", self.game, x, y, cls=GravityBlock)
+                        self.map.set_case(x, y, "dirt", self.game, x, y, cls=GravityBlock)
             else:
                 if block.unbreakable:
                     if self.game.is_admin and left:
