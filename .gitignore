@@ -1,3 +1,5 @@
 _perso.json
 cache/*
 saves/*
+!cache
+!saves
