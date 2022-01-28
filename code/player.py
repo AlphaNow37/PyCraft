@@ -122,7 +122,7 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
     return fragments
 
 
-USER_NAME = "simonpalade"
+USER_NAME = "Alpha_Now"
 skin_dir = ROOT / "cache" / ("skin_" + USER_NAME + ".png")
 
 
