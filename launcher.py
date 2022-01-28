@@ -4,6 +4,4 @@ pygame.init()
 import code
 code.Game()
 
-
-
 pass
