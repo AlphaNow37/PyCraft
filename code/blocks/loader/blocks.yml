@@ -1,0 +1,183 @@
+__name_woods: &name_woods
+  - birch
+  - oak
+  - spruce
+  - dark_oak
+  - acacia
+  - jungle
+
+__colors_A: &colors_A
+  - white
+  - blue
+  - black
+  - green
+  - brown
+  - cyan
+  - red
+  - yellow
+  - purple
+  - orange
+  - light_blue
+  - pink
+  - magenta
+  - gray
+
+# base
+_gen_block: &gen_block
+    folder: ""
+    class: null
+
+# stones
+<<:
+  _gen_stone: &gen_stone
+    <<: *gen_block
+    solidity: 10
+    outil: pickaxe
+    folder: /stones
+    into:
+      - stone
+      - diorite
+      - granite
+      - andesite
+      - sandstone
+      - cobblestone
+
+  _gen_ore:
+    <<: *gen_stone
+    into: [ "iron_ore", "gold_ore", "emerald_ore", "coal_ore", "diamond_ore" ]
+    folder: /ores
+    class: ORE
+
+  _gen_terracotta: &gen_terracotta
+    <<: *gen_stone
+    suffix: _terracotta
+    into: *colors_A
+    folder: /terracotta
+
+  terracotta:
+    <<: *gen_terracotta
+
+  ice:
+    <<: *gen_stone
+    solidity: 1
+    folder: /other
+
+# surface
+<<:
+  _gen_surface: &gen_surface
+    <<: *gen_block
+    outil: shovel
+    folder: /surface
+    solidity: 0.7
+    into:
+      - dirt
+  _fallable:
+    <<: *gen_surface
+    class: GRAVITY
+    into:
+      - sand
+      - gravel
+  grass:
+    <<: *gen_surface
+    load_img: false
+    class: GRASS
+
+# wood
+<<:
+  _gen_wood: &gen_wood
+      <<: *gen_block
+      solidity: 1.5
+      outil: axe
+      folder: /wood
+  _gen_log:
+    <<: *gen_wood
+    suffix: _log
+    into: *name_woods
+  _gen_planks:
+    <<: *gen_wood
+    suffix: _planks
+    into: *name_woods
+    slab: true
+    stair: true
+  cactus:
+    <<: *gen_wood
+    folder: /vegetation
+    class: SUPPORTED_BLOCK
+
+# leaves
+<<:
+  _gen_leave:
+      <<: *gen_block
+      solidity: 0.5
+      outil: hoe
+      into: *name_woods
+      suffix: _leaves
+      folder: /vegetation/leaves
+
+# no_collide
+<<:
+  _gen_no_collide: &gen_no_collide
+      <<: *gen_block
+      solidity: 0
+      collision: false
+
+  # flowers
+  <<:
+    _gen_fleurs: &gen_flower
+      <<: *gen_no_collide
+      folder: /vegetation/fleurs
+      prefix: fleur_
+    _small_fleur:
+      <<: *gen_flower
+      class: SUPPORTED_BLOCK
+      into: ["pink", "blue", "yellow", "red",
+             "white_tulip", "pink_tulip", "red_tulip"]
+
+    _big_flower_bottom:
+      <<: *gen_flower
+      class: BIG_FLOWER_BOTTOM
+      into:
+      - pink2_0
+      - red2_0
+      - violet_0
+
+    _big_flower_up:
+      <<: *gen_flower
+      class: BIG_FLOWER_UP
+      into:
+        - pink2_1
+        - red2_1
+        - violet_1
+
+  dead_bush:
+    <<: *gen_no_collide
+    folder: /vegetation
+    class: SUPPORTED_BLOCK
+
+# other
+<<:
+  air:
+    <<: *gen_block
+    air: true
+    collision: false
+    load_img: false
+    solidity: null
+
+  bedrock:
+    <<: *gen_block
+    unbreakable: true
+    solidity: null
+
+  water:
+    <<: *gen_block
+    unbreakable: true
+    alpha: 150
+    collision: false
+    color: blue
+    solidity: null
+
+  snow:
+    <<: *gen_block
+    color: white
+    height: 0.2
+    class: SUPPORTED_BLOCK

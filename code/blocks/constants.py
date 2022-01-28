@@ -1,0 +1,1 @@
+HEIGHT_SNOW = (2, 5)
