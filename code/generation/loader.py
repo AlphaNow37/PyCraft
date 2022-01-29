@@ -7,7 +7,6 @@ def load_from_data(data_str: str) -> Generator:
     data = json.loads(data_str)
     data = load_data(data, gen)
     gen.__dict__ = data
-    print(data)
     return gen
 
 def load_data(data, gen):
