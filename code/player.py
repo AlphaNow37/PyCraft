@@ -1,9 +1,7 @@
-import os.path
-
 import pygame
 from .entity import BaseEntity
 import math
-from .constants import ROOT, SRC_ROOT
+from .constants import SRC_ROOT, CACHE_ROOT
 
 import requests
 import base64
@@ -123,7 +121,7 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
 
 
 USER_NAME = "Alpha_Now"
-skin_dir = ROOT / "cache" / ("skin_" + USER_NAME + ".png")
+skin_dir = CACHE_ROOT / ("skin_" + USER_NAME + ".png")
 
 
 class Player(BaseEntity):
@@ -137,7 +135,7 @@ class Player(BaseEntity):
 
     @classmethod
     def set_img(cls):
-        if not os.path.exists(skin_dir):
+        if not skin_dir.exists():
             succes = download_skin()
             if not succes:
                 return
