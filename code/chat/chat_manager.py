@@ -84,7 +84,7 @@ class Chatmanager:
         y = self.game.size_screen[1]-input_height
         self.game.screen.blit(new_input_surface, (0, y))
         for line in self.lines_surfaces[::-1]:
-            y -= HEIGHT_LINE*self.game.size_screen[1]/480*(line.text.line_counter("\n") + 1)
+            y -= HEIGHT_LINE*self.game.size_screen[1]/480*(line.text.count("\n") + 1)
             y -= PAD*2 * self.game.size_screen[1] / 480
             y += 1
             line.draw_xy_exact(0, y)
@@ -102,7 +102,7 @@ class Chatmanager:
     def send(self, text, error=False):
         pgt = PygameText(self.game, 0, 0, None, text,
                          color_text="red" if error else "white", color_fond="black",
-                         height=HEIGHT_LINE*(text.line_counter("\n") + 1), pad=PAD, alpha=ALPHA)
+                         height=HEIGHT_LINE*(text.count("\n") + 1), pad=PAD, alpha=ALPHA)
         self.lines_surfaces.append(pgt)
 
     def tick(self):

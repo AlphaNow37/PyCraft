@@ -97,8 +97,7 @@ class EventManager:
                     self.player.set_sneaking(pressed[pygame.K_LSHIFT] or pressed[pygame.K_s])
 
     def change_gamemode(self):
-        self.game.gamemode = GAMEMODES[(GAMEMODES.index(self.game.gamemode) + 1) % len(GAMEMODES)]
-        self.game.is_admin = self.game.gamemode in ["CREATIVE", "SPECTATOR"]
+        self.game.change_gamemode(GAMEMODES[(GAMEMODES.index(self.game.gamemode) + 1) % len(GAMEMODES)])
 
 
 def get_blocks_size(size_screen, zoom):

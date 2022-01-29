@@ -129,8 +129,7 @@ class Game:
         self.raining: Property = w_manager.raining
         self.next_rain: Property = w_manager.next_rain
 
-        self.gamemode = "SURVIVAL" if 0 else "SPECTATOR"
-        self.is_admin = self.gamemode in ["CREATIVE", "SPECTATOR"]
+        self.change_gamemode("SURVIVAL" if 0 else "SPECTATOR")
 
     def save_world(self):
         name = "save"
@@ -144,3 +143,7 @@ class Game:
         }, indent=4)
         general_data_path.write_text(general_data, "UTF-8")
         print("save")
+
+    def change_gamemode(self, new_gamemode):
+        self.gamemode = new_gamemode
+        self.is_admin = self.gamemode in ["CREATIVE", "SPECTATOR"]

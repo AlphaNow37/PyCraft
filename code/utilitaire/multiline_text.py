@@ -8,7 +8,7 @@ class PygameText:
         self.height = height + pad*2
         if font is None:
             font = pygame.font.Font(None, 60)
-        self.text = text
+        self.text: str = text
         lines = text.split("\n")
         lines_surfaces = [font.render(line, True, color_text) for line in lines]
         max_width = max(lines_surfaces, key=pygame.Surface.get_width).get_width()
