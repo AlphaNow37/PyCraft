@@ -136,7 +136,7 @@ class Game:
         name = "save"
         path = ROOT / "saves" / name
         if not path.exists():
-            path.mkdir()
+            path.mkdir(parents=True)
         general_data_path = path / "data.json"
         general_data = json.dumps({
             "tick": self.tick,
