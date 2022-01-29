@@ -62,6 +62,13 @@ class Block(base_elements.BaseCarre):
             if (value := getattr(self, name)) is not None
         }
 
+    def get_reduced_visualisation(self):
+        return {
+            name: value
+            for (name, value) in self.get_visualisation().items()
+            if blocks[self.name].get(name, ...) != value
+        }
+
     def as_str_vue(self, visu=None):
         visu = visu if visu is not None else self.get_visualisation()
         _n = "\n"

@@ -1,3 +1,4 @@
+import json
 from .player import Player
 from . import blocks
 from typing import Union
@@ -7,6 +8,20 @@ from .constants import *
 """
 Fichier servant a gérer la map, et déclanchant les générations de terrain
 """
+
+
+dct_name_to_cls = {
+                "ORE": blocks.Ore,
+                "GRASS": blocks.Grass,
+                "BIG_FLOWER_UP": blocks.BigFlowerUp,
+                "BIG_FLOWER_BOTTOM": blocks.BigFlowerBottom,
+                "SUPPORTED_BLOCK": blocks.SupportedBlock,
+                "GRAVITY": blocks.GravityBlock,
+            }
+dct_cls_to_name = {
+    cls: name for (name, cls) in dct_name_to_cls.items()
+}
+
 
 class Map:
     def __init__(self, game):
@@ -20,8 +35,8 @@ class Map:
 
         self.right_generator = Generator()
         self.right_generator.setup()
-        self.right_world = []
-        self.right_biome = []
+        self.right_world: list[list[blocks.Block]] = []
+        self.right_biome: list[list[blocks.Block]] = []
 
         self.player = Player(self.game, self.get_top(0) + 0.5)
 
@@ -57,14 +72,7 @@ class Map:
         properties: dict
         classe: type[blocks.Block] = properties.pop("class", None)
         if isinstance(classe, str):
-            classe = {
-                "ORE": blocks.Ore,
-                "GRASS": blocks.Grass,
-                "BIG_FLOWER_UP": blocks.BigFlowerUp,
-                "BIG_FLOWER_BOTTOM": blocks.BigFlowerBottom,
-                "SUPPORTED_BLOCK": blocks.SupportedBlock,
-                "GRAVITY": blocks.GravityBlock,
-            }[classe]
+            classe = dct_name_to_cls[classe]
         elif classe is None:
             classe = blocks.Block
         block = classe(name, self.game, x, y, **properties)
@@ -126,3 +134,18 @@ class Map:
             for _ in range(x_ - len(world) + 1):
                 self._add_column(cote)
         world[x_][y] = block
+
+    def get_world_data(self):
+        return json.dumps(
+            {
+                name: [
+                    [
+                        [
+                            case.name,
+                            case.get_reduced_visualisation()
+                            | ({"class": dct_cls_to_name[case.__class__]} if case.__class__ != blocks.Block else {})
+                        ] for case in column
+                    ] for column in world
+                ] for (name, world) in [("left", self.left_world), ("right", self.right_world)]
+            }
+        )

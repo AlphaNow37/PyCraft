@@ -142,6 +142,8 @@ class Game:
             **self.sc_deco.get_data()
         }, indent=4)
         general_data_path.write_text(general_data, "UTF-8")
+        world_data_path = path / "world.json"
+        world_data_path.write_text(self.map.get_world_data(), "UTF-8")
         print("save")
 
     def change_gamemode(self, new_gamemode):
