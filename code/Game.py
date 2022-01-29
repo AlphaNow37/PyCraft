@@ -143,6 +143,8 @@ class Game:
         general_data_path.write_text(general_data, "UTF-8")
         world_data_path = path / "world.json"
         world_data_path.write_text(self.map.get_world_data(), "UTF-8")
+        little_map_data_path = path / "little_map.json"
+        little_map_data_path.write_text(json.dumps(self.map.get_little_data(), indent=4), "UTF-8")
         print("save")
 
     def open_world(self, name="save"):
@@ -153,7 +155,10 @@ class Game:
         self.sc_deco.set_data(general_data)
         world_data_path = path / "world.json"
         world_data = json.loads(world_data_path.read_text("UTF-8"))
-        self.map.set_data(world_data)
+        self.map.set_world_data(world_data)
+        little_map_data_path = path / "little_map.json"
+        little_map_data = json.loads(little_map_data_path.read_text("UTF-8"))
+        self.map.set_little_data(little_map_data)
         print("open")
 
     def change_gamemode(self, new_gamemode):

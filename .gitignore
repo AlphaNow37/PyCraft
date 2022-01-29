@@ -1,6 +1,7 @@
 _perso.json
 cache/*
 saves/*
+code/tests
 !cache
 !saves
 !.gitignore

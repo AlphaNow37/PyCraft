@@ -224,5 +224,17 @@ class Player(BaseEntity):
         if down is not None and down.collision:
             self.act_speed_y += 0.7
 
+    def get_data(self):
+        return {
+            "x": self.x,
+            "y": self.y,
+            "life": self.life,
+        }
+
+    def set_data(self, data):
+        self.life = data["life"]
+        self.x = data["x"]
+        self.y = data["y"]
+
 
 threading.Thread(target=Player.set_img).start()

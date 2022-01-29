@@ -1,3 +1,5 @@
+from functools import partial
+
 from .TerrainGenerator import TerrainGenerator
 from .seeder import random
 from .generation_blocks import BLOCKS, STONES
@@ -55,15 +57,10 @@ class PatchGenerator(TerrainGenerator):
                 )
 
     def add_blob(self, block, nb, y, to_replace=STONES, is_ore=False):
-        def can_go_on(x, y):
-            try:
-                return self.resume_world[x][y][0].upper() in to_replace
-            except IndexError:
-                return False
-
         if not hasattr(to_replace, "__contains__"):
             to_replace = [to_replace]
         blocks_pos = [(-1, y), (-2, y)]
+        can_go_on = partial(self.patch_can_go_on, to_replace)
 
         while nb > 0:
             finish = False
@@ -103,3 +100,9 @@ class PatchGenerator(TerrainGenerator):
                     "y": y,
                     "condition": can_go_on
                 })
+
+    def patch_can_go_on(self, to_replace, x, y):
+        try:
+            return self.resume_world[x][y][0].upper() in to_replace
+        except IndexError:
+            return False

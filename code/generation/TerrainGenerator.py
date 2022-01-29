@@ -6,6 +6,10 @@ from .BaseGenerator import BaseGenerator
 AIR_BLOCKS = ["air", "snow"] + FLEURS_BLOCKS_NAMES
 
 
+def _default_true(*_, **__):
+    return True
+
+
 class TerrainGenerator(BaseGenerator):
     def __init__(self):
         super(TerrainGenerator, self).__init__()
@@ -85,7 +89,7 @@ class TerrainGenerator(BaseGenerator):
             element = to_put[x_]
             element["x"] -= 1
             if element["x"] < 0:
-                condition = element.get("condition", lambda *_, **__: True)
+                condition = element.get("condition", _default_true)
                 is_ore = element.get("is_ore", False)
                 x = element["x"]
                 y = element["y"]

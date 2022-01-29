@@ -2,7 +2,7 @@ import json
 from .player import Player
 from . import blocks
 from typing import Union
-from .generation import Generator
+from .generation import Generator, load_from_data, get_data_from_gen
 from .constants import *
 
 """
@@ -160,7 +160,7 @@ class Map:
             }
         )
 
-    def set_data(self, data: dict[str, list[list[tuple[str, dict[str, str]]]]]):
+    def set_world_data(self, data: dict[str, list[list[tuple[str, dict[str, str]]]]]):
         self.left_world = []
         self.right_world = []
         self.left_biomes = data["left_biomes"]
@@ -169,3 +169,14 @@ class Map:
             for column in data[name]:
                 self._add_column(cote, column)
 
+    def get_little_data(self):
+        return {
+            "left_gen": get_data_from_gen(self.left_generator),
+            "right_gen": get_data_from_gen(self.right_generator),
+            "player": self.player.get_data()
+        }
+
+    def set_little_data(self, data):
+        self.left_generator = load_from_data(data["left_gen"])
+        self.right_generator = load_from_data(data["right_gen"])
+        self.player.set_data(data["player"])
