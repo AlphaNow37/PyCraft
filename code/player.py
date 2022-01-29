@@ -164,6 +164,7 @@ class Player(BaseEntity):
     def tp_to(self, x, y):
         self.x = x
         self.y = y - self.height / 4 + 1
+        self.game.camera_center = (self.x, self.y)
 
     def get_distance(self, x, y):
         return math.dist((self.x, self.y), (x, y))
@@ -233,8 +234,7 @@ class Player(BaseEntity):
 
     def set_data(self, data):
         self.life = data["life"]
-        self.x = data["x"]
-        self.y = data["y"]
+        self.tp_to(data["x"], data["y"])
 
 
 threading.Thread(target=Player.set_img).start()

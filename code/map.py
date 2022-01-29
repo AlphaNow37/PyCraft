@@ -2,7 +2,7 @@ import json
 from .player import Player
 from . import blocks
 from typing import Union
-from .generation import Generator, load_from_data, get_data_from_gen
+from .generation import Generator, load_from_data, get_data_from_gen, seeder
 from .constants import *
 
 """
@@ -39,6 +39,8 @@ class Map:
         self.right_biomes = []
 
         self.player = Player(self.game, self.get_top(0) + 0.5)
+
+        self.seed = seeder.seeder.seed
 
     def draw(self):
         x_cam, y_cam = map(int, self.game.camera_center)
@@ -173,10 +175,12 @@ class Map:
         return {
             "left_gen": get_data_from_gen(self.left_generator),
             "right_gen": get_data_from_gen(self.right_generator),
-            "player": self.player.get_data()
+            "player": self.player.get_data(),
+            "seed": self.seed,
         }
 
     def set_little_data(self, data):
+        seeder.seeder.reset(data["seed"])
         self.left_generator = load_from_data(data["left_gen"])
         self.right_generator = load_from_data(data["right_gen"])
         self.player.set_data(data["player"])
