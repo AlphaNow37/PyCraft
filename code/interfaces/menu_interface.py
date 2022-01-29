@@ -15,5 +15,6 @@ class MenuInterface(BaseInterface):
                 ("Keys", partial(self.change_interface, keys_interface.KeyInterface)),
                 ("reset", lambda: [game.reset_world(), self.change_interface(None)]),
                 ("save", lambda: [game.save_world(), self.change_interface(None)]),
+                ("open", lambda: [game.open_world(), self.change_interface(None)]),
             ])
         ]

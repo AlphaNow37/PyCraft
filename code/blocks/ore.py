@@ -7,6 +7,7 @@ class Ore(Block):
 
     def __init__(self, name, game, x, y, name_fond, **kwargs):
         self.fond = blocks[name_fond]["img"]
+        self.name_fond = name_fond
         super(Ore, self).__init__(name, game, x, y, **kwargs)
 
     def draw(self, x_self=None, y_self=None, img=None, width=None, height=None):

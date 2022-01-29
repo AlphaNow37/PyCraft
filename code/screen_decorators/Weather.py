@@ -54,6 +54,10 @@ class WeatherManager:
     def get_data(self):
         return {"raining": self.raining.get(), "next_rain": self.next_rain.get()}
 
+    def set_data(self, data: dict):
+        self.raining.set(data["raining"])
+        self.next_rain.set(data["next_rain"])
+
 
 @cache
 def get_surface(width_sc, height_sc, size_block, img_id: int):

@@ -39,3 +39,9 @@ class ScreenDecorator:
 
     def get_data(self):
         return self.time_manager.get_data() | self.weather_manager.get_data()
+
+    def set_data(self, data):
+        self.weather_manager.set_data(data)
+        self.time_manager.set_data(data)
+
+

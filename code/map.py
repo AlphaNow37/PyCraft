@@ -30,13 +30,13 @@ class Map:
     def generate(self):
         self.left_generator = Generator()
         self.left_generator.setup()
-        self.left_world = []
+        self.left_world: list[list[blocks.Block]] = []
         self.left_biomes = []
 
         self.right_generator = Generator()
         self.right_generator.setup()
         self.right_world: list[list[blocks.Block]] = []
-        self.right_biome: list[list[blocks.Block]] = []
+        self.right_biomes = []
 
         self.player = Player(self.game, self.get_top(0) + 0.5)
 
@@ -78,18 +78,25 @@ class Map:
         block = classe(name, self.game, x, y, **properties)
         return block
 
-    def _add_column(self, cote):
-        generator = self.left_generator if cote == -1 else self.right_generator
-        generator.generate()
+    def _add_column(self, cote, column=None):
+
         world = self.left_world if cote == -1 else self.right_world
         transformer_x = (lambda x: -x-1) if cote == -1 else (lambda x: x)
-        li_biome = self.left_biomes if cote == -1 else self.right_biome
-        world.append(
-            [self.get_block_from_resume(resume, transformer_x(len(world)), y)
-             for y, resume in enumerate(generator.resume_world[0])]
-        )
-        li_biome.append(generator.biomes[0])
-        generator.remove_first_column()
+        li_biome = self.left_biomes if cote == -1 else self.right_biomes
+        if column is None:
+            generator = self.left_generator if cote == -1 else self.right_generator
+            generator.generate()
+            world.append(
+                [self.get_block_from_resume(resume, transformer_x(len(world)), y)
+                 for y, resume in enumerate(generator.resume_world[0])]
+            )
+            li_biome.append(generator.biomes[0])
+            generator.remove_first_column()
+        else:
+            world.append(
+                [self.get_block_from_resume(resume, transformer_x(len(world)), y)
+                 for y, resume in enumerate(column)]
+            )
 
     def _get_world_from_x(self, x):
         return (abs(x)-1, self.left_world, -1) if x < 0 else (x, self.right_world, 1)
@@ -98,7 +105,7 @@ class Map:
         if x is None:
             x = self.game.player.x
         x, _, cote = self._get_world_from_x(x)
-        li_biome = self.left_biomes if cote == -1 else self.right_biome
+        li_biome = self.left_biomes if cote == -1 else self.right_biomes
         return li_biome[int(x)]
 
     def destroy_case(self, x, y):
@@ -147,5 +154,18 @@ class Map:
                         ] for case in column
                     ] for column in world
                 ] for (name, world) in [("left", self.left_world), ("right", self.right_world)]
+            } | {
+                "left_biomes": self.left_biomes,
+                "right_biomes": self.right_biomes,
             }
         )
+
+    def set_data(self, data: dict[str, list[list[tuple[str, dict[str, str]]]]]):
+        self.left_world = []
+        self.right_world = []
+        self.left_biomes = data["left_biomes"]
+        self.right_biomes = data["right_biomes"]
+        for name, cote in (("left", -1), ("right", 1)):
+            for column in data[name]:
+                self._add_column(cote, column)
+

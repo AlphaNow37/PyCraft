@@ -54,8 +54,8 @@ class Block(base_elements.BaseCarre):
     def get_visualisation(self):
         return {
             name: value
-            for name in ("air", "collision", "unbreakable", "outil")
-            if (value := getattr(self, name)) != getattr(Block, name)
+            for name in ("air", "collision", "unbreakable", "outil", "name_fond")
+            if (value := getattr(self, name, None)) != getattr(Block, name, None)
         } | {
             name: value
             for name in ("solidity", )

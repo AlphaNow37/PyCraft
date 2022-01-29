@@ -58,6 +58,9 @@ class TimeManager:
     def get_data(self):
         return {"time": self.time.get()}
 
+    def set_data(self, data: dict):
+        self.time.set(data["time"])
+
     def get_pos(self, angle):
         angle = math.radians(angle)
         x = math.sin(angle) * self.game.zoom / 2
