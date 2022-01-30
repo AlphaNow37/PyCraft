@@ -9,6 +9,7 @@ from .entity import EntityManager
 from .chat import Chatmanager
 from .interfaces import BaseInterface
 from .constants import ROOT
+import os
 
 
 """
@@ -16,6 +17,10 @@ Fichier principale aceuillant la classe Game, la racine du jeu
 """
 
 class Game:
+    saves_path = ROOT / "saves"
+    if not saves_path.exists():
+        saves_path.mkdir()
+
     def __init__(self):
         self.size_screen = (1080, 720)
 
@@ -132,9 +137,17 @@ class Game:
         self.change_gamemode("SURVIVAL" if 0 else "SPECTATOR")
 
     def save_world(self, name="save"):
-        path = ROOT / "saves" / name
+        if "." in name or "/" in name or "\\" in name:
+            raise ValueError(f"Invalid name {name}")
+        path = self.saves_path / name
         if not path.exists():
-            path.mkdir(parents=True)
+            try:
+                path.mkdir()
+            except OSError as e:
+                if e.winerror == 123:  # Problem with the name of the dir
+                    raise ValueError(f"Invalid name {name}")
+                else:
+                    raise e
         general_data_path = path / "data.json"
         general_data = json.dumps({
             "tick": self.tick,
@@ -148,7 +161,9 @@ class Game:
         print("save")
 
     def open_world(self, name="save"):
-        path = ROOT / "saves" / name
+        path = self.saves_path / name
+        if not path.exists():
+            raise ValueError(f"The save {name} doesn't exist")
         general_data_path = path / "data.json"
         general_data = json.loads(general_data_path.read_text("UTF-8"))
         self.tick = general_data["tick"]

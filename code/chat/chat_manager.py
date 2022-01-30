@@ -19,6 +19,7 @@ class Chatmanager:
         self.next_back = 15
         self.lasts_inputs = []
         self.last_input_index = 0
+        self.on_input = False
 
         self.next_barre_vue_change = self.barre_change_time
         self.barre_type = True
@@ -33,8 +34,10 @@ class Chatmanager:
                     self.barre_index -= 1
             elif key == pygame.K_RETURN:
                 self.lasts_inputs.append(self.input)
-                self.send(self.input)
-                if self.input.startswith("/"):
+                self.send(f"[You] {self.input}")
+                if self.on_input:
+                    self.finish_input(self.input)
+                elif self.input.startswith("/"):
                     command.execute(self.input, self.game)
                 self.input = ""
                 self.barre_index = 0
@@ -114,3 +117,34 @@ class Chatmanager:
                 self.next_back = 1
         else:
             self.next_back = 15
+
+    def start_input(self, command_finish, text):
+        self.on_input = True
+        self.command_finish = command_finish
+        self.send(f"[Input] {text} :")
+        self.open_chat()
+
+    def finish_input(self, text):
+        if text in ("...", "/", "stop"):
+            self.stop_input("Exiting", error=True)
+        res = self.command_finish(text)
+        match res:
+            case True:
+                self.stop_input("Correct answers")
+            case False:
+                self.send("[Input] Incorrect answers", error=True)
+            case (False, str(text)):
+                self.send(f"[Input] {text}", error=True)
+            case (True, str(text)):
+                self.stop_input(text)
+            case None:
+                self.stop_input()
+            case _:
+                raise ValueError(f"Error: incorrect res for the finish command: {res}")
+
+    def stop_input(self, text=None, error=None):
+        if text is not None:
+            self.send(f"[Input] {text}", error=error)
+        self.close_chat()
+        del self.command_finish
+        self.on_input = False
