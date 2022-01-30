@@ -99,5 +99,6 @@ setblock -> raccourcis pour block set
 """
 
 
-block_command = command.Command(name="block", subcommands=[get_block, set_block, fill], function="get", help_text=block_help)
+block_command = command.Command(name="block", subcommands=[get_block, set_block, fill],
+                                function="get", help_text=block_help)
 command.register_command(block_command)

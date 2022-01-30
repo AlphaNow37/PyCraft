@@ -25,7 +25,6 @@ def parse_value(value: dict, name: str):
 
 
 def register_block(value: dict, name: str):
-
     stair = value.pop("stair", False)
     slab = value.pop("slab", False)
     value = parse_value(value.copy(), name)
@@ -52,4 +51,5 @@ for name_block, block in blocks_loaded.items():
         name = block.pop("name", name_block)
         register_block(block, name)
 
+# import json
 # print(json.dumps(blocks, default=repr, indent=4))

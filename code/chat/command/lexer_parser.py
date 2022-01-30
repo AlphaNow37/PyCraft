@@ -6,7 +6,7 @@ from json import loads as json_loads, JSONDecodeError
 
 regex_arguments = re.compile(r"""((?P<enter>["']).*(?P=enter))|([^ ]+)""")
 regex_number = re.compile(r"-?[\d]*\.?[\d]")
-regex_block = re.compile(r"(minecraft:|pycraft:)?(?P<name>[a-zA-Z]+)")
+regex_block = re.compile(r"(minecraft:|pycraft:)?(?P<name>[a-zA-Z_]+)")
 regex_pos = re.compile(r"~[+-]?[0-9]*")
 regex_json = re.compile(r"(?P<arg>.+)(?P<json>{.*})")
 bools = {
