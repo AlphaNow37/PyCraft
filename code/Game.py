@@ -9,7 +9,6 @@ from .entity import EntityManager
 from .chat import Chatmanager
 from .interfaces import BaseInterface
 from .constants import ROOT
-import os
 
 
 """
