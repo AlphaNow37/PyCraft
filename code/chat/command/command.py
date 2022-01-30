@@ -12,7 +12,6 @@ Commandes:
 def _default_command(*_, **__):
     raise responses.CommandError("You can't call directly this command")
 
-
 class Command:
     nb_params_min: int
     nb_params_max: int
@@ -53,6 +52,7 @@ class Command:
         self.nb_params_max: int
         self._rooted = _rooted
         self.help_text = help_text.strip()
+        self.__doc__ = self.help_text
 
     def _nbargs_match(self, nb):
         if self.nb_params_possible:

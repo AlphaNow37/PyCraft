@@ -1,7 +1,7 @@
 import pygame
 from .entity import BaseEntity
 import math
-from .constants import SRC_ROOT, CACHE_ROOT
+from .constants import SRC_ROOT, CACHE_ROOT, USER_ROOT
 
 import requests
 import base64
@@ -13,9 +13,9 @@ import threading
 from typing import Union
 
 
-def download_skin():
+def download_skin(skin_dir, username):
     try:
-        resp_to_get_uuid = requests.get(f"https://api.mojang.com/users/profiles/minecraft/{USER_NAME}")
+        resp_to_get_uuid = requests.get(f"https://api.mojang.com/users/profiles/minecraft/{username}")
         uuid = resp_to_get_uuid.json()["id"]
         resp_to_get_skin = requests.get(f"https://sessionserver.mojang.com/session/minecraft/profile/{uuid}")
         value_encoded = resp_to_get_skin.json()["properties"][0]["value"]
@@ -120,12 +120,8 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
     return fragments
 
 
-USER_NAME = "Alpha_Now"
-skin_dir = CACHE_ROOT / ("skin_" + USER_NAME + ".png")
-
-
 class Player(BaseEntity):
-    username = USER_NAME
+    username = "None"
     fragments: dict[str, Union[dict[str, pygame.Surface], pygame.Surface]]
     fragments = get_img_from_skin(pygame.image.load(SRC_ROOT / "entity" / "player.png"))
 
@@ -135,11 +131,15 @@ class Player(BaseEntity):
 
     @classmethod
     def set_img(cls):
+        with open(USER_ROOT / "user.json") as file:
+            user_data = json.load(file)
+        cls.username = user_data["username"]
+        skin_dir = CACHE_ROOT / ("skin_" + cls.username + ".png")
         if not skin_dir.exists():
-            succes = download_skin()
+            succes = download_skin(skin_dir, cls.username)
             if not succes:
                 return
-        base_skin = pygame.image.load(skin_dir)
+        base_skin = pygame.image.load(str(skin_dir))
         fragments = cls.fragments = get_img_from_skin(base_skin)
         cls.fragments = fragments
         cls.img = fragments["front"]

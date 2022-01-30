@@ -13,7 +13,6 @@ def execute(input_command: str, game: Game):
         if not args:
             raise responses.CommandError(f"Invalid command '/{input_command}'")
         res = cmd.root(*args, game=game)
-        print(res)
         if isinstance(res, Generator):
             exceptions = res
         else:
