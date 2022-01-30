@@ -8,12 +8,15 @@ class BaseCarre:
     img: pygame.Surface = pygame.Surface((1, 1))
     img.fill((100, 0, 100))
     frame = 0
-    imgs = None
+    imgs: list[pygame.Surface] | None = None
 
     width = 1
     height = 1
 
     alpha = 255
+
+    flip_x = False
+    flip_y = False
 
     def __init__(self, game, x, y, **kwargs):
         self.__dict__.update(kwargs)
@@ -43,6 +46,7 @@ class BaseCarre:
         width *= self.game.size_block
         height *= self.game.size_block
         img = pygame.transform.scale(img, (int(width)+1, int(height)+1))
+        img = pygame.transform.flip(img, self.flip_x, self.flip_y)
         img.set_alpha(self.alpha)
 
         y = height_screen - y - height
