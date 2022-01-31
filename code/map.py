@@ -56,10 +56,10 @@ class Map:
         y = int(y)
         if not 0 <= y < HEIGHT_WORLD:
             return None
-        x_, world, cote = self._get_world_from_x(x)
+        x_, world, side = self._get_world_from_x(x)
         if x_+20 > len(world):
             for _ in range(x_ - len(world) + 1):
-                self._add_column(cote)
+                self._add_column(side)
         return world[x_][y]
 
     def get_top(self, x):
@@ -80,13 +80,13 @@ class Map:
         block = classe(name, self.game, x, y, **properties)
         return block
 
-    def _add_column(self, cote, column=None):
+    def _add_column(self, side, column=None):
 
-        world = self.left_world if cote == -1 else self.right_world
-        transformer_x = (lambda x: -x-1) if cote == -1 else (lambda x: x)
-        li_biome = self.left_biomes if cote == -1 else self.right_biomes
+        world = self.left_world if side == -1 else self.right_world
+        transformer_x = (lambda x: -x-1) if side == -1 else (lambda x: x)
+        li_biome = self.left_biomes if side == -1 else self.right_biomes
         if column is None:
-            generator = self.left_generator if cote == -1 else self.right_generator
+            generator = self.left_generator if side == -1 else self.right_generator
             generator.generate()
             world.append(
                 [self.get_block_from_resume(resume, transformer_x(len(world)), y)
@@ -106,8 +106,8 @@ class Map:
     def get_biome(self, x=None):
         if x is None:
             x = self.game.player.x
-        x, _, cote = self._get_world_from_x(x)
-        li_biome = self.left_biomes if cote == -1 else self.right_biomes
+        x, _, side = self._get_world_from_x(x)
+        li_biome = self.left_biomes if side == -1 else self.right_biomes
         return li_biome[int(x)]
 
     def destroy_case(self, x, y):
@@ -138,10 +138,10 @@ class Map:
         else:
             cls = kwargs.pop("cls", blocks.Block)
             block: blocks.Block = cls(*args, **kwargs)
-        x_, world, cote = self._get_world_from_x(x)
+        x_, world, side = self._get_world_from_x(x)
         if x_+20 > len(world):
             for _ in range(x_ - len(world) + 1):
-                self._add_column(cote)
+                self._add_column(side)
         world[x_][y] = block
 
     def get_world_data(self):
@@ -167,9 +167,9 @@ class Map:
         self.right_world = []
         self.left_biomes = data["left_biomes"]
         self.right_biomes = data["right_biomes"]
-        for name, cote in (("left", -1), ("right", 1)):
+        for name, side in (("left", -1), ("right", 1)):
             for column in data[name]:
-                self._add_column(cote, column)
+                self._add_column(side, column)
 
     def get_little_data(self):
         return {

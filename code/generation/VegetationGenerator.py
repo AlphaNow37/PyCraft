@@ -160,13 +160,13 @@ def get_structure(name, seed):
             for x in range(-3, 4)
             for y in range(1 if abs(x) == 3 else 2)
         ]
-        for cote, dir_ in ((first_bas, 1), (-first_bas, 2)):
+        for side, dir_ in ((first_bas, 1), (-first_bas, 2)):
             tree += [
-                (x*cote, height+(x*dir_)-1-h, BLOCKS["ACACIA_LOG"], True)
+                (x*side, height+(x*dir_)-1-h, BLOCKS["ACACIA_LOG"], True)
                 for x in range(1, size_branch+1)
                 for h in range(dir_)
             ] + [
-                ((x+size_branch)*cote, height+y_+size_branch*dir_, BLOCKS["ACACIA_LEAVES"], False)
+                ((x+size_branch)*side, height+y_+size_branch*dir_, BLOCKS["ACACIA_LEAVES"], False)
                 for x, y_ in leaves_struct
             ]
 

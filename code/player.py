@@ -62,16 +62,16 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
              4],
     }
     fragments: dict[str, Union[dict[str, pygame.Surface], pygame.Surface]] = {}
-    for name, cotes in names_fragments.items():
+    for name, sides in names_fragments.items():
         fragments[name] = frag = {}
-        surface_1_rect, surface_2_rect, width_cote = cotes
+        surface_1_rect, surface_2_rect, width_side = sides
         x_front_1, y_front_1 = surface_1_rect[:2]
         x_front_2, y_front_2 = surface_2_rect[:2]
         width, height = surface_1_rect[2: 4]
-        for name_cote, x, width_morceau in [("front", 0, width), ("left", -width_cote, width_cote), ("right", width, width_cote)]:
-            frag[name_cote] = pygame.Surface((width_morceau, height))
-            frag[name_cote].blit(skin.subsurface([x_front_1+x, y_front_1, width_morceau, height]), (0, 0))
-            frag[name_cote].blit(skin.subsurface([x_front_2+x, y_front_2, width_morceau, height]), (0, 0))
+        for side_name, x, width_morceau in [("front", 0, width), ("left", -width_side, width_side), ("right", width, width_side)]:
+            frag[side_name] = pygame.Surface((width_morceau, height))
+            frag[side_name].blit(skin.subsurface([x_front_1+x, y_front_1, width_morceau, height]), (0, 0))
+            frag[side_name].blit(skin.subsurface([x_front_2+x, y_front_2, width_morceau, height]), (0, 0))
     fragments["cou"] = {
         "front": fragments["body"]["front"].subsurface([2, 0, 4, 1]),
         "left": fragments["body"]["left"].subsurface([1, 0, 2, 1]),
