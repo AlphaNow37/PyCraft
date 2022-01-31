@@ -30,9 +30,18 @@ def register_block(value: dict, name: str):
     value = parse_value(value.copy(), name)
     img = value.get("img")
     if stair:
-        parse_value(value | {"img": img_modifier.get_stair_img(img), "load_img": False}, f"{name}_stair")
+        stair_modifiers = {
+            "img": img_modifier.get_stair_img(img), "load_img": False,
+            "support_x_flip": True, "support_y_flip": True,
+        }
+
+        parse_value(value | stair_modifiers, f"{name}_stair")
     if slab:
-        parse_value(value | {"img": img_modifier.get_slab_img(img), "load_img": False, "height": 0.5}, f"{name}_slab")
+        slab_mofidier = {
+            "img": img_modifier.get_slab_img(img), "load_img": False,
+            "support_y_flip": True, "height": 0.5, "is_slab": True,
+        }
+        parse_value(value | slab_mofidier, f"{name}_slab")
 
 
 blocks: dict[str, dict] = {}

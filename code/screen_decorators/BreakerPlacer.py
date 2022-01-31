@@ -1,7 +1,7 @@
 from ..base_elements import BaseCarre
 import pygame
 from .. import Game
-from ..blocks import GravityBlock
+from ..blocks import Block
 from ..constants import PLAYER_RANGE
 from ..constants import SRC_ROOT
 
@@ -34,7 +34,13 @@ class BreakerPlacerManager:
                     else:
                         ok = any(not block_next.air for block_next in self.map.get_around(x, y))
                     if ok:
-                        self.map.set_case(x, y, "dirt", self.game, x, y, cls=GravityBlock)
+                        x_side, y_side = self.game.block_side
+                        block = Block("oak_planks_slab", self.game, x, y)
+                        if block.support_x_flip:
+                            block.flip_x = x_side < 0.5
+                        if block.support_y_flip:
+                            block.flip_y = y_side < 0.5
+                        self.map.set_case(x, y, block)
             else:
                 if block.unbreakable:
                     if self.game.is_admin and left:

@@ -12,6 +12,11 @@ class Block(base_elements.BaseCarre):
     solidity = 0.5
     outil = None
 
+    support_x_flip = False
+    support_y_flip = False
+
+    is_slab = False
+
     destroyed = False
 
     @staticmethod
@@ -23,6 +28,8 @@ class Block(base_elements.BaseCarre):
         self.__dict__.update(blocks[name])
         self.__dict__.update(kwargs)
         self.img.set_colorkey((0, 0, 0, 0))
+        if self.is_slab:
+            self.draw = self.slab_draw
 
         self.friends: list[tuple[int, int]] = self.func_get_pos_friends(self.x, self.y)
 
@@ -51,10 +58,14 @@ class Block(base_elements.BaseCarre):
     def update(self, from_x, from_y):
         pass
 
+    def slab_draw(self, x_self=None, y_self=None, img=None, width=None, height=None):
+        y_self = y_self if y_self is not None else self.y
+        super().draw(x_self, y_self+0.5-0.5*self.flip_y, img, width, height)
+
     def get_visualisation(self):
         return {
             name: value
-            for name in ("air", "collision", "unbreakable", "outil", "name_fond")
+            for name in ("air", "collision", "unbreakable", "outil", "name_fond", "flip_x", "flip_y")
             if (value := getattr(self, name, None)) != getattr(Block, name, None)
         } | {
             name: value

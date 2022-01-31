@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import json
 from . import map
@@ -42,9 +44,11 @@ class Game:
 
         self.running = True
         self.pause = False
+        self.mouse_pos = (None, None)
+        self.mouse_pos_side = (None, None)
 
         self.chat_manager = Chatmanager(self)
-        self.mouse_pos = (None, None)
+
         self.run()
 
     def run(self):
@@ -85,7 +89,10 @@ class Game:
 
     def update(self):
         if self.interface is None:
-            self.mouse_pos = self.get_pos_from_screenpos(pygame.mouse.get_pos())
+            x, y, side_x, side_y = self.get_pos_from_screenpos(pygame.mouse.get_pos())
+            self.mouse_pos = [x, y]
+            self.block_side = [side_x, side_y]
+
             self.player.update_vue_dir()
 
             self.player.tick()
@@ -108,15 +115,9 @@ class Game:
         y /= self.size_block
         x += x_cam
         y += y_cam
-        if x < 0:
-            x = int(x-1)
-        else:
-            x = int(x)
-        if y < 0:
-            y = int(y-1)
-        else:
-            y = int(y)
-        return x, y
+        x_block = math.floor(x)
+        y_block = math.floor(y)
+        return x_block, y_block, x-x_block, y-y_block
 
     def reset_world(self):
         self.map.generate()
