@@ -7,3 +7,5 @@ code/tests/**
 !cache
 !saves
 !.gitignore
+
+/.idea/**
