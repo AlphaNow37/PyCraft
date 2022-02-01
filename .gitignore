@@ -3,6 +3,10 @@ cache/**
 saves/**
 code/tests
 code/tests/**
+
 !cache
 !saves
 !.gitignore
+
+# IDE
+**/.idea

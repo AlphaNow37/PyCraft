@@ -13,4 +13,4 @@ def search(string, path: pathlib.Path):
                 yield subpath
 
 
-print(*search("cote", path), sep="\n")
+print(*search("print", path), sep="\n")
