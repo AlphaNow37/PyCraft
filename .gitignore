@@ -7,6 +7,3 @@ code/tests/**
 !cache
 !saves
 !.gitignore
-
-# IDE
-**/.idea
