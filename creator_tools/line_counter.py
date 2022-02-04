@@ -1,7 +1,7 @@
 import pathlib
 
 
-root = pathlib.Path(__file__).parent.parent / "code"
+root = pathlib.Path(__file__).parent.parent / "code_src"
 
 
 def line_counter(path: pathlib.Path):

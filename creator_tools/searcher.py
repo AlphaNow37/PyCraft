@@ -1,7 +1,7 @@
 import pathlib
 
 
-path = pathlib.Path(__file__).parent.parent / "code"
+path = pathlib.Path(__file__).parent.parent / "code_src"
 
 
 def search(string, path: pathlib.Path):
