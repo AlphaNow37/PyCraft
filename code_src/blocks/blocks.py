@@ -46,16 +46,20 @@ class Block(base_elements.BaseCarre):
                     block.revelate()
         self.revelated = True
 
-    def destroy(self):
+    def destroy(self, particle=True):
         self.destroyed = True
         for friend in self.friends:
             case = self.map.get_case(*friend)
             if case and not case.destroyed:
                 self.map.destroy_case(*friend)
-        for _ in range(5):
-            self.game.entity_manager.add(entity.Particle(self.game, self.x+0.5, self.y+0.5, self.img))
+        if particle:
+            for _ in range(5):
+                self.game.entity_manager.add(entity.Particle(self.game, self.x+0.5, self.y+0.5, self.img))
 
-    def update(self, from_x, from_y):
+    def update_from_voisin(self, from_x, from_y):
+        pass
+
+    def planned_update(self):
         pass
 
     def slab_draw(self, x_self=None, y_self=None, img=None, width=None, height=None):

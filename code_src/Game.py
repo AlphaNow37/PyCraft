@@ -99,6 +99,7 @@ class Game:
             self.player.tick()
             self.sc_deco.tick()
             self.entity_manager.tick()
+            self.map.tick()
 
             if self.open_chat:
                 self.chat_manager.tick()

@@ -1,7 +1,8 @@
 import json
+from typing import Union
+
 from .player import Player
 from . import blocks
-from typing import Union
 from .generation import Generator, load_from_data, get_data_from_gen, seeder
 from .constants import *
 
@@ -28,6 +29,8 @@ class Map:
         self.game = game
 
     def generate(self):
+        self.to_planned_update: list[list[int, int, int]] = []
+
         self.left_generator = Generator()
         self.left_generator.setup()
         self.left_world: list[list[blocks.Block]] = []
@@ -41,6 +44,18 @@ class Map:
         self.player = Player(self.game, self.get_top(0) + 0.5)
 
         self.seed = seeder.seeder.seed
+
+    def tick(self):
+        i = 0
+        while i < len(self.to_planned_update):
+            nb_ticks, x, y = self.to_planned_update[i]
+            nb_ticks -= 1
+            if nb_ticks == 0:
+                self.get_case(x, y).planned_update()
+                del self.to_planned_update[i]
+            else:
+                self.to_planned_update[i][0] = nb_ticks
+                i += 1
 
     def draw(self):
         x_cam, y_cam = map(int, self.game.camera_center)
@@ -110,9 +125,9 @@ class Map:
         li_biome = self.left_biomes if side == -1 else self.right_biomes
         return li_biome[int(x)]
 
-    def destroy_case(self, x, y):
+    def destroy_case(self, x, y, particle=True):
         new_x, world, _ = self._get_world_from_x(x)
-        self.get_case(x, y).destroy()
+        self.get_case(x, y).destroy(particle=particle)
         world[new_x][y] = blocks.Block("air", self.game, new_x, y)
         self.update_around(x, y)
 
@@ -120,7 +135,7 @@ class Map:
         for x_, y_ in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
             case = self.get_case(x+x_, y+y_)
             if isinstance(case, blocks.Block):
-                case.update(-x_, -y_)
+                case.update_from_voisin(-x_, -y_)
 
     def get_around(self, x, y) -> list[blocks.Block]:
         cases = []

@@ -27,8 +27,8 @@ class HealthBarManager:
         }
         for i in range(max(nb_heath+nb_partial_heath, 10)):
             y, x = divmod(i, 10)
-            screen_x = x * height_hearth
-            screen_y = y * height_hearth
+            screen_x = x * height_hearth + height_hearth/4
+            screen_y = y * height_hearth + height_hearth/4
             if i < nb_heath:
                 name = "plain"
             elif i == nb_heath and nb_partial_heath == 1:

@@ -7,7 +7,7 @@ class SupportedBlock(Block):
         super().__init__(name, game, x, y, **kwargs)
         self.support_from_x, self.support_from_y = self.support_from = support_from
 
-    def update(self, from_x, from_y):
+    def update_from_voisin(self, from_x, from_y):
         if self.destroyed:
             return
         if (from_x, from_y) == self.support_from:
