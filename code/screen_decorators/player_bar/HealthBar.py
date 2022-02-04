@@ -34,6 +34,6 @@ class HealthBarManager:
             elif i == nb_heath and nb_partial_heath == 1:
                 name = "partial"
             else:
-                name = None
+                name = "empty"
             if name is not None:
                 self.game.screen.blit(hearths_surfaces[name], (screen_x, screen_y))
