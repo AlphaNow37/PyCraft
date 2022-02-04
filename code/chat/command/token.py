@@ -51,6 +51,9 @@ class Number(OneValueToken):
     def assert_good(self, value):
         return isinstance(value, (float, int))
 
+class Percent(Number):
+    name = "P%"
+
 
 class BoolValue(OneValueToken):
     name = "Bo"

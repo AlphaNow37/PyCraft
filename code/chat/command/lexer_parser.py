@@ -40,7 +40,10 @@ def lex_parse(input_str: str):
         if regex_number.fullmatch(arg):
             args.append(token.Number(float(arg), arg))
             continue
-        if arg.lower() in bools:
+        elif regex_number.fullmatch(arg.removesuffix("%")):
+            args.append(token.Percent(float(arg.removesuffix("%")), arg))
+            continue
+        elif arg.lower() in bools:
             args.append(token.BoolValue(bools[arg], arg))
             continue
         elif arg in nones:
