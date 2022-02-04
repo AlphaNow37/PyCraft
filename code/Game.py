@@ -77,6 +77,7 @@ class Game:
             self.entity_manager.draw()
             self.player.draw()
             self.sc_deco.draw_clouds()
+            self.sc_deco.draw_bars()
             if self.open_chat:
                 self.chat_manager.draw()
             elif self.open_f3:

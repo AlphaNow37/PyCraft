@@ -5,6 +5,9 @@ from . import BreakerPlacer
 from . import Block_overlay
 from . import F3_screen
 from . import Weather
+from . import player_bar
+
+from . import cursor as _
 
 
 class ScreenDecorator:
@@ -17,6 +20,7 @@ class ScreenDecorator:
         self.block_overlay_manager = Block_overlay.BlockOverlayManager(game)
         self.f3_manager = F3_screen.F3ScreenManager(game)
         self.weather_manager = Weather.WeatherManager(game)
+        self.player_bar_manager = player_bar.PlayerBarManager(game)
 
     def draw_clouds(self):
         self.cloud_manager.draw()
@@ -44,4 +48,5 @@ class ScreenDecorator:
         self.weather_manager.set_data(data)
         self.time_manager.set_data(data)
 
-
+    def draw_bars(self):
+        self.player_bar_manager.draw()

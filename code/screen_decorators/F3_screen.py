@@ -48,6 +48,7 @@ Pos:
     Temperature: {biome[1]} 
     Humidité: {biome[2]}
 UserName: {player.username}
+Life: {player.life}/100
 Vue:
     Angle: {round(self.game.player.vue_dir, 2)}
 {SEPARATOR}
