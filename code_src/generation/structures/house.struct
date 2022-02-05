@@ -1,11 +1,14 @@
 O: OAK_LOG
 /: FORCED_AIR
+P: OAK_PLANKS
 S: OAK_PLANKS_SLAB{"flip_y":true}
 T: OAK_PLANKS_STAIR{"flip_x":true}
 R: OAK_PLANKS_STAIR{"flip_x":false}
+_FOUNDATION: COBBLESTONE
 ---
- SSS
-TOOOR
-O///O
-O///O
-OOOOO
+   S
+  TPR
+ TOOOR
+TO///OR
+ O///O
+ OOOOO

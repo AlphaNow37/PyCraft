@@ -35,7 +35,7 @@ class BreakerPlacerManager:
                         ok = any(not block_next.air for block_next in self.map.get_around(x, y))
                     if ok:
                         x_side, y_side = self.game.block_side
-                        block = Block("oak_planks_slab", self.game, x, y)
+                        block = Block("bedrock", self.game, x, y)
                         if block.support_x_flip:
                             block.flip_x = x_side < 0.5
                         if block.support_y_flip:
