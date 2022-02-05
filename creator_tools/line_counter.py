@@ -17,8 +17,10 @@ def line_counter(path: pathlib.Path):
     for sub_path in path.iterdir():
         if sub_path.is_file():
             if sub_path.suffix == ".py":
-                dct["lines"] += sub_path.read_text("UTF-8").count("\n")
+                text = sub_path.read_text("UTF-8")
+                dct["lines"] += text.count("\n")
                 dct["files"] += 1
+                dct["chars"] += len(text)
         else:
             dct2 = line_counter(sub_path)
             dct = fusion_dct(dct, dct2)
