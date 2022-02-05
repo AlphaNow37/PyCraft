@@ -31,10 +31,11 @@ class VegetationGenerator(PatchGenerator):
             if y > HEIGHT_OCEAN:
                 if self.biome in ["plain", "birch_forest"] and self.is_air(-2, y+1):
                     fleur = random.choice(FLEURS_NAMES)
-                    for h, name_morceau in enumerate(fleur):
-                        block = BLOCKS[f"FLEUR_{name_morceau.upper()}"]
-                        self.resume_world[-2][y+h+1] = block
-                    return
+                    if len(fleur) == 1 or self.is_air(-2, y+2):
+                        for h, name_morceau in enumerate(fleur):
+                            block = BLOCKS[f"FLEUR_{name_morceau.upper()}"]
+                            self.resume_world[-2][y+h+1] = block
+                        return
         if len(self.tops) > 2:
             x_base = -2
             y_base = self.tops[-2] + 1
