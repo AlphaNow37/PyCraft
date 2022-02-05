@@ -1,10 +1,11 @@
 O: OAK_LOG
-/: SPRUCE_LOG
-S: OAK_PLANKS_SLAB
-T: OAK_PLANKS_STAIR
+/: FORCED_AIR
+S: OAK_PLANKS_SLAB{"flip_y":true}
+T: OAK_PLANKS_STAIR{"flip_x":true}
+R: OAK_PLANKS_STAIR{"flip_x":false}
 ---
  SSS
-TOOOT
-O   O
-O   O
+TOOOR
+O///O
+O///O
 OOOOO

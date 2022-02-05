@@ -86,10 +86,14 @@ class Map:
             if case is not None and case.air:
                 return y
 
-    def get_block_from_resume(self, resume, x, y) -> blocks.Block:
+    def get_block_from_resume(self, resume, x, y, is_left=False) -> blocks.Block:
         name, properties = resume
+        if name == "forced_air":
+            name = "air"
         properties = properties.copy()
         properties: dict
+        if is_left and "flip_x" in properties:
+            properties["flip_x"] = not properties["flip_x"]
         classe: type[blocks.Block] = properties.pop("class", None)
         if isinstance(classe, str):
             classe = dct_name_to_cls[classe]
@@ -99,7 +103,6 @@ class Map:
         return block
 
     def _add_column(self, side, column=None):
-
         world = self.left_world if side == -1 else self.right_world
         transformer_x = (lambda x: -x-1) if side == -1 else (lambda x: x)
         li_biome = self.left_biomes if side == -1 else self.right_biomes
@@ -107,7 +110,7 @@ class Map:
             generator = self.left_generator if side == -1 else self.right_generator
             generator.generate()
             world.append(
-                [self.get_block_from_resume(resume, transformer_x(len(world)), y)
+                [self.get_block_from_resume(resume, transformer_x(len(world)), y, side == -1)
                  for y, resume in enumerate(generator.resume_world[0])]
             )
             li_biome.append(generator.biomes[0])

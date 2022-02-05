@@ -18,7 +18,7 @@ BIOMES = {  # (temperature, humidite)
     None: ["oak_forest", "plain", "birch_forest"]
 }
 
-force_biome = "desert"
+force_biome = "plain"
 force_temp = None
 force_humid = None
 

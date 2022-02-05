@@ -171,12 +171,15 @@ _gen_block: &gen_block
 
 # other
 <<:
-  air:
+  air: &_air
     <<: *gen_block
     air: true
     collision: false
     load_img: false
     solidity: null
+
+  forced_air:
+    <<: *_air
 
   bedrock:
     <<: *gen_block

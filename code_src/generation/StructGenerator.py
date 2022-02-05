@@ -31,6 +31,8 @@ class StructGenerator(VegetationGenerator):
                     if y_base > HEIGHT_OCEAN:
                         if self.biome == "desert":
                             struct = "micro_desert_temple"
+                        elif self.biome == "plain":
+                            struct = "house"
                 elif i_struct == 1:
                     y_base = random.randint(0, y_base-5)
                     struct = "generator"
@@ -46,7 +48,10 @@ class StructGenerator(VegetationGenerator):
                     if struct.foundation is not None:
                         for x in range(struct.width):
                             x = -x+struct.width//2+1
-                            self.__to_put_foundations.append([x, BLOCKS[random.choice(struct.foundation)], y_base])
+                            name, block_data = random.choice(struct.foundation)
+                            block = BLOCKS[name]
+                            block = (block[0], block[1] | block_data)
+                            self.__to_put_foundations.append([x, block, y_base])
         i = 0
         while i < len(self.__to_put_foundations):
             self.__to_put_foundations[i][0] -= 1
