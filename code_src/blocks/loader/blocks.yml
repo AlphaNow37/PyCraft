@@ -154,6 +154,21 @@ _gen_block: &gen_block
     folder: /vegetation
     class: SUPPORTED_BLOCK
 
+# fluids
+<<:
+  _gen_fluid: &gen_fluid
+    <<: *gen_block
+    collision: false
+    solidity: null
+    unbreakable: true
+    class: FLUID
+
+  water:
+    <<: *gen_fluid
+    color: blue
+    alpha: 150
+
+
 # other
 <<:
   air:
@@ -166,14 +181,6 @@ _gen_block: &gen_block
   bedrock:
     <<: *gen_block
     unbreakable: true
-    solidity: null
-
-  water:
-    <<: *gen_block
-    unbreakable: true
-    alpha: 150
-    collision: false
-    color: blue
     solidity: null
 
   snow:

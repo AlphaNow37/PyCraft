@@ -1,5 +1,6 @@
 import pygame
 import math
+from . import map
 
 
 class BaseCarre:
@@ -20,7 +21,7 @@ class BaseCarre:
 
     def __init__(self, game, x, y, **kwargs):
         self.__dict__.update(kwargs)
-        self.map = game.map
+        self.map: map.Map = game.map
         self.screen: pygame.Surface = game.screen
         self.game = game
         self.x = x

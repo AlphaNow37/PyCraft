@@ -12,19 +12,22 @@ Fichier servant a gérer la map, et déclanchant les générations de terrain
 
 
 dct_name_to_cls = {
-                "ORE": blocks.Ore,
-                "GRASS": blocks.Grass,
-                "BIG_FLOWER_UP": blocks.BigFlowerUp,
-                "BIG_FLOWER_BOTTOM": blocks.BigFlowerBottom,
-                "SUPPORTED_BLOCK": blocks.SupportedBlock,
-                "GRAVITY": blocks.GravityBlock,
-            }
+    "ORE": blocks.Ore,
+    "GRASS": blocks.Grass,
+    "BIG_FLOWER_UP": blocks.BigFlowerUp,
+    "BIG_FLOWER_BOTTOM": blocks.BigFlowerBottom,
+    "SUPPORTED_BLOCK": blocks.SupportedBlock,
+    "GRAVITY": blocks.GravityBlock,
+    "FLUID": blocks.FluidBlock,
+}
 dct_cls_to_name = {
     cls: name for (name, cls) in dct_name_to_cls.items()
 }
 
 
 class Map:
+    to_planned_update: list[list[int]]
+
     def __init__(self, game):
         self.game = game
 
