@@ -2,33 +2,11 @@ from .. import token
 from ..responses import Send, ParamsError
 from .... import Game
 from .. import command
-from ....constants import HEIGHT_WORLD
 from ....blocks import blocks
+from ..cast_pos import cast_pos
 
 
 _default = object()
-
-
-def cast_pos(xy, game):
-    for i, coord in enumerate(xy):
-        match coord:
-            case int(coord) | token.Number(coord):
-                pass
-            case token.RelativePosition(coord_):
-                coord = game.player.pos[i] + coord_
-                if i == 1:
-                    coord -= 1
-            case None:
-                coord = game.player.pos[i]
-                if i == 1:
-                    coord -= 1
-            case _:
-                raise ParamsError("x and y must be numbers")
-        xy[i] = coord
-    x, y = map(int, xy)
-    if y < 0 or y >= HEIGHT_WORLD:
-        raise ParamsError(f"y must be in [0->{HEIGHT_WORLD}[")
-    return x, y
 
 
 @command.decorate_command(nb_params={0, 2}, name="get")
