@@ -9,6 +9,11 @@ class BaseEntity(BaseImageCentree):
     speed = 0.5
     act_speed_y = 0
     destroy_after = None
+    base_life = 100
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._life = self.base_life
 
     def move(self, x, y):
         if self.collision:
@@ -68,6 +73,16 @@ class BaseEntity(BaseImageCentree):
 
     def destroy(self):
         self.game.entity_manager.remove(self)
+
+    @property
+    def life(self):
+        return self._life
+
+    @life.setter
+    def life(self, value):
+        self._life = value
+        if value == 0:
+            self.destroy()
 
 
 class EntitySubModule(BaseImageCentree):

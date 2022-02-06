@@ -129,6 +129,8 @@ class Player(BaseEntity):
     width = height / fragments["front"].get_height() * fragments["front"].get_width()
     img = fragments["front"]
 
+    base_life = 100
+
     @classmethod
     def set_img(cls):
         with open(USER_ROOT / "user.json") as file:
@@ -147,7 +149,7 @@ class Player(BaseEntity):
     def __init__(self, game, y):
         super(Player, self).__init__(game, 0, 0)
         self.tp_to(0.5, y)
-        self.life = 100
+        self.spawnpoint = [0.5, y]
         self.vue_dir = 0
         self.sneaking = False
 
@@ -235,6 +237,11 @@ class Player(BaseEntity):
     def set_data(self, data):
         self.life = data["life"]
         self.tp_to(data["x"], data["y"])
+
+    def destroy(self):
+        self.tp_to(*self.spawnpoint)
+        self.life = 100
+    kill = destroy
 
 
 threading.Thread(target=Player.set_img).start()
