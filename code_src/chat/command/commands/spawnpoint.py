@@ -1,6 +1,5 @@
 from ..command import register_command, Command, decorate_command
-from ..token import Number
-from ..responses import Send, ParamsError
+from ..responses import Send
 from .... import Game
 from ..cast_pos import cast_pos
 
