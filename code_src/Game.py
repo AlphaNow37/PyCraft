@@ -12,6 +12,7 @@ from .chat import Chatmanager
 from .interfaces import BaseInterface
 from .constants import ROOT
 
+_PROFILE = False
 
 """
 Fichier principale aceuillant la classe Game, la racine du jeu
@@ -48,8 +49,14 @@ class Game:
         self.mouse_pos_side = (None, None)
 
         self.chat_manager = Chatmanager(self)
-
-        self.run()
+        if _PROFILE:
+            import cProfile
+            profile = cProfile.Profile()
+            with profile:
+                self.run()
+            profile.print_stats(sort="cumtime")
+        else:
+            self.run()
 
     def run(self):
         while self.running:

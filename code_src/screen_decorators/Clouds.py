@@ -1,69 +1,88 @@
 import random
 import pygame
 from .. import base_elements, Game
+from ..constants import SRC_ROOT
+CLOUD_ROOT = SRC_ROOT / "environnement" / "clouds"
+
+scaler = 0.1
+
+base_img_height = 38
+base_img_width = 76
+cloud_height = base_img_height*scaler
+cloud_width = base_img_width*scaler
 
 CLOUD = {
-    "COLOR": "#DDDDDD",
     "ALPHA": 160,
-    "PERIOD": 256,
-    "PERIOD_SPEED": 0.05,
-    "Y": 75,
-    "NB": 32,
-    "HEIGHT": 3,
-    "MAX_SPEED": {
-        "Y": 0.1,
-        "X": 0.3,
-    }
+    "PERIOD": 50,
+    "MIN_Y": 100,
+    "MAX_Y": 110,
+    "NB": 10,
+    "SPEEDS": [0.2, 0.3, 0.5],
+    "IMGS": [pygame.image.load(CLOUD_ROOT / name) for name in CLOUD_ROOT.iterdir()],
+    "NB_DIVS": 25,
 }
 
+block_size = ...
+def get_clouds_surface(block_width: block_size, block_height: block_size, resolution):
+    width, height = int(block_width * resolution), int(block_height * resolution)
+    img = pygame.Surface((width, height))
+    row_size = CLOUD["PERIOD"] / CLOUD["NB"]
+    for index in range(CLOUD["NB"]):
+        x = (index * row_size + random.uniform(-row_size / 2, row_size / 2)) % width
+        y = random.uniform(CLOUD["MIN_Y"], CLOUD["MAX_Y"]) - CLOUD["MIN_Y"]
+        img_cloud = random.choice(CLOUD["IMGS"])
+        img_resized = pygame.transform.scale(img_cloud, (cloud_width * resolution, cloud_height * resolution))
+        img.blit(img_resized, (x * resolution, y * resolution))
+        img.blit(img_resized, (x * resolution - width, y * resolution))
+    img.set_alpha(CLOUD["ALPHA"])
+    img.set_colorkey("black")
+    surface_row_width = width / CLOUD["NB_DIVS"]
+    subsurfaces = [img.subsurface([int(surface_row_width * x), 0, surface_row_width, height]) for x in
+                   range(CLOUD["NB_DIVS"])]
+    return subsurfaces
 
-class Cloud(base_elements.BaseCarre):
-    img = texture_cloud = pygame.Surface((1, 1))
-    img.fill(CLOUD["COLOR"])
-    alpha = CLOUD["ALPHA"]
-
-    width = CLOUD["PERIOD"]//CLOUD["NB"]//2
-    height = CLOUD["HEIGHT"]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.y += random.randint(0, 2)
-        self.speed_x = 0
-        self.speed_y = 0
+class CloudSubLayer(base_elements.BaseCarre):
+    speed = 0
 
     def tick(self):
-        self.speed_y += random.randint(-5, 5)/500
-        self.speed_y = max(min(self.speed_y, CLOUD["MAX_SPEED"]["Y"]), -CLOUD["MAX_SPEED"]["Y"])
-        self.y += self.speed_y
-        if self.y < CLOUD["Y"]-CLOUD["HEIGHT"]//2:
-            self.speed_y = 0.05
-        if self.y > CLOUD["Y"]+CLOUD["HEIGHT"]//2:
-            self.speed_y = -0.05
-
-        self.speed_x += random.randint(-5, 5) / 400
-        self.speed_x = max(min(self.speed_x, CLOUD["MAX_SPEED"]["X"]), -CLOUD["MAX_SPEED"]["X"])
-        self.x += self.speed_x
-        self.x += CLOUD["PERIOD_SPEED"]
+        self.x += self.speed
         self.x %= CLOUD["PERIOD"]
 
 
 class CloudManager:
+    width_layer = CLOUD["PERIOD"]
+    width_sublayer = width_layer // CLOUD["NB_DIVS"]
+    height_layer = CLOUD["MAX_Y"] - CLOUD["MIN_Y"] + cloud_height
+
     def __init__(self, game):
         self.game: Game = game
-        self.clouds = [Cloud(game, CLOUD["PERIOD"]//CLOUD["NB"]*x, CLOUD["Y"]) for x in range(CLOUD["NB"])]
+        self.subs = []
+        for speed in CLOUD["SPEEDS"]:
+            speed_subs = []
+            surfaces = get_clouds_surface(self.width_layer, self.height_layer, 5)
+            for surface in surfaces:
+                sublayer = CloudSubLayer(game,
+                                         img=surface, x=0, y=CLOUD["MIN_Y"],
+                                         speed=speed,
+                                         width=self.width_sublayer, height=self.height_layer)
+                speed_subs.append(sublayer)
+            self.subs.append(speed_subs)
 
     def draw(self):
         x_cam, y_cam = self.game.camera_center
         zoom = self.game.zoom
-        if not (CLOUD["Y"]-CLOUD["HEIGHT"] > y_cam+zoom or CLOUD["Y"]+CLOUD["HEIGHT"] < y_cam-zoom):
-            left_screen = x_cam-zoom
-            left = left_screen
-            left -= left % CLOUD["PERIOD"]
-            for x in range(zoom*2//CLOUD["PERIOD"]+2):
-                left_period = left+x*CLOUD["PERIOD"]
-                for cloud in self.clouds:
-                    cloud.draw(x_self=left_period+cloud.x)
+        zoom -= zoom % self.width_sublayer
+        zoom += self.width_sublayer
+        if not (CLOUD["MIN_Y"] > y_cam+zoom or CLOUD["MAX_Y"] < y_cam-zoom):
+            for x_ in range(-zoom-self.width_sublayer*(CLOUD["NB_DIVS"]-1), zoom, self.width_sublayer):
+                sublayer_id = (x_ // self.width_sublayer) % CLOUD["NB_DIVS"]
+                for speed_list in self.subs:
+                    sublayer = speed_list[sublayer_id]
+                    x = x_cam + x_ + sublayer.x
+                    if x_cam + zoom > x > x_cam - zoom - self.width_sublayer:
+                        sublayer.draw(x_self=x)
 
     def tick(self):
-        for cloud in self.clouds:
-            cloud.tick()
+        for speed_list in self.subs:
+            for sublayer in speed_list:
+                sublayer.tick()

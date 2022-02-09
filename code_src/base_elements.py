@@ -47,7 +47,8 @@ class BaseCarre:
         width *= self.game.size_block
         height *= self.game.size_block
         img = pygame.transform.scale(img, (int(width)+1, int(height)+1))
-        img = pygame.transform.flip(img, self.flip_x, self.flip_y)
+        if self.flip_x or self.flip_y:
+            img = pygame.transform.flip(img, self.flip_x, self.flip_y)
         img.set_alpha(self.alpha)
 
         y = height_screen - y - height
