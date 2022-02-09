@@ -1,8 +1,7 @@
-from ..responses import Send, ParamsError, CommandError
+from ..responses import Send, CommandError
 from ..command import register_command, decorate_command
 from ..token import OneValueToken, SpecialString
 from .... import Game
-import traceback
 
 _allow_exec = True
 
