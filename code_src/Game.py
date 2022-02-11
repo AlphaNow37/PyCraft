@@ -66,10 +66,10 @@ class Game:
             self.flip()
             pygame.display.flip()
             self.clock.tick(20)
-            fps = self.clock.get_fps()
-            if fps < 15:
-                # print(f"[FPS] : {fps}")
-                pass
+            # fps = self.clock.get_fps()
+            # if fps < 15:
+            #     print(f"[FPS] : {fps}")
+            #     pass
             self.tick += 1
             if self.tick % 20 == 0:
                 pass
