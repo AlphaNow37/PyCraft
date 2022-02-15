@@ -131,7 +131,7 @@ class Game:
     def reset_world(self):
         self.map.generate()
         self.player = self.map.player
-        self.sc_deco = sc_deco.ScreenDecorator(self)
+        self.sc_deco: sc_deco.ScreenDecorator = sc_deco.ScreenDecorator(self)
         self.tick = 0
 
         self.time = self.sc_deco.time_manager.time  # 0-> 0h, 90-> 6h, 180-> 12h, 270-> 18h

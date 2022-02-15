@@ -14,6 +14,7 @@ class HealthBarManager:
             for (name, x, y) in [("plain", 4, 0), ("partial", 5, 0), ("empty", 0, 0)]
         }
         self.super_manager: __init__.PlayerBarManager = manager
+        self.life_changing = False
 
     def draw(self):
         w, h = self.game.size_screen
@@ -29,6 +30,8 @@ class HealthBarManager:
             y, x = divmod(i, 10)
             screen_x = x * height_hearth + height_hearth/4
             screen_y = y * height_hearth + height_hearth/4
+            if self.life_changing and x % 2 == 0:
+                screen_y += height_hearth/2
             if i < nb_heath:
                 name = "plain"
             elif i == nb_heath and nb_partial_heath == 1:
@@ -37,3 +40,7 @@ class HealthBarManager:
                 name = "empty"
             if name is not None:
                 self.game.screen.blit(hearths_surfaces[name], (screen_x, screen_y))
+        self.life_changing = False
+
+    def on_player_life_change(self):
+        self.life_changing = True

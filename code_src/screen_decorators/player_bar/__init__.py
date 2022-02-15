@@ -6,8 +6,8 @@ class PlayerBarManager:
     def __init__(self, game: Game):
         self.game = game
         self.player = self.game.player
-        self.heath_bar_manager = HealthBar.HealthBarManager(game, self)
+        self.health_bar_manager = HealthBar.HealthBarManager(game, self)
 
     def draw(self):
         if not self.game.is_admin:
-            self.heath_bar_manager.draw()
+            self.health_bar_manager.draw()

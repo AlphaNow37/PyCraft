@@ -3,6 +3,7 @@ from ..entity import BaseEntity
 import math
 from ..constants import SRC_ROOT, CACHE_ROOT, USER_ROOT
 from .skin_loader import get_img_from_skin, download_skin
+from .. import Game
 
 import json
 import threading
@@ -36,7 +37,7 @@ class Player(BaseEntity):
         cls.fragments = fragments
         cls.img = fragments["front"]
 
-    def __init__(self, game, y):
+    def __init__(self, game: Game, y):
         super(Player, self).__init__(game, 0, 0)
         self.tp_to(0.5, y)
         self.spawnpoint = [0.5, y]
@@ -131,6 +132,13 @@ class Player(BaseEntity):
     def destroy(self):
         self.tp_to(*self.spawnpoint)
         self.life = 100
+
+    def event(self, name: str, *args):
+        if name == "LIFE_CHANGE":
+            # from ..screen_decorators.player_bar.HealthBar import HealthBarManager
+            health_manager = self.game.sc_deco.player_bar_manager.health_bar_manager
+            health_manager.on_player_life_change()
+
     kill = destroy
 
 

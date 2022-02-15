@@ -85,6 +85,8 @@ class BaseEntity(BaseImageCentree):
         self._life = value
         if value == 0:
             self.destroy()
+        else:
+            self.event("LIFE_CHANGE")
 
     def event(self, name: str, *args):
         pass
