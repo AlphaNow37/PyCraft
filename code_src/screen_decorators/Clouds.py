@@ -74,9 +74,9 @@ class CloudManager:
         zoom -= zoom % self.width_sublayer
         zoom += self.width_sublayer
         if not (CLOUD["MIN_Y"] > y_cam+zoom or CLOUD["MAX_Y"] < y_cam-zoom):
-            for x_ in range(-zoom-self.width_sublayer*(CLOUD["NB_DIVS"]-1), zoom, self.width_sublayer):
-                sublayer_id = (x_ // self.width_sublayer) % CLOUD["NB_DIVS"]
-                for speed_list in self.subs:
+            for speed_list in self.subs:
+                for x_ in range(-zoom-self.width_sublayer*(CLOUD["NB_DIVS"]-1), zoom, self.width_sublayer):
+                    sublayer_id = (x_ // self.width_sublayer) % CLOUD["NB_DIVS"]
                     sublayer = speed_list[sublayer_id]
                     x = x_cam + x_ + sublayer.x
                     if x_cam + zoom > x > x_cam - zoom - self.width_sublayer:
