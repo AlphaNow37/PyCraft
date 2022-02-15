@@ -66,6 +66,8 @@ class BaseEntity(BaseImageCentree):
                 self.destroy()
             else:
                 self.destroy_after -= 1
+        if self.y < -50:
+            self.life -= 5
 
     def get_down_block(self):
         x, y = self.get_int_pos()
@@ -83,6 +85,9 @@ class BaseEntity(BaseImageCentree):
         self._life = value
         if value == 0:
             self.destroy()
+
+    def event(self, name: str, *args):
+        pass
 
 
 class EntitySubModule(BaseImageCentree):

@@ -9,4 +9,5 @@ class PlayerBarManager:
         self.heath_bar_manager = HealthBar.HealthBarManager(game, self)
 
     def draw(self):
-        self.heath_bar_manager.draw()
+        if not self.game.is_admin:
+            self.heath_bar_manager.draw()
