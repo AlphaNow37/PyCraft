@@ -16,18 +16,17 @@ CLOUD = {
     "PERIOD": 50,
     "MIN_Y": 100,
     "MAX_Y": 110,
-    "NB": 10,
     "SPEEDS": [0.2, 0.3, 0.5],
     "IMGS": [pygame.image.load(CLOUD_ROOT / name) for name in CLOUD_ROOT.iterdir()],
     "NB_DIVS": 25,
 }
 
 block_size = ...
-def get_clouds_surface(block_width: block_size, block_height: block_size, resolution):
+def get_clouds_surface(block_width: block_size, block_height: block_size, resolution, density):
     width, height = int(block_width * resolution), int(block_height * resolution)
     img = pygame.Surface((width, height))
-    row_size = CLOUD["PERIOD"] / CLOUD["NB"]
-    for index in range(CLOUD["NB"]):
+    row_size = CLOUD["PERIOD"] / density
+    for index in range(density):
         x = (index * row_size + random.uniform(-row_size / 2, row_size / 2)) % width
         y = random.uniform(CLOUD["MIN_Y"], CLOUD["MAX_Y"]) - CLOUD["MIN_Y"]
         img_cloud = random.choice(CLOUD["IMGS"])
@@ -59,10 +58,11 @@ class CloudManager:
         self.subs = []
         for speed in CLOUD["SPEEDS"]:
             speed_subs = []
-            surfaces = get_clouds_surface(self.width_layer, self.height_layer, 5)
-            for surface in surfaces:
+            surfaces1 = get_clouds_surface(self.width_layer, self.height_layer, 5, 5)
+            surfaces2 = get_clouds_surface(self.width_layer, self.height_layer, 5, 16)
+            for surface1, surface2 in zip(surfaces1, surfaces2):
                 sublayer = CloudSubLayer(game,
-                                         img=surface, x=0, y=CLOUD["MIN_Y"],
+                                         imgs=[surface1, surface2], x=0, y=CLOUD["MIN_Y"],
                                          speed=speed,
                                          width=self.width_sublayer, height=self.height_layer)
                 speed_subs.append(sublayer)
@@ -73,6 +73,7 @@ class CloudManager:
         zoom = self.game.zoom
         zoom -= zoom % self.width_sublayer
         zoom += self.width_sublayer
+        frame = int(self.game.raining)
         if not (CLOUD["MIN_Y"] > y_cam+zoom or CLOUD["MAX_Y"] < y_cam-zoom):
             for speed_list in self.subs:
                 for x_ in range(-zoom-self.width_sublayer*(CLOUD["NB_DIVS"]-1), zoom, self.width_sublayer):
@@ -80,7 +81,7 @@ class CloudManager:
                     sublayer = speed_list[sublayer_id]
                     x = x_cam + x_ + sublayer.x
                     if x_cam + zoom > x > x_cam - zoom - self.width_sublayer:
-                        sublayer.draw(x_self=x)
+                        sublayer.draw(x_self=x, frame=frame)
 
     def tick(self):
         for speed_list in self.subs:

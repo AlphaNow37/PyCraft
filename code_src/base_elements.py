@@ -27,7 +27,7 @@ class BaseCarre:
         self.x = x
         self.y = y
 
-    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None):
+    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
         if x_self is None:
             x_self = self.x
         if y_self is None:
@@ -39,7 +39,7 @@ class BaseCarre:
             if self.imgs is None:
                 img = self.img
             else:
-                img = self.imgs[self.frame]
+                img = self.imgs[self.frame if frame is None else frame]
         if width is None:
             width = self.width
         if height is None:
