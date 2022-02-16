@@ -1,5 +1,5 @@
 import subprocess
-from sys import version_info
+from sys import version_info, stderr
 
 
 for name, pipname in [("pygame",)*2, ("requests",)*2, ("yaml", "PyYaml")]:
@@ -12,7 +12,10 @@ import pygame
 pygame.init()
 
 import code_src
-code_src.Game()
+try:
+    code_src.Game()
+except KeyboardInterrupt as e:
+    print("Ended with KeyBoardInterrupt", file=stderr)
 """
 PyCraft
 Par AlphaNow
