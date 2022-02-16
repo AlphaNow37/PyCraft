@@ -10,7 +10,7 @@ from .events import EventManager, get_blocks_size
 from .entity import EntityManager
 from .chat import Chatmanager
 from .interfaces import BaseInterface
-from .constants import ROOT
+from .roots import SAVE_ROOT
 
 _PROFILE = False
 
@@ -19,9 +19,6 @@ Fichier principale aceuillant la classe Game, la racine du jeu
 """
 
 class Game:
-    saves_path = ROOT / "saves"
-    if not saves_path.exists():
-        saves_path.mkdir()
 
     def __init__(self):
         self.size_screen = (1080, 720)
@@ -148,7 +145,7 @@ class Game:
     def save_world(self, name="save"):
         if "." in name or "/" in name or "\\" in name:
             raise ValueError(f"Invalid name {name}")
-        path = self.saves_path / name
+        path = SAVE_ROOT / name
         if not path.exists():
             try:
                 path.mkdir()
@@ -170,7 +167,7 @@ class Game:
         print("save")
 
     def open_world(self, name="save"):
-        path = self.saves_path / name
+        path = SAVE_ROOT / name
         if not path.exists():
             raise ValueError(f"The save {name} doesn't exist")
         general_data_path = path / "data.json"

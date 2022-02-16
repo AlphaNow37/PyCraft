@@ -1,7 +1,7 @@
 from . import Game, decorate_command, Command, OneValueToken, ParamsError
 import json
 import threading
-from .....constants import USER_ROOT
+from .....roots import USER_ROOT
 user_path = USER_ROOT / "user.json"
 
 @decorate_command(nb_params=1)

@@ -3,7 +3,7 @@ import pygame
 import math
 from .Property import Property
 from ..constants import TIME_INCREMENT
-from ..constants import SRC_ROOT
+from ..roots import SRC_ROOT
 
 
 SUNRISE_TIME = 100  # Time beetween the sky color will change

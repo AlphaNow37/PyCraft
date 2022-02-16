@@ -4,7 +4,7 @@ from functools import cache
 import random
 from ..generation import get_height_snow_by_temp
 from .Property import Property
-from ..constants import SRC_ROOT
+from ..roots import SRC_ROOT
 
 
 FALLING_RAIN_SPEED = 1/8

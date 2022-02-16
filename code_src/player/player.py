@@ -1,7 +1,7 @@
 import pygame
 from ..entity import BaseEntity
 import math
-from ..constants import SRC_ROOT, CACHE_ROOT, USER_ROOT
+from ..roots import SRC_ROOT, CACHE_ROOT, USER_ROOT
 from .skin_loader import get_img_from_skin, download_skin
 from .. import Game
 

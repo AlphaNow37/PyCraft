@@ -3,7 +3,7 @@ import pygame
 from .. import Game
 from ..blocks import Block
 from ..constants import PLAYER_RANGE
-from ..constants import SRC_ROOT
+from ..roots import SRC_ROOT
 
 
 class Breaker(BaseCarre):

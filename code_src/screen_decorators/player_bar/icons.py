@@ -1,4 +1,4 @@
-from ...constants import SRC_ROOT
+from ...roots import SRC_ROOT
 import pygame
 
 icons_path = SRC_ROOT / "guy" / "icons.png"

@@ -1,5 +1,5 @@
 from . import Game, decorate_command, Command
-from .....constants import CACHE_ROOT
+from .....roots import CACHE_ROOT
 from ._clear_dir import clear_dir
 
 @decorate_command(nb_params=0)
