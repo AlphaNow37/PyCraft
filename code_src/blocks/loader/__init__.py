@@ -2,7 +2,7 @@ import yaml
 import pygame
 import pathlib
 from . import img_modifier
-from ...constants import SRC_ROOT
+from ...roots import SRC_ROOT
 search_path = pathlib.Path(__file__).parent
 
 with open(search_path / "blocks.yml") as file:

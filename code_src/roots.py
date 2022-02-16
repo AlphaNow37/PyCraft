@@ -13,3 +13,7 @@ USER_ROOT = ROOT / "user"  # Where userdata (username, keymap, ...) is
 SAVE_ROOT = ROOT / "saves"  # Where saves are
 if not SAVE_ROOT.exists():
     SAVE_ROOT.mkdir()
+
+TMP_ROOT = ROOT / "temp"  # Where temporary files are
+if not TMP_ROOT.exists():
+    TMP_ROOT.mkdir()
