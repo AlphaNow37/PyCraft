@@ -1,3 +1,6 @@
+"""
+Gère les différents chemins vers les dossiers de ressource
+"""
 import pathlib
 
 ROOT = pathlib.Path(__file__).parent.parent  # Project root

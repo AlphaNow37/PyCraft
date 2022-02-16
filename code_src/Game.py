@@ -56,6 +56,9 @@ class Game:
             self.run()
 
     def run(self):
+        """
+        Boucle principale du jeu
+        """
         while self.running:
             if not self.pause:
                 self.events()
@@ -74,6 +77,9 @@ class Game:
         pygame.quit()
 
     def flip(self):
+        """
+        réactualise l'ecran en affichant tout
+        """
         if self.interface is None:
             self.sc_deco.draw_sun_moon_sky_weather()
             self.map.draw()
@@ -111,6 +117,10 @@ class Game:
             self.interface.tick()
 
     def get_pos_from_screenpos(self, screenpos):
+        """
+        :param screenpos: (x; y) de la souris sur l'ecran
+        :return: (x; y; side-x; side-y) en jeu
+        """
         x, y = screenpos
         x_cam, y_cam = self.camera_center
         width, height = self.size_screen

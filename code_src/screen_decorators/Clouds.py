@@ -2,6 +2,7 @@ import random
 import pygame
 from .. import base_elements, Game
 from ..roots import SRC_ROOT
+"""S'occupe des nuages"""
 CLOUD_ROOT = SRC_ROOT / "environnement" / "clouds"
 
 scaler = 0.1

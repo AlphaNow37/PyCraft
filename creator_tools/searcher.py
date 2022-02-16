@@ -1,5 +1,4 @@
 import pathlib
-from functools import partialmethod
 
 root_path = pathlib.Path(__file__).parent.parent / "code_src"
 
@@ -24,4 +23,4 @@ def get_visualisation_search(string):
         path_str = str(path).removeprefix(str(root_path)+"\\")
         print(f"{path_str}{' '*(max_lenght-len(path_str))} at lines {' '.join(map(str, lines))}")
 
-get_visualisation_search("abs")
+get_visualisation_search("Union")

@@ -2,6 +2,7 @@ from . import Block
 
 
 class FluidBlock(Block):
+    """Classe de tous les fluides"""
     def update_from_voisin(self, from_x, from_y):
         if from_y == 1:
             return

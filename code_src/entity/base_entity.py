@@ -90,27 +90,3 @@ class BaseEntity(BaseImageCentree):
 
     def event(self, name: str, *args):
         pass
-
-
-class EntitySubModule(BaseImageCentree):
-    x = None
-    y = None
-
-    rotation = 0
-    rotation_center = (None, None)
-
-    def __init__(self, game, parent: BaseEntity, x=None, y=None):
-        if x is not None:
-            self.x = x
-        if y is not None:
-            self.y = y
-        super().__init__(game, self.x, self.y)
-        self.parent = parent
-
-    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None):
-        if x_self is None:
-            x_self = self.x
-        if y_self is None:
-            y_self = self.y
-        x_self += self.parent.x
-        y_self += self.parent.y

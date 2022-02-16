@@ -4,6 +4,9 @@ from . import map
 
 
 class BaseCarre:
+    """
+    Classe abstraite pour un objet drawable
+    """
     font = pygame.font.Font(None, 500)
 
     img: pygame.Surface = pygame.Surface((1, 1))
@@ -78,15 +81,18 @@ class BaseCarre:
 
 
 class BaseImageCentree(BaseCarre):
+    """
+    Classe abstraite dont les coordonnées sont celle de son centre et pas de son coin
+    """
     def __init__(self, game, x, y, **kwargs):
         super().__init__(game, x, y, **kwargs)
 
-    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None):
+    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
         if x_self is None:
             x_self = self.x
         if y_self is None:
             y_self = self.y
-        super().draw(x_self-self.width/2, y_self-self.height/2, img, width, height)
+        super().draw(x_self-self.width/2, y_self-self.height/2, img, width, height, frame)
 
     def get_rect(self) -> pygame.Rect:
         return pygame.Rect((self.x-self.width/2)*100, (self.y-self.height/2)*100, self.width*100, self.height*100)

@@ -7,6 +7,7 @@ import pyperclip
 
 
 class Chatmanager:
+    """Interface du chat"""
     font = pygame.font.Font(None, 200)
     barre_change_time = 5
 

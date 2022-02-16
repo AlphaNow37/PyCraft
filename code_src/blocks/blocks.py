@@ -5,6 +5,7 @@ from .. import entity
 
 
 class Block(base_elements.BaseCarre):
+    """Classe mere de tous les blocks"""
     collision = True
     air = False
     unbreakable = False

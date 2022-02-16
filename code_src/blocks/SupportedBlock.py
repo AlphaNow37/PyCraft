@@ -3,6 +3,7 @@ from functools import partial
 
 
 class SupportedBlock(Block):
+    """Classe de tous les blocks supportés par un autre block"""
     def __init__(self, name, game, x, y, support_from=(0, -1), **kwargs):
         super().__init__(name, game, x, y, **kwargs)
         self.support_from_x, self.support_from_y = self.support_from = support_from

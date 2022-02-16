@@ -8,12 +8,10 @@ from .. import Game
 import json
 import threading
 
-from typing import Union
-
-
 class Player(BaseEntity):
+    """Classe auquel appartient uniquement le joueur"""
     username = "None"
-    fragments: dict[str, Union[dict[str, pygame.Surface], pygame.Surface]]
+    fragments: dict[str, dict[str, pygame.Surface] | pygame.Surface]
     fragments = get_img_from_skin(pygame.image.load(SRC_ROOT / "entity" / "player.png"))
 
     height = 1.9
@@ -24,6 +22,7 @@ class Player(BaseEntity):
 
     @classmethod
     def set_img(cls):
+        """Charge le skin du joueur"""
         with open(USER_ROOT / "user.json") as file:
             user_data = json.load(file)
         cls.username = user_data["username"]
@@ -119,6 +118,7 @@ class Player(BaseEntity):
             self.act_speed_y += 0.7
 
     def get_data(self):
+        """Retourne les données relatives au joueur"""
         return {
             "x": self.x,
             "y": self.y,

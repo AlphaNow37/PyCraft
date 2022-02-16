@@ -13,6 +13,7 @@ def _default_command(*_, **__):
     raise responses.CommandError("You can't call directly this command")
 
 class Command:
+    """Classe gerant les commandes"""
     nb_params_min: int
     nb_params_max: int
     nb_params_possible: set
@@ -20,6 +21,20 @@ class Command:
     def __init__(self, name: str = "_default", subcommands=None, function=_default_command,
                  nb_params=(0, float("inf")), help_text: str = None,
                  _rooted=False):
+        """
+        Crée une commande
+        :param name: Le nom de la commande
+        :param subcommands: None-> aucunes subcommand;
+                            list[Command] | dict["name", Command] -> permet des /command subcommand
+        :param function: None-> impossible de faire /command seul;
+                         "name"-> /command <==> /command name
+                         callable-> appelle la fonction quand on /command
+        :param nb_params: set(...)-> le nombre d'argument passé a la commande doit etre dans le set
+                          tuple[min, max]-> le nombre doit etre entre min et max
+                          int-> le nombre d'arg doit etre égal au nombre
+        :param help_text: le text d'aide accompagnant votre commande. Par defaut, fonction.__doc__
+        :param _rooted: Si la commande est la commande racine (/)
+        """
         if name == "_default":
             name = function.__name__
         if subcommands is None:

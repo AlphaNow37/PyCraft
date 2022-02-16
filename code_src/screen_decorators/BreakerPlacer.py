@@ -11,6 +11,7 @@ class Breaker(BaseCarre):
 
 
 class BreakerPlacerManager:
+    """Gere certaines interactions (placer et casser des blocks a la main)"""
     def __init__(self, game: Game):
         self.breaker = Breaker(game, 0, 0)
         self.breaking = False

@@ -4,8 +4,6 @@ import json
 from urllib import request
 import sys
 
-from typing import Union
-
 import pygame
 
 
@@ -57,7 +55,7 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
              [52, 52, 4, 12],
              4],
     }
-    fragments: dict[str, Union[dict[str, pygame.Surface], pygame.Surface]] = {}
+    fragments: dict[str, dict[str, pygame.Surface] | pygame.Surface] = {}
     for name, sides in names_fragments.items():
         fragments[name] = frag = {}
         surface_1_rect, surface_2_rect, width_side = sides

@@ -1,3 +1,4 @@
+"""utilisé par certaines commandes"""
 from . import token
 from ...constants import HEIGHT_WORLD
 from .responses import ParamsError

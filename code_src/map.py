@@ -1,5 +1,4 @@
 import json
-from typing import Union
 
 from .player import Player
 from . import blocks
@@ -8,6 +7,10 @@ from .constants import *
 
 """
 Fichier servant a gérer la map, et déclanchant les générations de terrain
+
+resume :
+-> ("name", {"propname": <value>})
+-> est une version simplifiée du block
 """
 
 
@@ -32,6 +35,9 @@ class Map:
         self.game = game
 
     def generate(self):
+        """
+        Cette méthode crée la map, place le joueur et commence la génération
+        """
         self.to_planned_update: list[list[int, int, int]] = []
 
         self.left_generator = Generator()
@@ -61,6 +67,9 @@ class Map:
                 i += 1
 
     def draw(self):
+        """
+        affiche tout les blocks
+        """
         x_cam, y_cam = map(int, self.game.camera_center)
         zoom = self.game.zoom
         for x in range(x_cam-zoom-1, x_cam+zoom+1):
@@ -69,7 +78,10 @@ class Map:
                 if block is not None and not block.air:
                     block.draw()
 
-    def get_case(self, x, y) -> Union[blocks.Block, None]:
+    def get_case(self, x, y) -> blocks.Block | None:
+        """
+        retourne le Block situé en (x; y) si existant
+        """
         x = int(x)
         y = int(y)
         if not 0 <= y < HEIGHT_WORLD:
@@ -132,26 +144,40 @@ class Map:
         return li_biome[int(x)]
 
     def destroy_case(self, x, y, particle=True):
+        """
+        détruit le block en (x; y)
+        :param particle: si la destruction emet des particules
+        """
         new_x, world, _ = self._get_world_from_x(x)
         self.get_case(x, y).destroy(particle=particle)
         world[new_x][y] = blocks.Block("air", self.game, new_x, y)
         self.update_around(x, y)
 
     def update_around(self, x, y):
+        """
+        update tous les voisins de (x; y)
+        """
         for x_, y_ in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
             case = self.get_case(x+x_, y+y_)
-            if isinstance(case, blocks.Block):
+            if case is not None:
                 case.update_from_voisin(-x_, -y_)
 
     def get_around(self, x, y) -> list[blocks.Block]:
         cases = []
         for x_, y_ in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
             case = self.get_case(x+x_, y+y_)
-            if isinstance(case, blocks.Block):
+            if case is not None:
                 cases.append(case)
         return cases
 
     def set_case(self, x, y, *args, **kwargs):
+        """
+        Place un block
+        :param x: la position du block en x
+        :param y: la position du block en y
+        :param args, kwargs: (<block>,) {} -> place directement le block
+                            sinon place kwargs.pop("cls", Block)(*args, **kwargs)
+        """
         x = int(x)
         y = int(y)
         if len(args) == 1 and not kwargs and isinstance(args[0], blocks.Block):
@@ -166,6 +192,9 @@ class Map:
         world[x_][y] = block
 
     def get_world_data(self):
+        """
+        :return: les data du monde (le monde de gauche, celui de droite, idem pr les biomes)
+        """
         return json.dumps(
             {
                 name: [
@@ -193,6 +222,10 @@ class Map:
                 self._add_column(side, column)
 
     def get_little_data(self):
+        """
+        retourne les données relatives aux générateur et au joueur
+        :return: dict
+        """
         return {
             "left_gen": get_data_from_gen(self.left_generator),
             "right_gen": get_data_from_gen(self.right_generator),

@@ -1,3 +1,4 @@
+"""Package chargant le fichier blocks.yml"""
 import yaml
 import pygame
 import pathlib
