@@ -1,4 +1,4 @@
-from ..responses import Send, CommandError
+from ..responses import Send, CommandError, Error
 from ..command import register_command, decorate_command
 from ..token import OneValueToken, SpecialString
 from .... import Game
@@ -34,4 +34,7 @@ def exec_command(data, *, game: Game):
         except SyntaxError:
             exec(to_exec, execs_globals)
     except Exception as e:
-        raise CommandError(f"{e}")
+        if not isinstance(e, (Send, Error)):
+            raise CommandError(f"({e.__class__.__name__}){e}")
+        else:
+            raise e

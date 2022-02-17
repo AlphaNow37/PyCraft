@@ -11,6 +11,7 @@ from .entity import EntityManager
 from .chat import Chatmanager
 from .interfaces import BaseInterface
 from .roots import SAVE_ROOT
+from .tests import TestManager
 
 _PROFILING = False
 _TESTING = True
@@ -47,6 +48,10 @@ class Game:
         self.mouse_pos_side = (None, None)
 
         self.chat_manager = Chatmanager(self)
+
+        if _TESTING:
+            self.test_manager = TestManager(self)
+
         if _PROFILING:
             import cProfile
             profile = cProfile.Profile()
@@ -75,6 +80,8 @@ class Game:
             if self.tick % 20 == 0:
                 pass
                 # self.global_map = self.map.get_global_map()
+            if _TESTING:
+                self.test_manager.tick()
         pygame.quit()
 
     def flip(self):
@@ -196,3 +203,7 @@ class Game:
     def change_gamemode(self, new_gamemode):
         self.gamemode = new_gamemode
         self.is_admin = self.gamemode in ["CREATIVE", "SPECTATOR"]
+
+    def test_id(self, test_id):
+        assert _TESTING
+        self.test_manager.test_id(test_id)
