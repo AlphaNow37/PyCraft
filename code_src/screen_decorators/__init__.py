@@ -7,10 +7,15 @@ from . import F3_screen
 from . import Weather
 from . import player_bar
 
-from . import cursor as _
+from . import cursor as _  # we just run the file
 
 
 class ScreenDecorator:
+    # NOTE: decorator != decoration
+    #       |               \-> the moon, the sky, the rain
+    #       \-> @truc <\n> def ...
+    """Classe servant a centraliser les décorations"""
+
     def __init__(self, game: Game):
         self.game: Game = game
 

@@ -17,6 +17,9 @@ default_keys = {
 
 
 class KeyMapManager:
+    """
+    Singleton stockant les touches
+    """
     with open("user/key_map.json") as file:
         keys: dict[str, list[int]] = json.load(file)
 

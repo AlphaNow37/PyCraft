@@ -1,4 +1,5 @@
 import math
+
 from .base_entity import BaseEntity
 
 

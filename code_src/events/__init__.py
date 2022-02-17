@@ -16,6 +16,9 @@ class EventManager:
         self.f3_used = False
 
     def events(self):
+        """
+        regarde tout les évenements et réagit en conséquence
+        """
         chat_just_opened = False
         pressed = pygame.key.get_pressed()
         for event in pygame.event.get():
@@ -26,12 +29,7 @@ class EventManager:
                 self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
             elif self.game.interface is None:
                 if event.type == pygame.MOUSEWHEEL:
-                    if event.y < 0:
-                        for _ in range(abs(event.y)):
-                            self.game.zoom = round(self.game.zoom*1.2)
-                    else:
-                        for _ in range(event.y):
-                            self.game.zoom = max(4, round(self.game.zoom/1.2))
+                    self.game.zoom = round(1.2**(-event.y) * self.game.zoom)
                     self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # pos = event.pos

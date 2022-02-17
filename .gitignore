@@ -1,7 +1,9 @@
 cache/**
 saves/**
-code_src/tests
-code_src/tests/**
+tests
+tests/**
+
+!code_src/tests
 
 !cache
 !saves

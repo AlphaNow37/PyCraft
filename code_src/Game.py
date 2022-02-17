@@ -12,7 +12,8 @@ from .chat import Chatmanager
 from .interfaces import BaseInterface
 from .roots import SAVE_ROOT
 
-_PROFILE = False
+_PROFILING = False
+_TESTING = True
 
 """
 Fichier principale aceuillant la classe Game, la racine du jeu
@@ -46,7 +47,7 @@ class Game:
         self.mouse_pos_side = (None, None)
 
         self.chat_manager = Chatmanager(self)
-        if _PROFILE:
+        if _PROFILING:
             import cProfile
             profile = cProfile.Profile()
             with profile:
@@ -78,7 +79,7 @@ class Game:
 
     def flip(self):
         """
-        réactualise l'ecran en affichant tout
+        Réactualise l'ecran en affichant tout
         """
         if self.interface is None:
             self.sc_deco.draw_sun_moon_sky_weather()
