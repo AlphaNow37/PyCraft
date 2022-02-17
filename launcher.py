@@ -2,7 +2,7 @@ import subprocess
 from sys import version_info, stderr
 
 
-for name, pipname in [("pygame",)*2, ("requests",)*2, ("yaml", "PyYaml")]:
+for name, pipname in [("pygame",)*2, ("requests",)*2, ("yaml", "PyYaml"), ("pyperclip", )*2]:
     try:
         __import__(name)
     except ImportError:
@@ -14,7 +14,7 @@ pygame.init()
 import code_src
 try:
     code_src.Game()
-except KeyboardInterrupt as e:
+except KeyboardInterrupt:
     print("Ended with KeyBoardInterrupt", file=stderr)
 """
 PyCraft

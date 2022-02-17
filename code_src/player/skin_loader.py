@@ -8,6 +8,7 @@ import pygame
 
 
 def download_skin(skin_dir, username):
+    """Download the skin and return False if there is an error, True otherwith"""
     try:
         resp_to_get_uuid = requests.get(f"https://api.mojang.com/users/profiles/minecraft/{username}")
         uuid = resp_to_get_uuid.json()["id"]
@@ -23,6 +24,7 @@ def download_skin(skin_dir, username):
 
 
 def get_img_from_skin(skin: pygame.Surface) -> dict:
+    """transform a minecraft skin into a PyCraft player surface"""
     # Creating fragments
     names_fragments: dict[str, list[list[int], int]] = {
         "head":

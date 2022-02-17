@@ -1,6 +1,7 @@
+import pygame
+
 from .. import Game
 from ..base_elements import BaseCarre
-import pygame
 """Gere le fond gris qui montre où est la souris"""
 
 class Overlay(BaseCarre):

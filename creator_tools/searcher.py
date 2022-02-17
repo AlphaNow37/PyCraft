@@ -23,4 +23,6 @@ def get_visualisation_search(string):
         path_str = str(path).removeprefix(str(root_path)+"\\")
         print(f"{path_str}{' '*(max_lenght-len(path_str))} at lines {' '.join(map(str, lines))}")
 
-get_visualisation_search("Union")
+get_visualisation_search("\nimport ")
+print()
+get_visualisation_search("\nimport pygame")

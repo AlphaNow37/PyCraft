@@ -4,6 +4,7 @@ from . import widgets as wid
 
 
 class BaseInterface:
+    """Classe abstraite d'une interface de base"""
     bg = "#545454"
     widgets: list[wid.Widget] = []
     title_text: str | None = None

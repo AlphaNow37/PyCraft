@@ -1,13 +1,15 @@
+import pygame
+import math
+
 from .abc import BaseInterface
 from .widgets import Widget, Button
 from . import menu_interface
 from functools import partial
-import pygame
 from ..events.keymap import KeyChangeError, KeyMapManager
-import math
 
 
 class KeyInterface(BaseInterface):
+    """Interface gerant l'attribution des touches aux différentes actions"""
     title_text = "KeyMap :"
     superior = menu_interface.MenuInterface
 

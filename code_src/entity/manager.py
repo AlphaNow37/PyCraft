@@ -3,6 +3,7 @@ from . import BaseEntity
 
 
 class EntityManager:
+    """Gere les entités du monde"""
     def __init__(self, game: Game):
         self.game = game
         self.entity_lst: list[BaseEntity] = []

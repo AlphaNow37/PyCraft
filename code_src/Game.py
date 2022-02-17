@@ -1,7 +1,7 @@
 import math
-
 import pygame
 import json
+
 from . import map
 from . import screen_decorators as sc_deco
 from .screen_decorators.Property import Property
