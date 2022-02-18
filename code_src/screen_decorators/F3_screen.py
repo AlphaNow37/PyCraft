@@ -1,5 +1,5 @@
 from .. import Game
-from ..utilitaire import PygameText
+from ..tools import PygameText
 from ..infos import __version__
 
 SEPARATOR = "------------------"

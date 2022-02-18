@@ -10,6 +10,7 @@ SOUNDS_ROOT = SRC_ROOT / "sounds"
 
 
 class SoundManager:
+    """Interface permettant de jouer des sons"""
     def __init__(self, game):
         self.game: Game = game
         self.breaked_channel = Channel(1)

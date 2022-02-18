@@ -102,16 +102,15 @@ class Map:
         name, properties = resume
         if name == "forced_air":
             name = "air"
-        properties = properties.copy()
-        properties: dict
+        properties: dict = properties.copy()
         if is_left and "flip_x" in properties:
             properties["flip_x"] = not properties["flip_x"]
-        classe: type[blocks.Block] = properties.pop("class", None)
-        if isinstance(classe, str):
-            classe = dct_name_to_cls[classe]
-        elif classe is None:
-            classe = blocks.Block
-        block = classe(name, self.game, x, y, **properties)
+        cls: type[blocks.Block] = properties.pop("class", None)
+        if isinstance(cls, str):
+            cls = dct_name_to_cls[cls]
+        elif cls is None:
+            cls = blocks.Block
+        block = cls(name, self.game, x, y, **properties)
         return block
 
     def _add_column(self, side, column=None):

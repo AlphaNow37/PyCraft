@@ -1,5 +1,5 @@
+"""This module load all the sounds files"""
 from pygame.mixer import Sound
-
 
 from ..roots import SRC_ROOT
 SOUND_ROOT = SRC_ROOT / "sounds"

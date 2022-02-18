@@ -1,5 +1,5 @@
 from .constants import *
-from ..utilitaire import PygameText
+from ..tools import PygameText
 from .. import Game
 import pygame
 from . import command
