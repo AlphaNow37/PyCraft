@@ -22,14 +22,18 @@ class EventManager:
         chat_just_opened = False
         pressed = pygame.key.get_pressed()
         for event in pygame.event.get():
+
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.game.running = False
+
             elif event.type == pygame.WINDOWRESIZED:
                 self.game.size_screen = (event.x, event.y)
                 self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
+
             elif self.game.interface is None:
                 if event.type == pygame.MOUSEWHEEL:
                     self.game.zoom = round(1.2**(-event.y) * self.game.zoom)
+                    self.game.zoom = max(self.game.zoom, 4)
                     self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     # pos = event.pos
@@ -66,6 +70,7 @@ class EventManager:
 
                 elif event.type == pygame.TEXTINPUT and self.game.open_chat and not chat_just_opened:
                     self.game.chat_manager.event(event)
+
             elif self.game.interface is not None:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
                     if pressed[pygame.K_LSHIFT]:
@@ -74,29 +79,31 @@ class EventManager:
                         self.game.interface = None
                 else:
                     self.game.interface.on_event(event)
+
         if self.game.interface is None and not self.game.open_chat:
             if KeyMapManager.is_pressed(pressed, "jump"):
                 if self.game.gamemode == "SPECTATOR":
                     self.player.move(0, 1)
                 else:
                     self.player.jump()
-            if KeyMapManager.is_pressed(pressed, "left"):
-                self.player.move(-1, 0)
-            if KeyMapManager.is_pressed(pressed, "sneak"):
-                self.player.move(0, -1)
-            if KeyMapManager.is_pressed(pressed, "right"):
-                self.player.move(1, 0)
 
+            self.handle_player_moves(pressed)
             if not pressed[pygame.K_F3]:
                 self.f3_used = False
-
-            if KeyMapManager.is_pressed(pressed, "sneak") != self.player.sneaking:
-                if self.game.gamemode != "SPECTATOR":
-                    self.player.set_sneaking(pressed[pygame.K_LSHIFT] or pressed[pygame.K_s])
 
     def change_gamemode(self):
         self.game.change_gamemode(GAMEMODES[(GAMEMODES.index(self.game.gamemode) + 1) % len(GAMEMODES)])
 
+    def handle_player_moves(self, pressed):
+        if KeyMapManager.is_pressed(pressed, "left"):
+            self.player.move(-1, 0)
+        if KeyMapManager.is_pressed(pressed, "sneak"):
+            self.player.move(0, -1)
+        if KeyMapManager.is_pressed(pressed, "right"):
+            self.player.move(1, 0)
+        if KeyMapManager.is_pressed(pressed, "sneak") != self.player.sneaking:
+            if self.game.gamemode != "SPECTATOR":
+                self.player.set_sneaking(pressed[pygame.K_LSHIFT] or pressed[pygame.K_s])
 
 def get_blocks_size(size_screen, zoom):
     width_sc, height_sc = size_screen

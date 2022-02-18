@@ -7,21 +7,23 @@ from .. import Game
 
 class Block(base_elements.BaseCarre):
     """Classe mere de tous les blocks"""
-    collision = True
-    air = False
-    unbreakable = False
-    revelated = False
-    solidity = 0.5
-    outil = None
+    collision = True  # If the object has collision
+    falling_max_speed = None  # For water / ladders / ...
 
-    support_x_flip = False
-    support_y_flip = False
+    air = False  # For air only
+    unbreakable = False  # Bedrock, water, ...
+    revelated = False  # For Ores
+    solidity = 0.5  # For the mining speed
+    outil = None  # "pickaxe" -> stone, etc
+
+    support_x_flip = False  # If we can flip vertically
+    support_y_flip = False  # ~ horizontally
 
     is_slab = False
 
-    destroyed = False
+    destroyed = False  # never True beetween 2 ticks
 
-    breaked_sound = "stone"
+    breaked_sound = None  # The name of his breaked-sound
 
     @staticmethod
     def func_get_pos_friends(_x, _y): return []
@@ -60,7 +62,7 @@ class Block(base_elements.BaseCarre):
             for _ in range(5):
                 self.game.entity_manager.add(entity.Particle(self.game, self.x+0.5, self.y+0.5, self.img))
         if sound:
-            self.game.sound_manager.play_breaked_sound(self.breaked_sound)
+            self.game.sound_manager.breaked(self.breaked_sound)
 
     def update_from_voisin(self, from_x, from_y):
         pass

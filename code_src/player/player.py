@@ -115,8 +115,11 @@ class Player(BaseEntity):
 
     def jump(self):
         down = self.get_down_block()
-        if down is not None and down.collision:
-            self.act_speed_y += GRAVITY*20
+        if down is not None:
+            if down.collision:
+                self.act_speed_y += GRAVITY*20
+            elif down.falling_max_speed:
+                self.act_speed_y = min(GRAVITY*20, down.falling_max_speed)
 
     def get_data(self):
         """Retourne les données relatives au joueur"""

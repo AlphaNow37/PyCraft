@@ -36,6 +36,7 @@ class Chatmanager:
             elif key == pygame.K_RETURN:
                 self.lasts_inputs.append(self.input)
                 self.send(f"[You] {self.input}")
+                self.last_input_index = 0
                 if self.on_input:
                     self.finish_input(self.input)
                 elif self.input.startswith("/"):

@@ -2,6 +2,7 @@ import pygame
 
 from ..base_elements import BaseImageCentree
 from ..constants import *
+from ..tools import get_propertie_at
 
 
 class BaseEntity(BaseImageCentree):
@@ -16,48 +17,43 @@ class BaseEntity(BaseImageCentree):
         super().__init__(*args, **kwargs)
         self._life = self.base_life
 
-    def move(self, x, y):
+    def move(self, x, y) -> tuple[bool, tuple[float | int, ...]]:
         if self.collision:
             x_ = x/10
             y_ = y/10
             any_ = False
             for _ in range(10):
-                if not self.get_collision(self.x+x_, self.y+y_):
+                if not self.verify_collision(self.x + x_, self.y + y_):
                     self.x += x_
                     self.y += y_
+                    max_speed = get_propertie_at(self.game, "falling_max_speed", self.x, self.y, self.width, self.height)
+                    if max_speed:
+                        max_speed /= 10
+                        y_ = max(y_, -max_speed)
+                        x_ = max(min(x_, max_speed), -max_speed)
                 else:
                     any_ = True
                     break
-            return any_
+            return any_, (x_*10, y_*10)
         else:
             self.x += x
             self.y += y
-            return False
+            return False, (x, y)
 
-    def get_collision(self, x=None, y=None):
+    def verify_collision(self, x=None, y=None):
         if not self.collision:
             return False
         if x is None:
             x = self.x
         if y is None:
             y = self.y
-
-        self_rect = pygame.Rect((x-self.width/2)*100, (y-self.height/2)*100, self.width*100, self.height*100)
-        for x_ in range(-2, 3):
-            for y_ in range(-2, 3):
-                block = self.map.get_case(x+x_, y+y_)
-                if block is not None and block.collision and block.get_rect().colliderect(self_rect):
-                    return True
-        return False
+        return get_propertie_at(self.game, "collision", x, y, self.width, self.height)
 
     def tick(self):
         self.act_speed_y -= GRAVITY
-        if self.act_speed_y > 0:
-            any_ = self.move(0, self.act_speed_y)
-            if any_:
-                self.act_speed_y = 0
-        elif self.fall:
-            any_ = self.move(0, self.act_speed_y)
+        if self.fall:
+            any_, new_falling_speed = self.move(0, self.act_speed_y)
+            self.act_speed_y = new_falling_speed[1]
             if any_:
                 speed = self.act_speed_y
                 if speed < -1.5:
@@ -87,7 +83,7 @@ class BaseEntity(BaseImageCentree):
     @life.setter
     def life(self, value):
         self._life = value
-        if value == 0:
+        if value <= 0:
             self.destroy()
         else:
             self.event("LIFE_CHANGE")

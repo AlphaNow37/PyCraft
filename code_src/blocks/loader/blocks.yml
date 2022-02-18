@@ -175,6 +175,7 @@ _gen_block: &gen_block
     <<: *gen_fluid
     color: blue
     alpha: 150
+    falling_max_speed: 0.3
 
 
 # other
@@ -193,6 +194,7 @@ _gen_block: &gen_block
     <<: *gen_block
     unbreakable: true
     solidity: null
+    breaked_sound: stone
 
   snow:
     <<: *gen_block
