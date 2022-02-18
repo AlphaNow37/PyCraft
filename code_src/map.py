@@ -143,13 +143,13 @@ class Map:
         li_biome = self.left_biomes if side == -1 else self.right_biomes
         return li_biome[int(x)]
 
-    def destroy_case(self, x, y, particle=True):
+    def destroy_case(self, x, y, particle=True, sound=True):
         """
         détruit le block en (x; y)
         :param particle: si la destruction emet des particules
         """
         new_x, world, _ = self._get_world_from_x(x)
-        self.get_case(x, y).destroy(particle=particle)
+        self.get_case(x, y).destroy(particle=particle, sound=sound)
         world[new_x][y] = blocks.Block("air", self.game, new_x, y)
         self.update_around(x, y)
 

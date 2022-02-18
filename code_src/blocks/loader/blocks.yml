@@ -41,6 +41,7 @@ _gen_block: &gen_block
       - andesite
       - sandstone
       - cobblestone
+    breaked_sound: stone
 
   _gen_ore:
     <<: *gen_stone
@@ -61,6 +62,7 @@ _gen_block: &gen_block
     <<: *gen_stone
     solidity: 1
     folder: /other
+    breaked_sound: glass
 
 # surface
 <<:
@@ -69,14 +71,19 @@ _gen_block: &gen_block
     outil: shovel
     folder: /surface
     solidity: 0.7
+    breaked_sound: dirt
     into:
       - dirt
-  _fallable:
+  _fallable: &surface_fallable
     <<: *gen_surface
     class: GRAVITY
-    into:
-      - sand
-      - gravel
+    into: []
+  sand:
+    <<: *surface_fallable
+    breaked_sound: sand
+  gravel:
+    <<: *surface_fallable
+    breaked_sound: gravel
   grass:
     <<: *gen_surface
     load_img: false
@@ -86,6 +93,7 @@ _gen_block: &gen_block
 <<:
   _gen_wood: &gen_wood
       <<: *gen_block
+      breaked_sound: wood
       solidity: 1.5
       outil: axe
       folder: /wood
@@ -190,4 +198,5 @@ _gen_block: &gen_block
     <<: *gen_block
     color: white
     height: 0.2
-    class: SUPPORTED_BLOCK
+    class:
+    breaked_sound: snow

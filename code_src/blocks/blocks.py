@@ -2,6 +2,7 @@ import pygame
 from .. import base_elements
 from . import loader
 from .. import entity
+from .. import Game
 
 
 class Block(base_elements.BaseCarre):
@@ -20,10 +21,12 @@ class Block(base_elements.BaseCarre):
 
     destroyed = False
 
+    breaked_sound = "stone"
+
     @staticmethod
     def func_get_pos_friends(_x, _y): return []
 
-    def __init__(self, name, game, x, y, **kwargs):
+    def __init__(self, name, game: Game, x, y, **kwargs):
         super().__init__(game, x, y)
         self.name = name
         self.__dict__.update(blocks[name])
@@ -47,15 +50,17 @@ class Block(base_elements.BaseCarre):
                     block.revelate()
         self.revelated = True
 
-    def destroy(self, particle=True):
+    def destroy(self, particle=True, sound=True):
         self.destroyed = True
         for friend in self.friends:
             case = self.map.get_case(*friend)
             if case and not case.destroyed:
-                self.map.destroy_case(*friend)
+                self.map.destroy_case(*friend, sound=False)
         if particle:
             for _ in range(5):
                 self.game.entity_manager.add(entity.Particle(self.game, self.x+0.5, self.y+0.5, self.img))
+        if sound:
+            self.game.sound_manager.play_breaked_sound(self.breaked_sound)
 
     def update_from_voisin(self, from_x, from_y):
         pass

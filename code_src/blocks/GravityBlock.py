@@ -9,7 +9,7 @@ class GravityBlock(Block):
             block = self.map.get_case(self.x, self.y-1)
             if block and block.air:
                 self.map.set_case(self.x, self.y-1, self)
-                self.map.destroy_case(self.x, self.y, particle=False)
+                self.map.destroy_case(self.x, self.y, particle=False, sound=False)
                 self.y -= 1
                 self.falling = True
                 self.map.to_planned_update.append([2, self.x, self.y])

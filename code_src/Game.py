@@ -12,6 +12,8 @@ from .chat import Chatmanager
 from .interfaces import BaseInterface
 from .roots import SAVE_ROOT
 from .tests import TestManager
+from .sounds import SoundManager
+
 
 _PROFILING = False
 _TESTING = True
@@ -48,6 +50,7 @@ class Game:
         self.mouse_pos_side = (None, None)
 
         self.chat_manager = Chatmanager(self)
+        self.sound_manager: SoundManager = SoundManager(self)
 
         if _TESTING:
             self.test_manager = TestManager(self)
@@ -118,6 +121,7 @@ class Game:
             self.sc_deco.tick()
             self.entity_manager.tick()
             self.map.tick()
+            self.sound_manager.tick()
 
             if self.open_chat:
                 self.chat_manager.tick()
