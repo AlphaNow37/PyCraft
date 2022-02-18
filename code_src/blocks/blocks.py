@@ -12,7 +12,7 @@ class Block(base_elements.BaseCarre):
 
     air = False  # For air only
     unbreakable = False  # Bedrock, water, ...
-    revelated = False  # For Ores
+    revelated = True  # For Ores
     solidity = 0.5  # For the mining speed
     outil = None  # "pickaxe" -> stone, etc
 
@@ -43,14 +43,10 @@ class Block(base_elements.BaseCarre):
         return f"{self.__class__.__name__}('{self.name}',x={self.x}, y={self.y})"
 
     def revelate(self):
-        if self.air and not self.revelated:
-            for x, y in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
-                x += self.x
-                y += self.y
-                block = self.map.get_case(x, y)
-                if block is not None and not block.revelated:
-                    block.revelate()
-        self.revelated = True
+        if not self.revelated:
+            self.revelated = True
+            for case in self.map.get_around(self.x, self.y):
+                case.revelate()
 
     def destroy(self, particle=True, sound=True):
         self.destroyed = True

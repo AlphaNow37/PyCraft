@@ -5,6 +5,7 @@ from .blocks import Block, blocks
 class Ore(Block):
     """Classe de tous les minerais"""
     fond = pygame.image.load("src/blocks/stones/stone.png")
+    revelated = False
 
     def __init__(self, name, game, x, y, name_fond, **kwargs):
         self.fond = blocks[name_fond]["img"]

@@ -18,6 +18,7 @@ class BreakerPlacerManager:
         self.stage = 0
         self.breaking_pos = (None, None)
         self.rest_breaking_solidity = None
+        self.last_stage = None
         self.game = game
         self.map = game.map
 
@@ -61,6 +62,9 @@ class BreakerPlacerManager:
                         self.map.destroy_case(x, y)
                     else:
                         self.stage = 10-int(self.rest_breaking_solidity/block.solidity*10)
+                        if self.stage != self.last_stage:
+                            self.game.sound_manager.breaked(block.breaked_sound, sleep=True)
+                            self.last_stage = self.stage
                         return
 
         self.breaking = False
@@ -68,6 +72,7 @@ class BreakerPlacerManager:
         self.breaking_pos = (None, None)
         self.rest_breaking_solidity = None
         self.mining_block = None
+        self.last_stage = None
 
     def draw(self):
         if self.breaking:

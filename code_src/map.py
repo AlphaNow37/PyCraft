@@ -151,6 +151,8 @@ class Map:
         self.get_case(x, y).destroy(particle=particle, sound=sound)
         world[new_x][y] = blocks.Block("air", self.game, new_x, y)
         self.update_around(x, y)
+        for case in self.get_around(x, y):
+            case.revelate()
 
     def update_around(self, x, y):
         """
