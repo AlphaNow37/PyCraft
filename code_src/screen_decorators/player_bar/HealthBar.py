@@ -1,4 +1,5 @@
 import pygame.transform
+from math import ceil
 
 from ... import Game
 from . import icons
@@ -21,6 +22,7 @@ class HealthBarManager:
         height_hearth = min(w/50, h/10)
         life = self.game.player.life
         nb_heath, nb_partial_heath = divmod(life, 10)
+        nb_heath = ceil(nb_heath)
         nb_partial_heath = 1 if nb_partial_heath else 0
         hearths_surfaces = {
             name: pygame.transform.scale(surface, (height_hearth, height_hearth))

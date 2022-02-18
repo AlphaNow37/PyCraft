@@ -4,6 +4,7 @@ import math
 from ..roots import SRC_ROOT, CACHE_ROOT, USER_ROOT
 from .skin_loader import get_img_from_skin, download_skin
 from .. import Game
+from ..constants import GRAVITY
 
 import json
 import threading
@@ -115,7 +116,7 @@ class Player(BaseEntity):
     def jump(self):
         down = self.get_down_block()
         if down is not None and down.collision:
-            self.act_speed_y += 0.7
+            self.act_speed_y += GRAVITY*20
 
     def get_data(self):
         """Retourne les données relatives au joueur"""

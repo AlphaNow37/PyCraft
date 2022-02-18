@@ -56,9 +56,12 @@ class BaseEntity(BaseImageCentree):
             any_ = self.move(0, self.act_speed_y)
             if any_:
                 self.act_speed_y = 0
-        if self.fall:
+        elif self.fall:
             any_ = self.move(0, self.act_speed_y)
             if any_:
+                speed = self.act_speed_y
+                if speed < -1.5:
+                    self.life -= (-speed - 0.5) * 15
                 self.act_speed_y = 0
         else:
             self.act_speed_y = 0
