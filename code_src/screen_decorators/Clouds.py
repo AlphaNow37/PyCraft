@@ -2,6 +2,7 @@ import random
 import pygame
 from .. import base_elements, Game
 from ..roots import SRC_ROOT
+from .skycolor import get_colors
 """S'occupe des nuages"""
 CLOUD_ROOT = SRC_ROOT / "environnement" / "clouds"
 
@@ -44,9 +45,24 @@ def get_clouds_surface(block_width: block_size, block_height: block_size, resolu
 class CloudSubLayer(base_elements.BaseCarre):
     speed = 0
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.masks = [pygame.mask.from_surface(surface) for surface in self.imgs]
+
     def tick(self):
         self.x += self.speed
         self.x %= CLOUD["PERIOD"]
+
+    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
+        img = self.imgs[frame]
+        mask = self.masks[frame]
+        _, mask_rgb = get_colors(int(self.game.time))
+        mask_img = mask.to_surface(setcolor=mask_rgb, unsetcolor=(0, 0, 0, 0))
+        mask_img.set_alpha(100)
+        new_img = img.copy()
+        new_img.blit(mask_img, (0, 0))
+
+        super().draw(x_self, y_self, new_img, width, height)
 
 
 class CloudManager:

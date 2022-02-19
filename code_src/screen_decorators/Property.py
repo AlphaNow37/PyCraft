@@ -7,6 +7,7 @@ def _default(*_, **__):
 
 
 class Property:
+    """As property but more customisable"""
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
         self.reset = partial(self.reset, self)

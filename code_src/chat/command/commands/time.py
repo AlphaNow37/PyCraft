@@ -28,13 +28,13 @@ def set_time(new_time, game: Game):
     if isinstance(new_time, token.Number):
         new_time = float(new_time)
         assert 0 <= new_time <= 360, (ParamsError, "The new time must be in range 0->360,\n0=night 180=day")
-        game.time = new_time
+        game.time.set(new_time)
     elif isinstance(new_time, (token.SpecialString, str, token.String)):
         new_time_int = times.get(str(new_time))
         if new_time_int is None:
             raise ParamsError("Invalid time '{}',\ncan be in '{}'"
                               .format(new_time, "', '".join(times)))
-        game.time = new_time_int
+        game.time.set(new_time_int)
     else:
         raise ParamsError(f"Invalid data '{str(new_time)}'")
     raise Send(f"Time changed to {new_time}", name="Time")

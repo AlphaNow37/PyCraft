@@ -3,7 +3,7 @@ import pygame
 import json
 
 from . import map
-from . import screen_decorators as sc_deco
+from .screen_decorators import ScreenDecorator
 from .screen_decorators.Property import Property
 from .infos import __version__
 from .events import EventManager, get_blocks_size
@@ -150,7 +150,7 @@ class Game:
     def reset_world(self):
         self.map.generate()
         self.player = self.map.player
-        self.sc_deco: sc_deco.ScreenDecorator = sc_deco.ScreenDecorator(self)
+        self.sc_deco: ScreenDecorator = ScreenDecorator(self)
         self.tick = 0
 
         self.time = self.sc_deco.time_manager.time  # 0-> 0h, 90-> 6h, 180-> 12h, 270-> 18h

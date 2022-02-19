@@ -4,6 +4,7 @@ import math
 from .Property import Property
 from ..constants import TIME_INCREMENT
 from ..roots import SRC_ROOT
+from .skycolor import get_colors
 
 
 SUNRISE_TIME = 100  # Time beetween the sky color will change
@@ -35,7 +36,8 @@ class TimeManager:
         self.moon = Astre("Moon_2", game)
 
     def draw(self):
-        self.game.screen.fill(self.get_sky_color())
+        sky_color, _ = get_colors(int(self.time))
+        self.game.screen.fill(sky_color)
         angle = self.time % 360
         angle = math.radians(angle)
 
@@ -69,17 +71,3 @@ class TimeManager:
         x += x_player
         y += y_player
         return x, y
-
-    def get_sky_color(self):
-        time = self.time
-        if END_SUNRISE <= time <= BEGIN_SUNSET:
-            sky_color = (90, 210, 240)
-        elif time < BEGIN_SUNRISE or time > END_SUNSET:
-            sky_color = (0, 0, 0)
-        else:
-            if time < 180:
-                i = time - BEGIN_SUNRISE
-            else:
-                i = END_SUNSET - time
-            sky_color = (i*90/SUNRISE_TIME, i*210/SUNRISE_TIME, i*240/SUNRISE_TIME)
-        return sky_color
