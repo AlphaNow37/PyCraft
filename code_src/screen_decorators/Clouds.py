@@ -17,7 +17,7 @@ CLOUD = {
     "ALPHA": 160,
     "PERIOD": 50,
     "MIN_Y": 100,
-    "MAX_Y": 110,
+    "MAX_Y": 120,
     "SPEEDS": [0.2, 0.3, 0.5],
     "IMGS": [pygame.image.load(CLOUD_ROOT / name) for name in CLOUD_ROOT.iterdir()],
     "NB_DIVS": 25,
