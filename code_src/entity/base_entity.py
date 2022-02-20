@@ -16,6 +16,7 @@ class BaseEntity(BaseImageCentree):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._life = self.base_life
+        self.was_destroyed = False
 
     def move(self, x, y) -> tuple[bool, tuple[float | int, ...]]:
         if self.collision:
@@ -50,6 +51,7 @@ class BaseEntity(BaseImageCentree):
         return get_propertie_at(self.game, "collision", x, y, self.width, self.height)
 
     def tick(self):
+        self.was_destroyed = False
         self.act_speed_y -= GRAVITY
         if self.fall:
             any_, new_falling_speed = self.move(0, self.act_speed_y)
@@ -74,6 +76,7 @@ class BaseEntity(BaseImageCentree):
         return self.map.get_case(x, y-1)
 
     def destroy(self):
+        self.was_destroyed = True
         self.game.entity_manager.remove(self)
 
     @property
@@ -85,8 +88,10 @@ class BaseEntity(BaseImageCentree):
         self._life = value
         if value <= 0:
             self.destroy()
+            self.event("DEATH")
         else:
             self.event("LIFE_CHANGE")
 
     def event(self, name: str, *args):
-        pass
+        if name == "DEATH":
+            self.destroy()

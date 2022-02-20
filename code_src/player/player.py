@@ -53,6 +53,8 @@ class Player(BaseEntity):
         self.fall = not self.game.gamemode == "SPECTATOR"
         self.collision = self.fall
         super(Player, self).tick()
+        if self.was_destroyed:
+            self.send_death_message(f"{self.username} hits the ground too hard")
 
     def tp_to(self, x, y):
         self.x = x
@@ -133,15 +135,23 @@ class Player(BaseEntity):
         self.life = data["life"]
         self.tp_to(data["x"], data["y"])
 
-    def destroy(self):
+    def destroy(self, kill_message: str | None = None):
+        self.was_destroyed = True
         self.tp_to(*self.spawnpoint)
         self.life = 100
+        if kill_message is not None:
+            self.send_death_message(kill_message)
+
+    def send_death_message(self, message: str):
+        self.game.chat_manager.send(f"[Death] {message}")
 
     def event(self, name: str, *args):
         if name == "LIFE_CHANGE":
             # from ..screen_decorators.player_bar.HealthBar import HealthBarManager
             health_manager = self.game.sc_deco.player_bar_manager.health_bar_manager
             health_manager.on_player_life_change()
+        else:
+            super().event(name, *args)
 
     kill = destroy
 
