@@ -46,4 +46,4 @@ class HealthBarManager:
             self.life_changing_restant_time -= 1
 
     def on_player_life_change(self):
-        self.life_changing_restant_time = 30
+        self.life_changing_restant_time = 6
