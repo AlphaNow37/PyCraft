@@ -21,6 +21,8 @@ class Player(BaseEntity):
 
     base_life = 100
 
+    does_send_death_msg = True
+
     @classmethod
     def set_img(cls):
         """Charge le skin du joueur"""
@@ -53,8 +55,6 @@ class Player(BaseEntity):
         self.fall = not self.game.gamemode == "SPECTATOR"
         self.collision = self.fall
         super(Player, self).tick()
-        if self.was_destroyed:
-            self.send_death_message(f"{self.username} hits the ground too hard")
 
     def tp_to(self, x, y):
         self.x = x
@@ -142,9 +142,6 @@ class Player(BaseEntity):
         if kill_message is not None:
             self.send_death_message(kill_message)
 
-    def send_death_message(self, message: str):
-        self.game.chat_manager.send(f"[Death] {message}")
-
     def event(self, name: str, *args):
         if name == "LIFE_CHANGE":
             # from ..screen_decorators.player_bar.HealthBar import HealthBarManager
@@ -154,6 +151,10 @@ class Player(BaseEntity):
             super().event(name, *args)
 
     kill = destroy
+
+    @property
+    def name(self):
+        return self.username
 
 
 threading.Thread(target=Player.set_img).start()
