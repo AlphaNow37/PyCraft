@@ -7,7 +7,7 @@ from . import F3_screen
 from . import Weather
 from . import player_bar
 
-from . import cursor as _  # we just run the file
+from . import cursor_and_icon as _  # we just run the file
 
 
 class ScreenDecorator:
