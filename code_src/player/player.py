@@ -23,21 +23,22 @@ class Player(BaseEntity):
 
     does_send_death_msg = True
 
-    @classmethod
-    def set_img(cls):
+    def set_img(self):
         """Charge le skin du joueur"""
         with open(USER_ROOT / "user.json") as file:
             user_data = json.load(file)
-        cls.username = user_data["username"]
-        skin_dir = CACHE_ROOT / ("skin_" + cls.username + ".png")
+        self.username = user_data["username"]
+        skin_dir = CACHE_ROOT / ("skin_" + self.username + ".png")
         if not skin_dir.exists():
-            succes = download_skin(skin_dir, cls.username)
+            succes = download_skin(skin_dir, self.username)
             if not succes:
-                return
+                self.game.chat_manager.send(f"Can't load the skin of {self.username}", error=True)
+                return False
         base_skin = pygame.image.load(str(skin_dir))
-        fragments = cls.fragments = get_img_from_skin(base_skin)
-        cls.fragments = fragments
-        cls.img = fragments["front"]
+        fragments = self.fragments = get_img_from_skin(base_skin)
+        self.fragments = fragments
+        self.img = fragments["front"]
+        return True
 
     def __init__(self, game: Game, y):
         super(Player, self).__init__(game, 0, 0)
@@ -45,6 +46,7 @@ class Player(BaseEntity):
         self.spawnpoint = [0.5, y]
         self.vue_dir = 0
         self.sneaking = False
+        threading.Thread(target=self.set_img).start()
 
     def move(self, x, y):
         any_ = super().move(x, y)
@@ -157,4 +159,3 @@ class Player(BaseEntity):
         return self.username
 
 
-threading.Thread(target=Player.set_img).start()
