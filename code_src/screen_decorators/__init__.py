@@ -12,7 +12,7 @@ from . import cursor as _  # we just run the file
 
 class ScreenDecorator:
     # NOTE: decorator != decoration
-    #       |               \-> the moon, the sky, the rain
+    #       |               \-> the moon, the sky, the rain, the weather, the overlays
     #       \-> @truc <\n> def ...
     """Classe servant a centraliser les décorations"""
 

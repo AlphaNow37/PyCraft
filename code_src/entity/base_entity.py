@@ -12,6 +12,7 @@ class BaseEntity(BaseImageCentree):
     act_speed_y = 0
     destroy_after = None
     base_life = 100
+    group=None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -77,7 +78,8 @@ class BaseEntity(BaseImageCentree):
 
     def destroy(self):
         self.was_destroyed = True
-        self.game.entity_manager.remove(self)
+        group = self.group or self.game.entities
+        group.remove(self)
 
     @property
     def life(self):

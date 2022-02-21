@@ -56,7 +56,7 @@ class Block(base_elements.BaseCarre):
                 self.map.destroy_case(*friend, sound=False)
         if particle:
             for _ in range(5):
-                self.game.entity_manager.add(entity.Particle(self.game, self.x+0.5, self.y+0.5, self.img))
+                self.game.entities.add(entity.Particle(self.game, self.x + 0.5, self.y + 0.5, self.img))
         if sound:
             self.game.sound_manager.breaked(self.breaked_sound)
 

@@ -7,7 +7,7 @@ from .screen_decorators import ScreenDecorator
 from .screen_decorators.Property import Property
 from .infos import __version__
 from .events import EventManager, get_blocks_size
-from .entity import EntityManager
+from .entity import EntityGroup
 from .chat import Chatmanager
 from .interfaces import BaseInterface
 from .roots import SAVE_ROOT
@@ -95,7 +95,7 @@ class Game:
             self.sc_deco.draw_sun_moon_sky_weather()
             self.map.draw()
             self.sc_deco.draw_overlays()
-            self.entity_manager.draw()
+            self.entities.draw()
             self.player.draw()
             self.sc_deco.draw_clouds()
             self.sc_deco.draw_bars()
@@ -119,7 +119,7 @@ class Game:
 
             self.player.tick()
             self.sc_deco.tick()
-            self.entity_manager.tick()
+            self.entities.tick()
             self.map.tick()
             self.sound_manager.tick()
 
@@ -156,7 +156,7 @@ class Game:
         self.time = self.sc_deco.time_manager.time  # 0-> 0h, 90-> 6h, 180-> 12h, 270-> 18h
 
         self.event_manager = EventManager(self)
-        self.entity_manager: EntityManager = EntityManager(self)
+        self.entities: EntityGroup = EntityGroup(self)
 
         w_manager = self.sc_deco.weather_manager
         self.raining: Property = w_manager.raining

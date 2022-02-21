@@ -72,13 +72,16 @@ class CloudManager:
 
     def __init__(self, game):
         self.game: Game = game
+        self.create_clouds()
+
+    def create_clouds(self):
         self.subs = []
         for speed in CLOUD["SPEEDS"]:
             speed_subs = []
             surfaces1 = get_clouds_surface(self.width_layer, self.height_layer, 5, 5)
             surfaces2 = get_clouds_surface(self.width_layer, self.height_layer, 5, 16)
             for surface1, surface2 in zip(surfaces1, surfaces2):
-                sublayer = CloudSubLayer(game,
+                sublayer = CloudSubLayer(self.game,
                                          imgs=[surface1, surface2], x=0, y=CLOUD["MIN_Y"],
                                          speed=speed,
                                          width=self.width_sublayer, height=self.height_layer)
