@@ -1,4 +1,4 @@
 from .base_entity import BaseEntity
 from .directed_entity import DirectedEntity
 from .particle import Particle
-from .manager import EntityGroup
+from .entity_group import EntityGroup

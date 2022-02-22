@@ -15,7 +15,7 @@ from .tests import TestManager
 from .sounds import SoundManager
 
 
-_PROFILING = False
+_PROFILING = True
 _TESTING = True
 
 """
