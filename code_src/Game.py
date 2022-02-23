@@ -15,8 +15,8 @@ from .tests import TestManager
 from .sounds import SoundManager
 
 
-_PROFILING = True
-_TESTING = True
+_PROFILING = False
+_TESTING = False
 
 """
 Fichier principale aceuillant la classe Game, la racine du jeu

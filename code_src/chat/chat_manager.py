@@ -4,6 +4,7 @@ from .. import Game
 import pygame
 from . import command
 import pyperclip
+from typing import Generator
 
 
 class Chatmanager:
@@ -25,33 +26,50 @@ class Chatmanager:
         self.next_barre_vue_change = self.barre_change_time
         self.barre_type = True
 
+        self.active_command: Generator | None = None
+
     def event(self, event: pygame.event.Event):
         pressed = pygame.key.get_pressed()
         if event.type == pygame.KEYDOWN:
             key = event.key
+
             if key == pygame.K_BACKSPACE:
                 self.input = self.input[:self.barre_index-1] + self.input[self.barre_index:]
                 if self.barre_index != 0:
                     self.barre_index -= 1
+
             elif key == pygame.K_RETURN:
                 self.lasts_inputs.append(self.input)
-                self.send(f"[You] {self.input}")
+                if self.active_command is not None:
+                    self.send(f">>> {self.input}")
+                    try:
+                        self.active_command.send(self.input)
+                    except (StopIteration, RuntimeError):
+                        self.active_command = None
+                else:
+                    self.send(f"[You] {self.input}")
                 self.last_input_index = 0
                 if self.on_input:
                     self.finish_input(self.input)
                 elif self.input.startswith("/"):
-                    command.execute(self.input, self.game)
+                    res = command.execute(self.input, self.game)
+                    if isinstance(res, Generator):
+                        self.active_command = res
+                        next(self.active_command)
                 self.input = ""
                 self.barre_index = 0
+
             elif (pressed[pygame.K_LCTRL] or pressed[pygame.K_RCTRL]) and key == pygame.K_v:
                 # If ctrl+v
                 text = pyperclip.paste()
                 self.input += text
                 self.barre_index += len(text)
+
             elif key == pygame.K_UP and self.last_input_index != -len(self.lasts_inputs):
                 self.last_input_index -= 1
                 self.input = self.lasts_inputs[self.last_input_index]
                 self.barre_index = len(self.input)
+
             elif key == pygame.K_DOWN and self.last_input_index != 0:
                 self.last_input_index += 1
                 if self.last_input_index == 0:
@@ -59,13 +77,17 @@ class Chatmanager:
                 else:
                     self.input = self.lasts_inputs[self.last_input_index]
                 self.barre_index = len(self.input)
+
             elif key == pygame.K_LEFT and self.barre_index > 0:
                 self.barre_index -= 1
+
             elif key == pygame.K_RIGHT and self.barre_index < len(self.input):
                 self.barre_index += 1
+
         elif event.type == pygame.TEXTINPUT:
             self.input = self.input[:self.barre_index] + event.text + self.input[self.barre_index:]
             self.barre_index += len(event.text)
+
         self.update_input()
 
     def update_input(self):
