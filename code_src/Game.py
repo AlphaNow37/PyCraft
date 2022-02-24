@@ -91,7 +91,7 @@ class Game:
         """
         Réactualise l'ecran en affichant tout
         """
-        if self.interface is None:
+        if self.interface is None or not self.interface.paused:
             self.sc_deco.draw_sun_moon_sky_weather()
             self.map.draw()
             self.sc_deco.draw_overlays()
@@ -103,14 +103,14 @@ class Game:
                 self.chat_manager.draw()
             elif self.open_f3:
                 self.sc_deco.draw_f3_screen()
-        else:
+        if self.interface is not None:
             self.interface.draw()
 
     def events(self):
         self.event_manager.events()
 
     def update(self):
-        if self.interface is None:
+        if self.interface is None or not self.interface.paused:
             x, y, side_x, side_y = self.get_pos_from_screenpos(pygame.mouse.get_pos())
             self.mouse_pos = [x, y]
             self.block_side = [side_x, side_y]
@@ -125,7 +125,7 @@ class Game:
 
             if self.open_chat:
                 self.chat_manager.tick()
-        else:
+        if self.interface is not None:
             self.interface.tick()
 
     def get_pos_from_screenpos(self, screenpos):
