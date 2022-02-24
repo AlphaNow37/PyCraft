@@ -14,6 +14,7 @@ class EventManager:
         self.game: Game = game
         self.player = game.player
         self.f3_used = False
+        self.key_manager = KeyMapManager()
 
     def events(self):
         """
@@ -81,7 +82,7 @@ class EventManager:
                     self.game.interface.on_event(event)
 
         if self.game.interface is None and not self.game.open_chat:
-            if KeyMapManager.is_pressed(pressed, "jump"):
+            if self.key_manager.is_pressed(pressed, "jump"):
                 if self.game.gamemode == "SPECTATOR":
                     self.player.move(0, 1)
                 else:
@@ -95,13 +96,13 @@ class EventManager:
         self.game.change_gamemode(GAMEMODES[(GAMEMODES.index(self.game.gamemode) + 1) % len(GAMEMODES)])
 
     def handle_player_moves(self, pressed):
-        if KeyMapManager.is_pressed(pressed, "left"):
+        if self.key_manager.is_pressed(pressed, "left"):
             self.player.move(-1, 0)
-        if KeyMapManager.is_pressed(pressed, "sneak"):
+        if self.key_manager.is_pressed(pressed, "sneak"):
             self.player.move(0, -1)
-        if KeyMapManager.is_pressed(pressed, "right"):
+        if self.key_manager.is_pressed(pressed, "right"):
             self.player.move(1, 0)
-        if KeyMapManager.is_pressed(pressed, "sneak") != self.player.sneaking:
+        if self.key_manager.is_pressed(pressed, "sneak") != self.player.sneaking:
             if self.game.gamemode != "SPECTATOR":
                 self.player.set_sneaking(pressed[pygame.K_LSHIFT] or pressed[pygame.K_s])
 
