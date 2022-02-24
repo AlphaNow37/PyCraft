@@ -14,7 +14,7 @@ cloud_height = base_img_height*scaler
 cloud_width = base_img_width*scaler
 
 CLOUD = {
-    "ALPHA": 160,
+    "ALPHA": 200,
     "PERIOD": 50,
     "MIN_Y": 100,
     "MAX_Y": 120,
@@ -35,7 +35,6 @@ def get_clouds_surface(block_width: block_size, block_height: block_size, resolu
         img_resized = pygame.transform.scale(img_cloud, (cloud_width * resolution, cloud_height * resolution))
         img.blit(img_resized, (x * resolution, y * resolution))
         img.blit(img_resized, (x * resolution - width, y * resolution))
-    img.set_alpha(CLOUD["ALPHA"])
     img.set_colorkey("black")
     surface_row_width = width / CLOUD["NB_DIVS"]
     subsurfaces = [img.subsurface([int(surface_row_width * x), 0, surface_row_width, height]) for x in
@@ -44,6 +43,7 @@ def get_clouds_surface(block_width: block_size, block_height: block_size, resolu
 
 class CloudSubLayer(base_elements.BaseCarre):
     speed = 0
+    alpha = CLOUD["ALPHA"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
