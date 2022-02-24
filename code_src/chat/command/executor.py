@@ -18,7 +18,8 @@ def execute(input_command: str, game: Game):
             while True:
                 user_input = yield
                 to_send = res.send(user_input)
-                send(to_send, game)
+                if to_send is not None:
+                    send(to_send, game)
         else:
             responses_exc = []
     except Exception as e:

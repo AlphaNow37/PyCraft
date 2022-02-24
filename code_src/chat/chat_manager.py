@@ -54,8 +54,11 @@ class Chatmanager:
                 elif self.input.startswith("/"):
                     res = command.execute(self.input, self.game)
                     if isinstance(res, Generator):
-                        self.active_command = res
-                        next(self.active_command)
+                        try:
+                            next(res)
+                            self.active_command = res
+                        except (StopIteration, RuntimeError):
+                            pass
                 self.input = ""
                 self.barre_index = 0
 
