@@ -1,6 +1,6 @@
 import pygame
-from .. import Game
-from ..tools import PygameText
+from code_src import Game
+from code_src.tools import PygameText
 
 
 class Widget:

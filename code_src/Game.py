@@ -9,7 +9,7 @@ from .infos import __version__
 from .events import EventManager, get_blocks_size
 from .entity import EntityGroup
 from .chat import Chatmanager
-from .interfaces import BaseInterface
+from .interfaces import AbcInterface
 from .roots import SAVE_ROOT
 from .tests import TestManager
 from .sounds import SoundManager
@@ -35,7 +35,7 @@ class Game:
 
         self.reset_world()
 
-        self.interface: BaseInterface | None = None
+        self.interface: AbcInterface | None = None
 
         self.zoom = 4
         self.camera_center = self.player.pos

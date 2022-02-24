@@ -1,11 +1,13 @@
 import pygame
-from .. import Game
+from ... import Game
 from . import widgets as wid
+from ..abc import AbcInterface
 
 
-class BaseInterface:
+class BasePausedInterface(AbcInterface):
     """Classe abstraite d'une interface de base"""
     bg = "#545454"
+    paused = True
     widgets: list[wid.Widget] = []
     title_text: str | None = None
     title: wid.Text | None = None

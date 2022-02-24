@@ -1,10 +1,10 @@
-from .abc import BaseInterface
-from .widgets import Button, Text, Widget
+from .abc import BasePausedInterface
+from code_src.interfaces.paused_interfaces.widgets import Button, Widget
 from functools import partial
 from . import keys_interface
 
 
-class MenuInterface(BaseInterface):
+class MenuInterface(BasePausedInterface):
     title_text = "Menu :"
 
     def __init__(self, game):
