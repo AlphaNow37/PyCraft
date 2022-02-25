@@ -3,6 +3,7 @@ from .. import base_elements
 from . import loader
 from .. import entity
 from .. import Game
+from ..items import DroppedItem
 
 
 class Block(base_elements.BaseCarre):
@@ -15,6 +16,9 @@ class Block(base_elements.BaseCarre):
     revelated = True  # For Ores
     solidity = 0.5  # For the mining speed
     outil = None  # "pickaxe" -> stone, etc
+
+    drop_value = None  # None -> himself, dict[str, int] -> int instances of str item
+                       # dict[str, dict[...]] -> custom 0->nothing
 
     support_x_flip = False  # If we can flip vertically
     support_y_flip = False  # ~ horizontally
@@ -48,7 +52,7 @@ class Block(base_elements.BaseCarre):
             for case in self.map.get_around(self.x, self.y):
                 case.revelate()
 
-    def destroy(self, particle=True, sound=True):
+    def destroy(self, particle=True, sound=True, do_drop=False):
         self.destroyed = True
         for friend in self.friends:
             case = self.map.get_case(*friend)
@@ -59,12 +63,22 @@ class Block(base_elements.BaseCarre):
                 self.game.entities.add(entity.Particle(self.game, self.x + 0.5, self.y + 0.5, self.img))
         if sound:
             self.game.sound_manager.breaked(self.breaked_sound)
+        if do_drop:
+            self.drop()
 
     def update_from_voisin(self, from_x, from_y):
         pass
 
     def planned_update(self):
         pass
+
+    def drop(self):
+        to_drop = []
+        if self.drop_value is None:
+            to_drop = [(self.name, self.img)]
+        for item in to_drop:
+            dropped_item = DroppedItem(self.game, self.x+0.5, self.y+0.5, item)
+            self.game.entities.add(dropped_item)
 
     def slab_draw(self, x_self=None, y_self=None, img=None, width=None, height=None):
         y_self = y_self if y_self is not None else self.y

@@ -1,3 +1,4 @@
+from .. import Game
 
 
 class AbcInterface:
@@ -11,6 +12,9 @@ class AbcInterface:
     -> inventory, ...
     """
     paused: bool
+
+    def __init__(self, game: Game):
+        self.game: Game = game
 
     def tick(self):
         """Update the interface"""

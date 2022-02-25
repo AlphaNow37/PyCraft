@@ -14,7 +14,7 @@ class BasePausedInterface(AbcInterface):
     superior = None
 
     def __init__(self, game: Game):
-        self.game: Game = game
+        super().__init__(game)
         self.y = 0
         self.screen = game.screen
         if self.title_text is not None:

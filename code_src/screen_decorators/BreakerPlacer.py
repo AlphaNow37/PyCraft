@@ -59,7 +59,7 @@ class BreakerPlacerManager:
                 if self.breaking:
                     self.rest_breaking_solidity -= self.game.player.get_mining_speed(block.outil)/25
                     if self.rest_breaking_solidity <= 0:
-                        self.map.destroy_case(x, y)
+                        self.map.destroy_case(x, y, do_drop=True)
                     else:
                         self.stage = 10-int(self.rest_breaking_solidity/block.solidity*10)
                         if self.stage != self.last_stage:
