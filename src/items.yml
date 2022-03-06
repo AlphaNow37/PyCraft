@@ -1,0 +1,17 @@
+
+_TOOLS:
+  wooden:
+    efficiency: 1
+    solidity: 60
+  stone:
+    efficiency: 1.6
+    solidity: 120
+  iron:
+    efficiency: 2.4
+    solidity: 240
+  gold:
+    efficiency: 5
+    solidity: 50
+  diamond:
+    efficiency: 3.5
+    solidity: 400
