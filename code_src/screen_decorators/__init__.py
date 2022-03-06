@@ -40,8 +40,9 @@ class ScreenDecorator:
 
     def tick(self):
         self.cloud_manager.tick()
-        self.breaker_manager.tick()
         self.time_manager.tick()
+        self.breaker_manager.tick()
+
 
     def draw_f3_screen(self):
         self.f3_manager.draw()

@@ -18,12 +18,12 @@ class AbcInterface:
 
     def tick(self):
         """Update the interface"""
-        raise NotImplemented
+        raise NotImplementedError
 
     def draw(self):
         """Draw the interface on the screen"""
-        raise NotImplemented
+        raise NotImplementedError
 
     def on_event(self, event):
         """Catch the events"""
-        raise NotImplemented
+        raise NotImplementedError

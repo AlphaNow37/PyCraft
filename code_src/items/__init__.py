@@ -1,3 +1,3 @@
-from .item import Item
-from .dropped_item import DroppedItem
 from .loader import items
+from . import item
+from . import dropped_item

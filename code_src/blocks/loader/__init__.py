@@ -1,12 +1,10 @@
 """Package chargant le fichier blocks.yml"""
 import yaml
 import pygame
-import pathlib
 from . import img_modifier
 from ...roots import SRC_ROOT
-search_path = pathlib.Path(__file__).parent
 
-with open(search_path / "blocks.yml") as file:
+with open(SRC_ROOT / "blocks.yml") as file:
     blocks_loaded: dict[str, dict] = yaml.load(file, yaml.FullLoader)
 
 

@@ -3,7 +3,7 @@ from .. import base_elements
 from . import loader
 from .. import entity
 from .. import Game
-from ..items import DroppedItem
+from ..items import dropped_item
 
 
 class Block(base_elements.BaseCarre):
@@ -77,8 +77,8 @@ class Block(base_elements.BaseCarre):
         if self.drop_value is None:
             to_drop = [(self.name, self.img)]
         for item in to_drop:
-            dropped_item = DroppedItem(self.game, self.x+0.5, self.y+0.5, item)
-            self.game.entities.add(dropped_item)
+            item = dropped_item.DroppedItem(self.game, self.x+0.5, self.y+0.5, item)
+            self.game.entities.add(item)
 
     def slab_draw(self, x_self=None, y_self=None, img=None, width=None, height=None):
         y_self = y_self if y_self is not None else self.y

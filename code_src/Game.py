@@ -13,6 +13,7 @@ from .interfaces import AbcInterface
 from .roots import SAVE_ROOT
 from .tests import TestManager
 from .sounds import SoundManager
+from .player import player_inventory
 
 
 _PROFILING = False
@@ -51,6 +52,8 @@ class Game:
 
         self.chat_manager = Chatmanager(self)
         self.sound_manager: SoundManager = SoundManager(self)
+
+        self.player_inventory = player_inventory.PlayerInventory()
 
         if _TESTING:
             self.test_manager = TestManager(self)
@@ -91,7 +94,7 @@ class Game:
         """
         Réactualise l'ecran en affichant tout
         """
-        if self.interface is None or not self.interface.paused:
+        if (self.interface is None) or (not self.interface.paused):
             self.sc_deco.draw_sun_moon_sky_weather()
             self.map.draw()
             self.sc_deco.draw_overlays()

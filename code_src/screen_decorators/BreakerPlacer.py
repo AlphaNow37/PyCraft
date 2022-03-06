@@ -14,15 +14,14 @@ class BreakerPlacerManager:
     """Gere certaines interactions (placer et casser des blocks a la main)"""
     def __init__(self, game: Game):
         self.breaker = Breaker(game, 0, 0)
-        self.breaking = False
-        self.stage = 0
-        self.breaking_pos = (None, None)
-        self.rest_breaking_solidity = None
-        self.last_stage = None
+        self.reset()
         self.game = game
         self.map = game.map
 
     def tick(self):
+        if self.game.interface is not None:
+            self.reset()
+            return
         left, _, right = pygame.mouse.get_pressed(3)
         mouse_pos = self.game.mouse_pos
         x, y = mouse_pos
@@ -66,12 +65,13 @@ class BreakerPlacerManager:
                             self.game.sound_manager.breaked(block.breaked_sound, sleep=True)
                             self.last_stage = self.stage
                         return
+        self.reset()
 
+    def reset(self):
         self.breaking = False
         self.stage = 0
         self.breaking_pos = (None, None)
         self.rest_breaking_solidity = None
-        self.mining_block = None
         self.last_stage = None
 
     def draw(self):
