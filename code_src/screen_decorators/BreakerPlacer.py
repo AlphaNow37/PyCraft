@@ -36,16 +36,19 @@ class BreakerPlacerManager:
                         ok = any(not block_next.air for block_next in self.map.get_around(x, y))
                     if ok:
                         x_side, y_side = self.game.block_side
-                        block = Block("bedrock", self.game, x, y)
+                        block = Block("stone", self.game, x, y)
                         if block.support_x_flip:
                             block.flip_x = x_side < 0.5
                         if block.support_y_flip:
                             block.flip_y = y_side < 0.5
                         self.map.set_case(x, y, block)
+                        self.game.sound_manager.placed(block.breaked_sound)
             else:
                 if block.unbreakable:
                     if self.game.is_admin and left:
                         self.map.destroy_case(x, y)
+                    else:
+                        self.reset()
                 elif left and mouse_pos == self.breaking_pos and self.breaking:
                     pass
                 elif left:

@@ -13,6 +13,7 @@ class SoundManager:
     def __init__(self, game):
         self.game: Game = game
         self.breaked = Category(sounds["breaked"], 0)
+        self.placed = Category(sounds["breaked"], 0)
 
     def tick(self):
         pass
