@@ -83,9 +83,10 @@ class BaseEntity(BaseImageCentree):
         return self.map.get_case(x, y-1)
 
     def destroy(self):
-        self.was_destroyed = True
-        group = self.group or self.game.entities
-        group.remove(self)
+        if not self.was_destroyed:
+            self.was_destroyed = True
+            group = self.group or self.game.entities
+            group.remove(self)
 
     @property
     def life(self):
