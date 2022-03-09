@@ -15,8 +15,6 @@ class Ore(Block):
 
     def draw(self, *args, **kwargs):
         if self.revelated or self.game.is_admin:
-            self.img = self.base_img
-            super().draw(*args, **kwargs)
+            super().draw(*args, **kwargs, img=self.base_img)
         else:
-            self.img = self.fond
-            super().draw(*args, **kwargs)
+            super().draw(*args, **kwargs, img=self.fond)

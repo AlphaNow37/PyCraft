@@ -3,8 +3,7 @@ from ..blocks import blocks
 
 class Item:
     """A dataclass"""
-    is_pickaxe = is_axe = is_sword = is_hoe = False
-    is_boot = is_legs = is_chetplate = is_helmet = False
+    item_type = None
     damages = 1
     efficiency = 1
     solidity = None

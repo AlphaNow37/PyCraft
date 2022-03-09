@@ -36,6 +36,15 @@ class Container:
     def __repr__(self):
         return f"Cont(size={self.size} ...)"
 
+    def __iter__(self):
+        return iter(self.grid)
+
+    def __len__(self):
+        return self.size
+
+    def __getitem__(self, item):
+        return self.grid[item]
+
 class Stack:
     maxsize = 64
 
