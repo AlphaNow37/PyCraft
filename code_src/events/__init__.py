@@ -24,25 +24,36 @@ class EventManager:
         pressed = pygame.key.get_pressed()
         for event in pygame.event.get():
 
+            # When the window is closed
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 self.game.running = False
 
+            # Update the block-size when the window is resized
             elif event.type == pygame.WINDOWRESIZED:
                 self.game.size_screen = (event.x, event.y)
                 self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
 
+            # When there is an interface, the event's catch is not the same
             elif self.game.interface is None:
+
+                # Update the zoom
                 if event.type == pygame.MOUSEWHEEL:
                     self.game.zoom = round(1.2**(-event.y) * self.game.zoom)
                     self.game.zoom = max(self.game.zoom, 4)
                     self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    # pos = event.pos
-                    pass
 
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = event.pos
+                    hotbar_box = self.game.sc_deco.player_bar_manager.hotbar_manager.box
+                    if hotbar_box.collidepoint(pos):
+                        x = pos[0] - hotbar_box.x
+                        i = int(x / hotbar_box.width * 9)
+                        self.game.player_inventory.hand_position = i
+
+                # Movements and other key events
                 elif event.type == pygame.KEYDOWN:
                     if not self.game.open_chat:
-                        if event.key in KeyMapManager["chat"]:
+                        if event.key in self.key_manager["chat"]:
                             self.game.chat_manager.open_chat()
                             chat_just_opened = True
                         elif event.key == pygame.K_n or (event.key == pygame.K_F3 and pressed[pygame.K_n]):
@@ -71,9 +82,11 @@ class EventManager:
                 elif event.type == pygame.MOUSEMOTION:
                     pass
 
+                # Send the texts to the chat manager
                 elif event.type == pygame.TEXTINPUT and self.game.open_chat and not chat_just_opened:
                     self.game.chat_manager.event(event)
 
+            # Else
             elif self.game.interface is not None:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_TAB:
                     if pressed[pygame.K_LSHIFT]:

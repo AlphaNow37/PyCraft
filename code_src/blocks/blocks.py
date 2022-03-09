@@ -19,6 +19,7 @@ class Block(base_elements.BaseCarre):
 
     drop_value = None  # None -> himself, dict[str, int] -> int instances of str item
                        # dict[str, dict[...]] -> custom 0->nothing
+                       # str -> the block with name=str
 
     support_x_flip = False  # If we can flip vertically
     support_y_flip = False  # ~ horizontally
@@ -76,6 +77,8 @@ class Block(base_elements.BaseCarre):
         to_drop = []
         if self.drop_value is None:
             to_drop = [(self.name, self.img)]
+        elif isinstance(self.drop_value, str):
+            to_drop = [self.drop_value]
         for item in to_drop:
             item = dropped_item.DroppedItem(self.game, self.x+0.5, self.y+0.5, item)
             self.game.entities.add(item)

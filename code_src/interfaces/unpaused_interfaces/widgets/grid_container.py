@@ -21,7 +21,8 @@ class GridContainer(Widget):
             x = self.x + x_coord * (self.case_width + self.inter_space)
             y = self.y + y_coord * (self.case_width + self.inter_space)
             if case is None:
-                pygame.draw.rect(surface, "red", [x, y, self.case_width, self.case_width])
+                # pygame.draw.rect(surface, "red", [x, y, self.case_width, self.case_width])
+                pass
             else:
                 img = pygame.transform.scale(case.item.img, (self.case_width, self.case_width))
                 surface.blit(img, (x, y))

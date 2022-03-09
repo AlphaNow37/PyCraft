@@ -38,10 +38,10 @@ class KeyMapManager:
         with open("user/key_map.json", "w") as file:
             json.dump(self.keys, file, indent=4)
 
-    def __class_getitem__(cls, item):
-        return cls.keys[item]
+    def __getitem__(self, item):
+        return self.keys[item]
 
-    get = __class_getitem__
+    get = __getitem__
 
     def is_pressed(self, pressed, action):
         keys = self.keys[action]

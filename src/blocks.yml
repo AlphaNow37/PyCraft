@@ -88,6 +88,7 @@ _gen_block: &gen_block
     <<: *gen_surface
     load_img: false
     class: GRASS
+    drop_value: dirt
 
 # wood
 <<:

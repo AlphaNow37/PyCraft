@@ -25,8 +25,13 @@ class BreakerPlacerManager:
         left, _, right = pygame.mouse.get_pressed(3)
         mouse_pos = self.game.mouse_pos
         x, y = mouse_pos
-        block = self.map.get_case(x, y)
 
+        # If the mouse is on the hotbar
+        hotbar_manager = self.game.sc_deco.player_bar_manager.hotbar_manager
+        if hotbar_manager.box.collidepoint(pygame.mouse.get_pos()):
+            return
+
+        block = self.map.get_case(x, y)
         if block is not None and self.game.player.get_distance(x, y) <= self.get_player_range():
             if block.air:
                 if right:
