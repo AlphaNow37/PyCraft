@@ -3,8 +3,6 @@ import pygame
 import json
 
 from . import map
-from .screen_decorators import ScreenDecorator
-from .screen_decorators.Property import Property
 from .infos import __version__
 from .events import EventManager, get_blocks_size
 from .entity import EntityGroup
@@ -14,6 +12,8 @@ from .roots import SAVE_ROOT
 from .tests import TestManager
 from .sounds import SoundManager
 from .player import player_inventory
+from .screen_decorators.Property import Property
+from .screen_decorators import ScreenDecorator
 
 
 _PROFILING = False

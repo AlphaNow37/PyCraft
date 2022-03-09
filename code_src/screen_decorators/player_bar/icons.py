@@ -1,7 +1,7 @@
 from ...roots import SRC_ROOT
 import pygame
 
-icons_path = SRC_ROOT / "guy" / "icons.png"
+icons_path = SRC_ROOT / "gui" / "icons.png"
 icons_surface = pygame.image.load(icons_path)
 
 cursor_surface = icons_surface.subsurface([0, 0, 15, 15])

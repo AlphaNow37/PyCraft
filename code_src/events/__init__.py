@@ -1,7 +1,7 @@
 from .. import Game
 import pygame
 from ..constants import *
-from ..interfaces import MenuInterface, InventoryInterface
+from .. import interfaces
 from .keymap import KeyChangeError, KeyMapManager
 
 """
@@ -50,9 +50,9 @@ class EventManager:
                                 self.change_gamemode()
                                 self.f3_used = True
                         elif event.key == pygame.K_TAB:
-                            self.game.interface = MenuInterface(self.game)
+                            self.game.interface = interfaces.MenuInterface(self.game)
                         elif event.key == pygame.K_e:
-                            self.game.interface = InventoryInterface(self.game)
+                            self.game.interface = interfaces.InventoryInterface(self.game)
                     elif event.key == pygame.K_TAB:
                         self.game.chat_manager.close_chat()
                     else:

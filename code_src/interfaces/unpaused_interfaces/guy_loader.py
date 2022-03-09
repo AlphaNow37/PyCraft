@@ -1,6 +1,6 @@
 import pygame
 from ...roots import SRC_ROOT
-guy_root = SRC_ROOT / "guy"
+guy_root = SRC_ROOT / "gui"
 
 
 def load_guy_surface(name):
