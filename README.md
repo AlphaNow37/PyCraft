@@ -3,6 +3,7 @@
 
 > For python `>=3.10`.
 > Run `__main__.py`, `__init__.py` or `launcher.py`.
+> Please give me feedback ! :-)
 
 > ### Used librairies:
 > `PyGame`
