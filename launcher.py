@@ -11,6 +11,8 @@ for name, pipname in [("pygame",)*2, ("requests",)*2, ("yaml", "PyYaml"), ("pype
 import pygame
 pygame.init()
 
+import _debug_addons as _
+
 import code_src
 try:
     code_src.Game()
