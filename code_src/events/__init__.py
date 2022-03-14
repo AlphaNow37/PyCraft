@@ -20,8 +20,10 @@ class EventManager:
         """
         regarde tout les évenements et réagit en conséquence
         """
+        mouse_pos = pygame.mouse.get_pos()
         chat_just_opened = False
         pressed = pygame.key.get_pressed()
+        hotbar_box = self.game.sc_deco.player_bar_manager.hotbar_manager.box
         for event in pygame.event.get():
 
             # When the window is closed
@@ -35,18 +37,20 @@ class EventManager:
 
             # When there is an interface, the event's catch is not the same
             elif self.game.interface is None:
-
-                # Update the zoom
                 if event.type == pygame.MOUSEWHEEL:
-                    self.game.zoom = round(1.2**(-event.y) * self.game.zoom)
-                    self.game.zoom = max(self.game.zoom, 4)
-                    self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
+                    if hotbar_box.collidepoint(mouse_pos):
+                        # modifie the main hand position
+                        self.game.player_inventory.hand_position += event.y
+                        self.game.player_inventory.hand_position %= 9
+                    else:
+                        # Update the zoom
+                        self.game.zoom = round(1.2**(-event.y) * self.game.zoom)
+                        self.game.zoom = max(self.game.zoom, 4)
+                        self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
 
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = event.pos
-                    hotbar_box = self.game.sc_deco.player_bar_manager.hotbar_manager.box
-                    if hotbar_box.collidepoint(pos):
-                        x = pos[0] - hotbar_box.x
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button <= 3:
+                    if hotbar_box.collidepoint(mouse_pos):
+                        x = mouse_pos[0] - hotbar_box.x
                         i = int(x / hotbar_box.width * 9)
                         self.game.player_inventory.hand_position = i
 
