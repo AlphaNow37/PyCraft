@@ -2,6 +2,7 @@ cache/**
 saves/**
 tests
 tests/**
+_debug_addons.py
 
 !code_src/tests
 
