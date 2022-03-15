@@ -41,16 +41,20 @@ class BaseUnpausedInterface(AbcInterface):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
             self.close()
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
-            x, y = event.pos
-            x -= self.last_rect.x
-            y -= self.last_rect.y
-            x /= self.last_rect.width
-            y /= self.last_rect.height
-            x *= self.last_surfacesize[0]
-            y *= self.last_surfacesize[1]
+            raw_x, raw_y = event.pos
+            x, y = self.get_xy_from_rawpos(raw_x, raw_y)
             for grid in self.grids:
                 if (pos := grid.get_xy_from_rawpos(x, y)) is not None:
                     print(pos)
+
+    def get_xy_from_rawpos(self, raw_x, raw_y):
+        x -= self.last_rect.x
+        y -= self.last_rect.y
+        x /= self.last_rect.width
+        y /= self.last_rect.height
+        x *= self.last_surfacesize[0]
+        y *= self.last_surfacesize[1]
+        return x, y
 
     def close(self):
         print("interface closed")
