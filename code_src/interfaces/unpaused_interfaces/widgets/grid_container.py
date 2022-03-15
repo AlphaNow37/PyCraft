@@ -18,10 +18,8 @@ class GridContainer(Widget):
         self.can_pose_item = can_pose_item
         self.can_take_item = can_take_item
 
-    def draw(self, surface, container=None):
-        if container is None:
-            container = self.container
-        for i, case in enumerate(container):
+    def draw(self, surface):
+        for i, case in enumerate(self.container):
             y_coord, x_coord = divmod(i, self.nb_columns)
             x = self.x + x_coord * (self.case_width + self.inter_space)
             y = self.y + y_coord * (self.case_width + self.inter_space)
@@ -31,3 +29,17 @@ class GridContainer(Widget):
             else:
                 img = pygame.transform.scale(case.get_img(), (self.case_width+3, self.case_width))
                 surface.blit(img, (x, y))
+
+    def get_xy_from_rawpos(self, raw_x, raw_y) -> int | None:
+        raw_x -= self.x
+        raw_y -= self.y
+        if raw_x < 0 or raw_y < 0:
+            return None
+        raw_x /= (self.case_width + self.inter_space)
+        raw_y /= (self.case_width + self.inter_space)
+        x = int(raw_x)
+        y = int(raw_y)
+        i = x + y * self.nb_columns
+        if i >= len(self.container):
+            return None
+        return i
