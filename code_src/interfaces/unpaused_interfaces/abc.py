@@ -47,7 +47,7 @@ class BaseUnpausedInterface(AbcInterface):
                 if (pos := grid.get_xy_from_rawpos(x, y)) is not None:
                     print(pos)
 
-    def get_xy_from_rawpos(self, raw_x, raw_y):
+    def get_xy_from_rawpos(self, x, y):
         x -= self.last_rect.x
         y -= self.last_rect.y
         x /= self.last_rect.width
