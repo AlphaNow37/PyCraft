@@ -27,3 +27,7 @@ class AbcInterface:
     def on_event(self, event):
         """Catch the events"""
         raise NotImplementedError
+
+    def close(self):
+        """When the interface close"""
+        self.game.interface = None

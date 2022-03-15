@@ -56,7 +56,7 @@ class BasePausedInterface(AbcInterface):
 
     def change_interface(self, new_interface_class):
         if new_interface_class is None:
-            self.game.interface = None
+            self.close()
         else:
             self.game.interface = new_interface_class(self.game)
 
@@ -65,6 +65,6 @@ class BasePausedInterface(AbcInterface):
 
     def back(self):
         if self.superior is None:
-            self.game.interface = None
+            self.close()
         else:
             self.game.interface = self.superior(self.game)

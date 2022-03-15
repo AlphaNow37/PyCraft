@@ -30,7 +30,7 @@ class MenuInterface(BasePausedInterface):
                 except ValueError as e:
                     return False, str(e)
             return True, "Succefully opened the world"
-        self.change_interface(None)
+        self.close()
         self.game.chat_manager.start_input(on_finish, "Enter the name of the world")
 
     def save_world(self):
@@ -45,5 +45,5 @@ class MenuInterface(BasePausedInterface):
                 except ValueError:
                     return False, "Invalid name"
             return True, "Succefully saved the world"
-        self.change_interface(None)
+        self.close()
         self.game.chat_manager.start_input(on_finish, "Enter the name of the world")

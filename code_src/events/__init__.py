@@ -23,7 +23,9 @@ class EventManager:
         mouse_pos = pygame.mouse.get_pos()
         chat_just_opened = False
         pressed = pygame.key.get_pressed()
-        hotbar_box = self.game.sc_deco.player_bar_manager.hotbar_manager.box
+
+        hotbar = self.game.sc_deco.player_bar_manager.hotbar_manager
+
         for event in pygame.event.get():
 
             # When the window is closed
@@ -38,10 +40,9 @@ class EventManager:
             # When there is an interface, the event's catch is not the same
             elif self.game.interface is None:
                 if event.type == pygame.MOUSEWHEEL:
-                    if hotbar_box.collidepoint(mouse_pos):
+                    if hotbar.box.collidepoint(mouse_pos):
                         # modifie the main hand position
-                        self.game.player_inventory.hand_position += event.y
-                        self.game.player_inventory.hand_position %= 9
+                        hotbar.event(event)
                     else:
                         # Update the zoom
                         self.game.zoom = round(1.2**(-event.y) * self.game.zoom)
@@ -49,10 +50,8 @@ class EventManager:
                         self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
 
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button <= 3:
-                    if hotbar_box.collidepoint(mouse_pos):
-                        x = mouse_pos[0] - hotbar_box.x
-                        i = int(x / hotbar_box.width * 9)
-                        self.game.player_inventory.hand_position = i
+                    if hotbar.box.collidepoint(mouse_pos):
+                        hotbar.event(event)
 
                 # Movements and other key events
                 elif event.type == pygame.KEYDOWN:
@@ -96,7 +95,7 @@ class EventManager:
                     if pressed[pygame.K_LSHIFT]:
                         self.game.interface.back()
                     else:
-                        self.game.interface = None
+                        self.game.interface.close()
                 else:
                     self.game.interface.on_event(event)
 

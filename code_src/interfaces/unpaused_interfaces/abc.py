@@ -1,5 +1,6 @@
 from ..abc import AbcInterface
 from ...tools import get_size
+from .widgets.grid_container import GridContainer
 
 import pygame
 
@@ -8,7 +9,10 @@ class BaseUnpausedInterface(AbcInterface):
     paused = False
     surface: pygame.Surface
 
+    grids: list[GridContainer] = []
+
     def __init__(self, game):
+        self.grids = []
         super().__init__(game)
 
     def tick(self):
@@ -25,8 +29,15 @@ class BaseUnpausedInterface(AbcInterface):
         self.game.screen.blit(my_surface, [my_x, my_y, my_width, my_height])
 
     def get_surface(self) -> pygame.Surface:
-        return self.surface
+        surface = self.surface.copy()
+        for grid in self.grids:
+            grid.draw(surface)
+        return surface
 
     def on_event(self, event):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_e:
-            self.game.interface = None
+            self.close()
+
+    def close(self):
+        print("interface closed")
+        super().close()

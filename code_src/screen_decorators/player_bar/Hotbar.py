@@ -40,3 +40,12 @@ class HotBarManager:
         self.box.y = y
         self.box.width = width
         self.box.height = height
+
+    def event(self, event: pygame.event.Event):
+        if event.type == pygame.MOUSEWHEEL:
+            self.game.player_inventory.hand_position += event.y
+            self.game.player_inventory.hand_position %= 9
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            x = event.pos[0] - self.box.x
+            i = int(x / self.box.width * 9)
+            self.game.player_inventory.hand_position = i

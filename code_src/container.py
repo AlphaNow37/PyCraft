@@ -45,7 +45,12 @@ class Container:
         return self.size
 
     def __getitem__(self, item):
-        return self.grid[item]
+        if isinstance(item, int):
+            return self.grid[item]
+        elif isinstance(item, slice):
+            return ContainerFragment(item, self)
+        else:
+            return NotImplemented
 
 class Stack:
     maxsize = 64
@@ -90,4 +95,21 @@ class Stack:
         # print((item_img.get_width()-4, item_img.get_height()-4), item_surface.get_size(), text.get_size())
         # pygame.show(item_surface)
         return item_surface
-import csv
+
+class ContainerFragment:
+    def __init__(self, indexs: slice, superior: Container):
+        self.grid = superior.grid
+        self.size = (indexs.stop or len(superior)) - (indexs.start or 0)
+        self.indexs = indexs
+
+    def __iter__(self):
+        return iter(self.grid[self.indexs])
+
+    def __repr__(self):
+        return f"FragCont(size={self.size} indexs={self.indexs} ...)"
+
+    def __len__(self):
+        return self.size
+
+    def __getitem__(self, item):
+        return self.grid[self.indexs][item]

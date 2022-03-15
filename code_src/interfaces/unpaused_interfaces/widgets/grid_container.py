@@ -1,17 +1,22 @@
 import pygame
 from . import Widget
-from ....container import Container
+from ....container import Container, ContainerFragment
 
+_SHOW_RED = False  # for debugging
 
 class GridContainer(Widget):
-    def __init__(self, game, container, nb_columns, x, y, inter_case_space, case_width):
+    def __init__(self, game, container, nb_columns, x, y, inter_case_space, case_width,
+                 can_pose_item=None, can_take_item=None):
         super().__init__(game)
-        self.container: Container | None = container
+        self.container: Container | ContainerFragment | None = container
         self.nb_columns = nb_columns
         self.x = x
         self.y = y
         self.inter_space = inter_case_space
         self.case_width = case_width
+
+        self.can_pose_item = can_pose_item
+        self.can_take_item = can_take_item
 
     def draw(self, surface, container=None):
         if container is None:
@@ -21,8 +26,8 @@ class GridContainer(Widget):
             x = self.x + x_coord * (self.case_width + self.inter_space)
             y = self.y + y_coord * (self.case_width + self.inter_space)
             if case is None:
-                # pygame.draw.rect(surface, "red", [x, y, self.case_width, self.case_width])
-                pass
+                if _SHOW_RED:
+                    pygame.draw.rect(surface, "red", [x, y, self.case_width, self.case_width])
             else:
                 img = pygame.transform.scale(case.get_img(), (self.case_width+3, self.case_width))
                 surface.blit(img, (x, y))
