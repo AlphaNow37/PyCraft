@@ -43,7 +43,6 @@ class ScreenDecorator:
         self.time_manager.tick()
         self.breaker_manager.tick()
 
-
     def draw_f3_screen(self):
         self.f3_manager.draw()
 
@@ -56,3 +55,6 @@ class ScreenDecorator:
 
     def draw_bars(self):
         self.player_bar_manager.draw()
+
+    def after_initialisation(self):
+        self.player_bar_manager.after_initialisation()

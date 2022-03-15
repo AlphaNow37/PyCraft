@@ -25,10 +25,13 @@ class HotBarManager:
         self.hotbar_viewer = grid_container.GridContainer(game, None, 9, 4, 4, 4, 16)
         self.box = pygame.Rect(0, 0, 0, 0)
 
+    def after_initialisation(self):
+        self.hotbar_viewer.container = self.game.player_inventory.inventory[:9]
+
     def draw(self):
         surface = self.base_surface.copy()
         surface.blit(self.hand_position_surface, (20*self.game.player_inventory.hand_position, 0))
-        self.hotbar_viewer.draw(surface, self.game.player_inventory.inventory[:9])
+        self.hotbar_viewer.draw(surface)
         w_screen, h_screen = self.game.size_screen
         width, height = get_size(w_screen, h_screen, self.sizes_ratio, 1/2, 1/10)
         x = (w_screen-width)/2

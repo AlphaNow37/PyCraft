@@ -55,6 +55,8 @@ class Game:
 
         self.player_inventory = player_inventory.PlayerInventory()
 
+        self.sc_deco.after_initialisation()
+
         if _TESTING:
             self.test_manager = TestManager(self)
 

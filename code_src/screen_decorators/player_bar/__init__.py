@@ -14,3 +14,6 @@ class PlayerBarManager:
         if not self.game.is_admin:
             self.health_bar_manager.draw()
         self.hotbar_manager.draw()
+
+    def after_initialisation(self):
+        self.hotbar_manager.after_initialisation()
