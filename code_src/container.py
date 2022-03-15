@@ -4,18 +4,12 @@ from .minecraft_font import get_surface_line
 
 
 class Container:
+    """Class to contain items"""
     def __init__(self, size, grid=None):
         if grid is None:
             grid = [None] * size
         self.grid: list[Stack | None] = grid
         self.size = size
-
-    def set_at(self, x, raw_stack):
-        stack = Stack.new(raw_stack)
-        self.grid[x] = stack
-
-    def get_at(self, x) -> "Stack | None":
-        return self.grid[x]
 
     def add_item(self, raw_item, count=1):
         if isinstance(raw_item, Stack):
@@ -52,7 +46,14 @@ class Container:
         else:
             return NotImplemented
 
+    def __setitem__(self, key, value):
+        key = int(key)
+        if value is not None:
+            value = Stack.new(value)
+        self.grid[key] = value
+
 class Stack:
+    """Represent an item with a quantity"""
     maxsize = 64
 
     @classmethod
@@ -97,6 +98,8 @@ class Stack:
         return item_surface
 
 class ContainerFragment:
+    """When you type container[slice]
+    It is syncronized with the container"""
     def __init__(self, indexs: slice, superior: Container):
         self.grid = superior.grid
         self.size = (indexs.stop or len(superior)) - (indexs.start or 0)
@@ -113,3 +116,6 @@ class ContainerFragment:
 
     def __getitem__(self, item):
         return self.grid[self.indexs][item]
+
+    def __setitem__(self, key, value):
+        self.grid[self.indexs][key] = value
