@@ -27,7 +27,7 @@ class DroppedItem(DirectedEntity):
         super().tick()
         dist = math.dist(self.game.player.pos, self.pos)
         if dist < 1:
-            if self.game.player_inventory.take_item(self.item):
+            if not self.game.player_inventory.take_item(self.item):
                 self.destroy()
                 print("objet ramassé")
         elif dist < 3:

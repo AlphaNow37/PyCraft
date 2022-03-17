@@ -15,6 +15,12 @@ class Item:
         self.__dict__.update(items.get(self.name, {}))
         self.__dict__.update(kwargs)
 
+    def __eq__(self, other) -> bool:
+        other_item = get_item(other)
+        if other_item.name == self.name:
+            return True
+        return False
+
 
 def get_item(item) -> Item:
     if isinstance(item, Item):

@@ -6,7 +6,7 @@ _SHOW_RED = False  # for debugging
 
 class GridContainer(Widget):
     def __init__(self, game, container, nb_columns, x, y, inter_case_space, case_width,
-                 can_pose_item=None, can_take_item=None):
+                 can_pose_items=None, can_take_items=None):
         super().__init__(game)
         self.container: Container | ContainerFragment | None = container
         self.nb_columns = nb_columns
@@ -15,8 +15,8 @@ class GridContainer(Widget):
         self.inter_space = inter_case_space
         self.case_width = case_width
 
-        self.can_pose_item = can_pose_item
-        self.can_take_item = can_take_item
+        self.can_pose_items = can_pose_items
+        self.can_take_items = can_take_items
 
     def draw(self, surface):
         for i, case in enumerate(self.container):

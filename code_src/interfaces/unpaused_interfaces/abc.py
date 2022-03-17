@@ -1,6 +1,7 @@
 from ..abc import AbcInterface
 from ...tools import get_size
 from .widgets.grid_container import GridContainer
+from ...container import Stack
 
 import pygame
 
@@ -16,6 +17,7 @@ class BaseUnpausedInterface(AbcInterface):
     def __init__(self, game):
         self.grids = []
         super().__init__(game)
+        self.on_mouse_stack: Stack | None = None
 
     def tick(self):
         pass
@@ -28,8 +30,16 @@ class BaseUnpausedInterface(AbcInterface):
         my_x = int((screen_w-my_width) / 2)
         my_y = int((screen_h-my_height) / 2)
         my_surface = pygame.transform.scale(self.get_surface(), (my_width, my_height))
+
         self.last_rect = pygame.Rect(my_x, my_y, my_width, my_height)
         self.game.screen.blit(my_surface, self.last_rect)
+
+        if self.on_mouse_stack is not None:
+            stack_surface = self.on_mouse_stack.get_img()
+            w, h = get_size(screen_w, screen_h, 1, 1/20, 1/15)
+            stack_surface = pygame.transform.scale(stack_surface, (w, h))
+            x_pos, y_pos = pygame.mouse.get_pos()
+            self.game.screen.blit(stack_surface, (x_pos-w//2, y_pos-h//2))
 
     def get_surface(self) -> pygame.Surface:
         surface = self.surface.copy()
@@ -42,10 +52,22 @@ class BaseUnpausedInterface(AbcInterface):
             self.close()
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
             raw_x, raw_y = event.pos
-            x, y = self.get_xy_from_rawpos(raw_x, raw_y)
-            for grid in self.grids:
-                if (pos := grid.get_xy_from_rawpos(x, y)) is not None:
-                    print(pos)
+            grid, pos = self.get_grid_from_xy(raw_x, raw_y)
+            if grid is None:
+                return
+            at = grid.container[pos]
+            if not grid.can_pose_items and self.on_mouse_stack:
+                return
+            if not grid.can_take_items and not self.on_mouse_stack:
+                return
+            grid.container[pos], self.on_mouse_stack = self.on_mouse_stack, at
+
+    def get_grid_from_xy(self, raw_x, raw_y) -> tuple[GridContainer | None, int]:
+        x, y = self.get_xy_from_rawpos(raw_x, raw_y)
+        for grid in self.grids:
+            if (pos := grid.get_xy_from_rawpos(x, y)) is not None:
+                return grid, pos
+        return None, -1
 
     def get_xy_from_rawpos(self, x, y):
         x -= self.last_rect.x

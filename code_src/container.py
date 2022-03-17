@@ -11,23 +11,32 @@ class Container:
         self.grid: list[Stack | None] = grid
         self.size = size
 
-    def add_item(self, raw_item, count=1):
-        if isinstance(raw_item, Stack):
-            count, item = raw_item.size, raw_item.item
-        else:
-            item: Item = get_item(raw_item)
+    def add_item_at(self, position, item, count=1, _do_cast=True) -> int:
+        if count <= 0:
+            return 0
+        if _do_cast:  # To add performance
+            item, count = _get_item_and_count(item, count)
+        stack = self.grid[position]
+        if stack is None:
+            self.grid[position] = stack = Stack(item, size=0)
+            return stack.take(count)
+        elif stack.item == item:
+            return stack.take(count)
+        return count
+
+    def add_item(self, raw_item, count=1) -> int:
+        """
+        Add an item in the container
+        :param raw_item: the item
+        :param count: the item count
+        :return: the numbers of unfilled items
+        """
+        item, count = _get_item_and_count(raw_item, count)
         for x, stack in enumerate(self.grid):
-            if stack is None:
-                stack_size = min(64, count)
-                self.grid[x] = Stack(item, stack_size)
-                count -= stack_size
-            elif stack.item.name == item.name:
-                stack_size = min(64-stack.size, count)
-                stack.take(stack_size)
-                count -= stack_size
-            if count == 0:
-                return True
-        return False
+            count = self.add_item_at(x, item, count, _do_cast=False)
+            if count <= 0:
+                return 0
+        return count
 
     def __repr__(self):
         return f"Cont(size={self.size} ...)"
@@ -72,10 +81,13 @@ class Stack:
             raise ValueError(number, self.size)
         self.size -= number
 
-    def take(self, number):
+    def take(self, number) -> int:
         if self.maxsize < number + self.size:
-            raise ValueError(number, self.size)
+            last_size = self.size
+            self.size = self.maxsize
+            return last_size + number - self.maxsize
         self.size += number
+        return 0
 
     def is_full(self):
         return self.size <= self.maxsize
@@ -102,7 +114,8 @@ class ContainerFragment:
     It is syncronized with the container"""
     def __init__(self, indexs: slice, superior: Container):
         self.grid = superior.grid
-        self.size = (indexs.stop or len(superior)) - (indexs.start or 0)
+        indexs = slice(indexs.start or 0, indexs.stop or len(superior))
+        self.size = indexs.stop - indexs.start
         self.indexs = indexs
 
     def __iter__(self):
@@ -118,4 +131,14 @@ class ContainerFragment:
         return self.grid[self.indexs][item]
 
     def __setitem__(self, key, value):
-        self.grid[self.indexs][key] = value
+        print(self.indexs, key)
+        self.grid[self.indexs.start + key] = value
+
+
+def _get_item_and_count(raw_item, raw_count=1) -> tuple[Item, int]:
+    if isinstance(raw_item, Stack):
+        count, item = raw_item.size, raw_item.item
+    else:
+        item: Item = get_item(raw_item)
+        count = raw_count
+    return item, count

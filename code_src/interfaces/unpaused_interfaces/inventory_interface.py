@@ -14,10 +14,10 @@ class InventoryInterface(BaseUnpausedInterface):
         self.inventory = self.game.player_inventory.inventory
         self.top_container_grid = grid_container.GridContainer(
             self.game, self.inventory[9:],
-            9, 8, 84, 2, 16, can_pose_item=True, can_take_item=True)
+            9, 8, 84, 2, 16, can_pose_items=True, can_take_items=True)
         self.hotbar = grid_container.GridContainer(
             self.game, self.inventory[:9],
-            9, 8, 142, 2, 16, can_pose_item=True, can_take_item=True)
+            9, 8, 142, 2, 16, can_pose_items=True, can_take_items=True)
         self.grids.append(self.hotbar)
         self.grids.append(self.top_container_grid)
 
