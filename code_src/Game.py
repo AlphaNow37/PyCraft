@@ -53,7 +53,7 @@ class Game:
         self.chat_manager = Chatmanager(self)
         self.sound_manager: SoundManager = SoundManager(self)
 
-        self.player_inventory = player_inventory.PlayerInventory()
+        self.player_inventory = player_inventory.PlayerInventory(self)
 
         self.sc_deco.after_initialisation()
 

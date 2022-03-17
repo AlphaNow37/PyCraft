@@ -85,8 +85,6 @@ class BaseImageCentree(BaseCarre):
     """
     Classe abstraite dont les coordonnées sont celle de son centre et pas de son coin
     """
-    def __init__(self, game, x, y, **kwargs):
-        super().__init__(game, x, y, **kwargs)
 
     def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
         if x_self is None:

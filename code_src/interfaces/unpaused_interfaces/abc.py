@@ -80,4 +80,6 @@ class BaseUnpausedInterface(AbcInterface):
 
     def close(self):
         print("interface closed")
+        if self.on_mouse_stack is not None:
+            self.game.player_inventory.drop_item_or_stack(self.on_mouse_stack)
         super().close()

@@ -131,7 +131,6 @@ class ContainerFragment:
         return self.grid[self.indexs][item]
 
     def __setitem__(self, key, value):
-        print(self.indexs, key)
         self.grid[self.indexs.start + key] = value
 
 

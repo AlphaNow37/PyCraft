@@ -1,7 +1,7 @@
 import pygame
 
 from ..entity import DirectedEntity
-from . import item
+from .. import container
 
 import random
 import math
@@ -12,22 +12,26 @@ class DroppedItem(DirectedEntity):
     width = 0.6
     height = 0.6
 
-    def __init__(self, game, x, y, raw_item, **kwargs):
-        super(DroppedItem, self).__init__(game, x, y, random.randint(0, 360), **kwargs)
-        self.item: item.Item = item.get_item(raw_item)
-        img = self.item.img
+    def __init__(self, game, x, y, raw_item, direction=None, *, time_cant_be_taked=0,  **kwargs):
+        direction = random.randint(0, 360) if direction is None else direction
+        super(DroppedItem, self).__init__(game, x, y, direction, **kwargs)
+        self.stack = container.Stack.new(raw_item)
+        img = self.stack.get_img()
         w, h = img.get_size()
         self.img = pygame.Surface((w*2, h*2))
         self.img.blit(img, (w//2, h//2))
         self.img.set_colorkey("black")
+        self.time_cant_be_taked = time_cant_be_taked
 
     def tick(self):
         self.x_speed *= 0.99
         self.y_speed *= 0.99
         super().tick()
         dist = math.dist(self.game.player.pos, self.pos)
-        if dist < 1:
-            if not self.game.player_inventory.take_item(self.item):
+        if self.time_cant_be_taked > 0:
+            self.time_cant_be_taked -= 1
+        elif dist < 1:
+            if not self.game.player_inventory.take_item(self.stack):
                 self.destroy()
                 print("objet ramassé")
         elif dist < 3:
