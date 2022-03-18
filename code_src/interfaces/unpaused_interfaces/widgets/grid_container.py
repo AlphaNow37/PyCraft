@@ -5,8 +5,12 @@ from ....container import Container, ContainerFragment
 _SHOW_RED = False  # for debugging
 
 class GridContainer(Widget):
-    def __init__(self, game, container, nb_columns, x, y, inter_case_space, case_width,
-                 can_pose_items=None, can_take_items=None):
+    # Updated with self.__dict__.update(kwargs)
+    can_pose_items = True
+    can_take_items = True
+    ephemeral_container = False
+
+    def __init__(self, game, container, nb_columns, x, y, inter_case_space, case_width, **kwargs):
         super().__init__(game)
         self.container: Container | ContainerFragment | None = container
         self.nb_columns = nb_columns
@@ -15,8 +19,7 @@ class GridContainer(Widget):
         self.inter_space = inter_case_space
         self.case_width = case_width
 
-        self.can_pose_items = can_pose_items
-        self.can_take_items = can_take_items
+        self.__dict__.update(kwargs)
 
     def draw(self, surface):
         for i, case in enumerate(self.container):

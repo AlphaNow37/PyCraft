@@ -36,7 +36,8 @@ class BaseUnpausedInterface(AbcInterface):
 
         if self.on_mouse_stack is not None:
             stack_surface = self.on_mouse_stack.get_img()
-            w, h = get_size(screen_w, screen_h, 1, 1/20, 1/15)
+            w = my_width / src_w * (16+3)
+            h = my_height / src_h * 16
             stack_surface = pygame.transform.scale(stack_surface, (w, h))
             x_pos, y_pos = pygame.mouse.get_pos()
             self.game.screen.blit(stack_surface, (x_pos-w//2, y_pos-h//2))
@@ -82,4 +83,9 @@ class BaseUnpausedInterface(AbcInterface):
         print("interface closed")
         if self.on_mouse_stack is not None:
             self.game.player_inventory.drop_item_or_stack(self.on_mouse_stack)
+        for grid in self.grids:
+            if grid.ephemeral_container:
+                for stack in grid.container:
+                    if stack is not None:
+                        self.game.player_inventory.drop_item_or_stack(stack)
         super().close()

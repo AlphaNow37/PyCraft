@@ -1,3 +1,9 @@
+"""
+PyCraft
+Par AlphaNow
+
+LIRE README.md
+"""
 import subprocess
 from sys import version_info, stderr
 
@@ -21,9 +27,3 @@ try:
     code_src.Game()
 except KeyboardInterrupt:
     print("Ended with KeyBoardInterrupt", file=stderr)
-"""
-PyCraft
-Par AlphaNow
-
-LIRE README.md
-"""

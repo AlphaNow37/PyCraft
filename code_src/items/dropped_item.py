@@ -9,8 +9,8 @@ import math
 
 class DroppedItem(DirectedEntity):
     destroy_after = 20 * 10
-    width = 0.6
-    height = 0.6
+    width = 19 * 3/100
+    height = 16 * 3/100
 
     def __init__(self, game, x, y, raw_item, direction=None, *, time_cant_be_taked=0,  **kwargs):
         direction = random.randint(0, 360) if direction is None else direction
@@ -33,7 +33,7 @@ class DroppedItem(DirectedEntity):
         elif dist < 1:
             if not self.game.player_inventory.take_item(self.stack):
                 self.destroy()
-                print("objet ramassé")
+            return
         elif dist < 3:
             self.collision = False
             self.fall = False
@@ -42,9 +42,9 @@ class DroppedItem(DirectedEntity):
             y -= self.y
             self.x_speed = x/5
             self.y_speed = y/5
-        else:
-            if not self.fall:
-                self.x_speed = 0
-                self.y_speed = 0
-            self.collision = True
-            self.fall = True
+            return
+        if not self.fall:
+            self.x_speed = 0
+            self.y_speed = 0
+        self.collision = True
+        self.fall = True
