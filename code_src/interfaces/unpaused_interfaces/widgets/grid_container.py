@@ -7,7 +7,6 @@ _SHOW_RED = False  # for debugging
 class GridContainer(Widget):
     # Updated with self.__dict__.update(kwargs)
     can_pose_items = True
-    can_take_items = True
     ephemeral_container = False
 
     def __init__(self, game, container, nb_columns, x, y, inter_case_space, case_width, **kwargs):
