@@ -11,31 +11,36 @@ class Container:
         self.grid: list[Stack | None] = grid
         self.size = size
 
-    def add_item_at(self, position, item, count=1, _do_cast=True) -> int:
+    def add_item_at(self, position, item, count=1, _do_cast=True, _filled_only=False, _unfilled_only=False) -> int:
         if count <= 0:
             return 0
         if _do_cast:  # To add performance
-            item, count = _get_item_and_count(item, count)
+            item, count = get_item_and_count(item, count)
         stack = self.grid[position]
         if stack is None:
-            self.grid[position] = stack = Stack(item, size=0)
-            return stack.take(count)
-        elif stack.item == item:
+            if not _filled_only:
+                self.grid[position] = stack = Stack(item, size=0)
+                return stack.take(count)
+        elif stack.item == item and not _unfilled_only:
             return stack.take(count)
         return count
 
-    def add_item(self, raw_item, count=1) -> int:
+    def add_item(self, raw_item, count=1, fillmode=None) -> int:
         """
         Add an item in the container
-        :param raw_item: the item
+        :param fillmode: None if we can fill all the slots, True if we only can fill empty slot else False
+        :param raw_item: the item|stack|as_stack
         :param count: the item count
         :return: the numbers of unfilled items
         """
-        item, count = _get_item_and_count(raw_item, count)
-        for x, stack in enumerate(self.grid):
-            count = self.add_item_at(x, item, count, _do_cast=False)
-            if count <= 0:
-                return 0
+        fill_lst = {True: [(True, False)], False: [(False, True)], None: [(False, True), (True, False)]}[fillmode]
+        for unfilled_only, filled_only in fill_lst:
+            item, count = get_item_and_count(raw_item, count)
+            for x, stack in enumerate(self.grid):
+                count = self.add_item_at(x, item, count,
+                                         _do_cast=False, _unfilled_only=unfilled_only, _filled_only=filled_only)
+                if count <= 0:
+                    return 0
         return count
 
     def __repr__(self):
@@ -48,12 +53,7 @@ class Container:
         return self.size
 
     def __getitem__(self, item):
-        if isinstance(item, int):
-            return self.grid[item]
-        elif isinstance(item, slice):
-            return ContainerFragment(item, self)
-        else:
-            return NotImplemented
+        return self.grid[item]
 
     def __setitem__(self, key, value):
         key = int(key)
@@ -109,32 +109,8 @@ class Stack:
         # pygame.show(item_surface)
         return item_surface
 
-class ContainerFragment:
-    """When you type container[slice]
-    It is syncronized with the container"""
-    def __init__(self, indexs: slice, superior: Container):
-        self.grid = superior.grid
-        indexs = slice(indexs.start or 0, indexs.stop or len(superior))
-        self.size = indexs.stop - indexs.start
-        self.indexs = indexs
 
-    def __iter__(self):
-        return iter(self.grid[self.indexs])
-
-    def __repr__(self):
-        return f"FragCont(size={self.size} indexs={self.indexs} ...)"
-
-    def __len__(self):
-        return self.size
-
-    def __getitem__(self, item):
-        return self.grid[self.indexs][item]
-
-    def __setitem__(self, key, value):
-        self.grid[self.indexs.start + key] = value
-
-
-def _get_item_and_count(raw_item, raw_count=1) -> tuple[Item, int]:
+def get_item_and_count(raw_item, raw_count=1) -> tuple[Item, int]:
     if isinstance(raw_item, Stack):
         count, item = raw_item.size, raw_item.item
     else:

@@ -12,12 +12,12 @@ class InventoryInterface(BaseUnpausedInterface):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.inventory = self.game.player_inventory.inventory
+        # self.inventory = self.game.player_inventory.inventory
         self.top_container_grid = grid_container.GridContainer(
-            self.game, self.inventory[9:],
+            self.game, self.game.player_inventory.upinventory,
             9, 8, 84, 2, 16)
         self.hotbar = grid_container.GridContainer(
-            self.game, self.inventory[:9],
+            self.game, self.game.player_inventory.hotbar,
             9, 8, 142, 2, 16)
         self.crafter = grid_container.GridContainer(
             self.game, Container(4),

@@ -6,7 +6,8 @@ from .. import Game
 class PlayerInventory:
     def __init__(self, game):
         self.inventory = container.Container(36)
-        self.take_item = self.inventory.add_item
+        self.hotbar = container.Container(9)
+        self.upinventory = container.Container(27)
         self.hand_position = 0
         self.game: Game = game
         self.player = self.game.player
@@ -20,3 +21,12 @@ class PlayerInventory:
         item = items.dropped_item.DroppedItem(self.game, self.player.x, self.player.y,
                                               stack, self.player.vue_dir, time_cant_be_taked=50)
         self.game.entities.add(item)
+
+    def take_item(self, item, count=1):
+        item, count = container.get_item_and_count(item, count)
+        for fillmode in (False, True):
+            if count:
+                count = self.hotbar.add_item(item, count, fillmode=fillmode)
+            if count:
+                count = self.upinventory.add_item(item, count, fillmode=fillmode)
+        return count

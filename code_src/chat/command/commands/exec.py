@@ -54,7 +54,7 @@ def exec_command(data, *, game: Game):
             res = eval(to_exec, execs_globals)
             if to_send:
                 raise Send(f"\n{''.join(to_send)}\n{res}", name="Exec")
-            raise Send(f"{res}", name="Exec")
+            raise Send(str(res), name="Exec")
         except SyntaxError:
             exec(to_exec, execs_globals)
     except Exception as e:

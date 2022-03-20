@@ -26,7 +26,7 @@ class HotBarManager:
         self.box = pygame.Rect(0, 0, 0, 0)
 
     def after_initialisation(self):
-        self.hotbar_viewer.container = self.game.player_inventory.inventory[:9]
+        self.hotbar_viewer.container = self.game.player_inventory.hotbar
 
     def draw(self):
         surface = self.base_surface.copy()

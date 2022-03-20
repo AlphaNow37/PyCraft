@@ -1,6 +1,6 @@
 import pygame
 from . import Widget
-from ....container import Container, ContainerFragment
+from ....container import Container
 
 _SHOW_RED = False  # for debugging
 
@@ -11,7 +11,7 @@ class GridContainer(Widget):
 
     def __init__(self, game, container, nb_columns, x, y, inter_case_space, case_width, **kwargs):
         super().__init__(game)
-        self.container: Container | ContainerFragment | None = container
+        self.container: Container | None = container
         self.nb_columns = nb_columns
         self.x = x
         self.y = y

@@ -3,7 +3,6 @@ import pygame
 
 
 letters_surface = pygame.image.load(SRC_ROOT / "ascii.png", )
-print(letters_surface.get_at((0, 0)))
 
 letters = [
     [
