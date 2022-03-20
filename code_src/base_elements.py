@@ -32,7 +32,8 @@ class BaseCarre:
         self.game = game
         self.x = x
         self.y = y
-        self.remaining_frametime = self.frametime
+        if self.frametime:
+            self.remaining_frametime = self.frametime
 
     def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
         if self.frametime:

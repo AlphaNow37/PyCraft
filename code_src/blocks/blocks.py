@@ -42,7 +42,8 @@ class Block(base_elements.BaseCarre):
         if self.is_slab:
             self.draw = self.slab_draw
         self.friends: list[tuple[int, int]] = self.func_get_pos_friends(self.x, self.y)
-        self.remaining_frametime = self.frametime
+        if self.frametime:
+            self.remaining_frametime = self.frametime
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.name}',x={self.x}, y={self.y})"
