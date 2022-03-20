@@ -42,8 +42,6 @@ class Block(base_elements.BaseCarre):
         if self.is_slab:
             self.draw = self.slab_draw
         self.friends: list[tuple[int, int]] = self.func_get_pos_friends(self.x, self.y)
-        if self.frametime:
-            self.remaining_frametime = self.frametime
 
     def __repr__(self):
         return f"{self.__class__.__name__}('{self.name}',x={self.x}, y={self.y})"
@@ -84,9 +82,9 @@ class Block(base_elements.BaseCarre):
             item = dropped_item.DroppedItem(self.game, self.x+0.5, self.y+0.5, item)
             self.game.entities.add(item)
 
-    def slab_draw(self, x_self=None, y_self=None, img=None, width=None, height=None):
+    def slab_draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
         y_self = y_self if y_self is not None else self.y
-        super().draw(x_self, y_self+0.5-0.5*self.flip_y, img, width, height)
+        super().draw(x_self, y_self+0.5-0.5*self.flip_y, img, width, height, frame)
 
     def get_visualisation(self):
         return {

@@ -178,13 +178,14 @@ _gen_block: &gen_block
     color: blue
     alpha: 150
     falling_max_speed: 0.3
+    fluidity: 3
 
   lava:
     <<: *gen_fluid
-    alpha: 180
     falling_max_speed: 0.15
     frametime: 3
     frame_number: auto
+    fluidity: 1
 
 
 # other

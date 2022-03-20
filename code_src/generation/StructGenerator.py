@@ -8,13 +8,14 @@ from .generation_blocks import BLOCKS
 times = [
     (10, 20),
     (20, 60),
+    (20, 50),
 ]
 
 
 class StructGenerator(VegetationGenerator):
     def __init__(self):
         super().__init__()
-        self.__next_struct = [random.randint(*times[i]) for i in range(2)]
+        self.__next_struct = [random.randint(*times[i]) for i in range(3)]
         self.__to_put = []
         self.__to_put_foundations = []
 
@@ -36,6 +37,9 @@ class StructGenerator(VegetationGenerator):
                 elif i_struct == 1:
                     y_base = random.randint(0, y_base-5)
                     struct = "generator"
+                elif i_struct == 2:
+                    y_base = random.randint(0, y_base-30)
+                    struct = "lava_lake"
                 if struct is not None:
                     if isinstance(struct, str):
                         struct: structures.Struct = structures.structs[struct]

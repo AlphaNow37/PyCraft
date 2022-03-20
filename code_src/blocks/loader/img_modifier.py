@@ -16,4 +16,4 @@ def cut_img(img: pygame.Surface, nb: int | str):
     if nb == "auto":
         nb = height // width
     cutted_height = height // nb
-    return [img.subsurface([0, y*cutted_height, width, cutted_height]) for y in range(nb)]
+    return [img.subsurface([0, y*cutted_height, width, cutted_height]) for y in range(nb)], nb

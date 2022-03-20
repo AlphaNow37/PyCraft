@@ -59,5 +59,5 @@ class Struct:
 
 
 structs: dict[str, Struct] = {}
-for name in ["micro_desert_temple", "generator", "house"]:
+for name in ["micro_desert_temple", "generator", "house", 'lava_lake']:
     structs[name] = Struct(name)

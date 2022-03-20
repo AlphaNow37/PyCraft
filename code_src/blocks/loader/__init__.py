@@ -22,7 +22,7 @@ def parse_value(value: dict, name: str):
         img.fill(color)
     nb_frames = value.pop("frame_number", None)
     if nb_frames is not None:
-        value["imgs"] = imgs = img_modifier.cut_img(img, nb_frames)
+        value["imgs"], value["nb_frames"] = imgs, _ = img_modifier.cut_img(img, nb_frames)
         value["img"] = imgs[0]
     blocks[name] = value
     return value
