@@ -9,16 +9,21 @@ with open(SRC_ROOT / "blocks.yml") as file:
 
 
 def parse_value(value: dict, name: str):
+
     color = value.pop("color", None)
     load_img = value.pop("load_img", True)
     if not load_img:
-        pass
+        img = None
     elif color is None:
         path_img = SRC_ROOT / f"blocks{value.pop('folder')}" / (name+".png")
-        value["img"] = pygame.image.load(path_img)
+        value["img"] = img = pygame.image.load(path_img)
     else:
         value["img"] = img = pygame.Surface((1, 1))
         img.fill(color)
+    nb_frames = value.pop("frame_number", None)
+    if nb_frames is not None:
+        value["imgs"] = imgs = img_modifier.cut_img(img, nb_frames)
+        value["img"] = imgs[0]
     blocks[name] = value
     return value
 

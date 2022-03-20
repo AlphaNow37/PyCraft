@@ -171,12 +171,20 @@ _gen_block: &gen_block
     solidity: null
     unbreakable: true
     class: FLUID
+    folder: /fluids
 
   water:
     <<: *gen_fluid
     color: blue
     alpha: 150
     falling_max_speed: 0.3
+
+  lava:
+    <<: *gen_fluid
+    alpha: 180
+    falling_max_speed: 0.15
+    frametime: 3
+    frame_number: auto
 
 
 # other

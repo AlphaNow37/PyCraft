@@ -23,6 +23,8 @@ class BaseCarre:
     flip_x = False
     flip_y = False
 
+    frametime = None
+
     def __init__(self, game, x, y, **kwargs):
         self.__dict__.update(kwargs)
         self.map: map.Map = game.map
@@ -30,8 +32,16 @@ class BaseCarre:
         self.game = game
         self.x = x
         self.y = y
+        self.remaining_frametime = self.frametime
 
     def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
+        if self.frametime:
+            self.remaining_frametime -= 1
+            if self.remaining_frametime <= 0:
+                self.remaining_frametime = self.frametime
+                self.frame += 1
+                self.frame %= len(self.imgs)
+
         if x_self is None:
             x_self = self.x
         if y_self is None:
