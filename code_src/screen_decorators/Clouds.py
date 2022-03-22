@@ -46,6 +46,7 @@ class CloudSubLayer(base_elements.BaseCarre):
     alpha = CLOUD["ALPHA"]
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
         self.masks = [pygame.mask.from_surface(surface) for surface in self.imgs]
 
@@ -71,6 +72,7 @@ class CloudManager:
     height_layer = CLOUD["MAX_Y"] - CLOUD["MIN_Y"] + cloud_height
 
     def __init__(self, game):
+        CLOUD["IMGS"] = [img.convert_alpha() for img in CLOUD["IMGS"]]
         self.game: Game = game
         self.create_clouds()
 

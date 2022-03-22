@@ -1,6 +1,6 @@
 import pygame
 from .items.item import Item, get_item
-from .minecraft_font import get_surface_line
+from .font import get_surface_line
 
 
 class Container:
