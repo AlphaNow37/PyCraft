@@ -145,6 +145,7 @@ _gen_block: &gen_block
     _big_flower_bottom:
       <<: *gen_flower
       class: BIG_FLOWER_BOTTOM
+      drop_value: []
       into:
       - pink2_0
       - red2_0
