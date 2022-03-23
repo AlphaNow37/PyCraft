@@ -65,7 +65,7 @@ class EventManager:
                                 self.f3_used = True
                         elif event.key == pygame.K_TAB:
                             self.game.interface = interfaces.MenuInterface(self.game)
-                        elif event.key == pygame.K_e:
+                        elif event.key in self.key_manager["inventory"]:
                             self.game.interface = interfaces.InventoryInterface(self.game)
                     elif event.key == pygame.K_TAB:
                         self.game.chat_manager.close_chat()

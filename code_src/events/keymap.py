@@ -12,7 +12,8 @@ default_keys = {
     "right": [pygame.K_d],
     "jump": [pygame.K_SPACE, pygame.K_z],
     "sneak": [pygame.K_LSHIFT, pygame.K_s],
-    "chat": [pygame.K_t]
+    "chat": [pygame.K_t],
+    "inventory": [pygame.K_e],
 }
 
 
