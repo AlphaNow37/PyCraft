@@ -74,12 +74,14 @@ class Block(base_elements.BaseCarre):
 
     def drop(self):
         to_drop = []
+        is_block = False
         if self.drop_value is None:
             to_drop = [(self.name, self.img)]
+            is_block = True
         elif isinstance(self.drop_value, str):
             to_drop = [self.drop_value]
         for item in to_drop:
-            item = dropped_item.DroppedItem(self.game, self.x+0.5, self.y+0.5, item)
+            item = dropped_item.DroppedItem(self.game, self.x+0.5, self.y+0.5, item, isblock=is_block)
             self.game.entities.add(item)
 
     def slab_draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):

@@ -14,20 +14,6 @@ resume :
 """
 
 
-dct_name_to_cls = {
-    "ORE": blocks.Ore,
-    "GRASS": blocks.Grass,
-    "BIG_FLOWER_UP": blocks.BigFlowerUp,
-    "BIG_FLOWER_BOTTOM": blocks.BigFlowerBottom,
-    "SUPPORTED_BLOCK": blocks.SupportedBlock,
-    "GRAVITY": blocks.GravityBlock,
-    "FLUID": blocks.FluidBlock,
-}
-dct_cls_to_name = {
-    cls: name for (name, cls) in dct_name_to_cls.items()
-}
-
-
 class Map:
     to_planned_update: list[list[int]]
 
@@ -106,10 +92,7 @@ class Map:
         if is_left and "flip_x" in properties:
             properties["flip_x"] = not properties["flip_x"]
         cls: type[blocks.Block] = properties.pop("class", None)
-        if isinstance(cls, str):
-            cls = dct_name_to_cls[cls]
-        elif cls is None:
-            cls = blocks.Block
+        cls = blocks.get_cls(cls)
         block = cls(name, self.game, x, y, **properties)
         return block
 
@@ -203,7 +186,7 @@ class Map:
                         [
                             case.name,
                             case.get_reduced_visualisation()
-                            | ({"class": dct_cls_to_name[case.__class__]} if case.__class__ != blocks.Block else {})
+                            | ({"class": blocks.get_name(type(case))} if type(case) is not blocks.Block else {})
                         ] for case in column
                     ] for column in world
                 ] for (name, world) in [("left", self.left_world), ("right", self.right_world)]

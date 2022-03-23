@@ -22,14 +22,14 @@ class Item:
         return False
 
 
-def get_item(item) -> Item:
+def get_item(item, **kwargs) -> Item:
     if isinstance(item, Item):
         return item
     elif isinstance(item, dict):
-        return Item(**item)
+        return Item(**item, **kwargs)
     elif isinstance(item, (tuple, list)):
-        return Item(*item)
+        return Item(*item, **kwargs)
     elif isinstance(item, str):
-        return Item(item, blocks[item]["img"], is_block=True)
+        return Item(item, blocks[item]["img"], **kwargs)
     else:
         raise ValueError(item)

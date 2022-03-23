@@ -66,11 +66,11 @@ class Stack:
     maxsize = 64
 
     @classmethod
-    def new(cls, obj, count=1):
+    def new(cls, obj, count=1, is_block=False):
         if isinstance(obj, Stack):
             return obj
         else:
-            return Stack(get_item(obj), count)
+            return Stack(get_item(obj, is_block=is_block), count)
 
     def __init__(self, item, size=1):
         self.item: Item = item
