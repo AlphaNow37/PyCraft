@@ -57,7 +57,7 @@ class Block(base_elements.BaseCarre):
         for friend in self.friends:
             case = self.map.get_case(*friend)
             if case and not case.destroyed:
-                self.map.destroy_case(*friend, sound=False)
+                self.map.destroy_case(*friend, sound=False, do_drop=True)
         if particle:
             for _ in range(5):
                 self.game.entities.add(entity.Particle(self.game, self.x + 0.5, self.y + 0.5, self.img))

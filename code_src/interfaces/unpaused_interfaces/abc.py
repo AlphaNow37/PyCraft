@@ -37,7 +37,7 @@ class BaseUnpausedInterface(AbcInterface):
 
         if self.on_mouse_stack is not None:
             stack_surface = self.on_mouse_stack.get_img()
-            w = my_width / src_w * (16+3)
+            w = my_width / src_w * 16
             h = my_height / src_h * 16
             stack_surface = pygame.transform.scale(stack_surface, (w, h))
             x_pos, y_pos = pygame.mouse.get_pos()

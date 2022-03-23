@@ -29,7 +29,7 @@ class GridContainer(Widget):
                 if _SHOW_RED:
                     pygame.draw.rect(surface, "red", [x, y, self.case_width, self.case_width])
             else:
-                img = pygame.transform.scale(case.get_img(), (self.case_width+3, self.case_width))
+                img = pygame.transform.scale(case.get_img(), (self.case_width, self.case_width))
                 surface.blit(img, (x, y))
 
     def get_xy_from_rawpos(self, raw_x, raw_y) -> int | None:

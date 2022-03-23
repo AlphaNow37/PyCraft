@@ -15,7 +15,7 @@ class SupportedBlock(Block):
             case = self.map.get_case(self.x+self.support_from_x, self.y+self.support_from_y)
             if isinstance(case, Block):
                 if case.air or not case.collision:
-                    self.map.destroy_case(self.x, self.y)
+                    self.map.destroy_case(self.x, self.y, do_drop=True)
 
 
 BigFlowerUp = partial(Block, func_get_pos_friends=lambda x, y: [(x, y-1)])

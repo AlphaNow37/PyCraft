@@ -1,10 +1,10 @@
 from .constants import *
-from ..tools import PygameText
 from .. import Game
 import pygame
 from . import command
 import pyperclip
 from typing import Generator
+from ..font import get_text, FONTSIZE, get_surface_line
 
 
 class Chatmanager:
@@ -13,7 +13,7 @@ class Chatmanager:
     barre_change_time = 5
 
     def __init__(self, game: Game):
-        self.lines_surfaces: list[PygameText] = []
+        self.lines_surfaces: list[pygame.Surface] = []
         self.game: Game = game
         self.input = ""
         self.barre_index = 0
@@ -95,8 +95,8 @@ class Chatmanager:
 
     def update_input(self):
         self.inputs_surfaces = [
-            self.font.render(f">>>{self.input[:self.barre_index]}{char}{self.input[self.barre_index:]}",
-                             True, [255]*3, [0]*3)
+            get_surface_line(f">>>{self.input[:self.barre_index]}{char}{self.input[self.barre_index:]}",
+                             "white", "black")
             for char in ["|", " "]
         ]
         for surface in self.inputs_surfaces:
@@ -108,16 +108,19 @@ class Chatmanager:
             self.next_barre_vue_change = self.barre_change_time
             self.barre_type = not self.barre_type
         input_surface = self.inputs_surfaces[self.barre_type]
-        input_height = HEIGHT_LINE*self.game.size_screen[1]/480 * 1.4
-        input_width = input_height * input_surface.get_width() / input_surface.get_height()
-        new_input_surface = pygame.transform.scale(input_surface, (int(input_width), int(input_height)))
-        y = self.game.size_screen[1]-input_height
+        height_line = self.game.size_screen[1] * 1/25
+        input_width = height_line * input_surface.get_width() / input_surface.get_height()
+        new_input_surface = pygame.transform.scale(input_surface, (int(input_width), int(height_line*1.4)))
+        coef = height_line/(FONTSIZE+1)
+        y = self.game.size_screen[1]-height_line*1.4
         self.game.screen.blit(new_input_surface, (0, y))
         for line in self.lines_surfaces[::-1]:
-            y -= HEIGHT_LINE*self.game.size_screen[1]/480*(line.text.count("\n") + 1)
-            y -= PAD*2 * self.game.size_screen[1] / 480
+            new_height = line.get_height()*coef
+            new_width = new_height * line.get_width() / line.get_height()
+            y -= new_height
             y += 1
-            line.draw_xy_exact(0, y)
+            line = pygame.transform.scale(line, (new_width, new_height))
+            self.game.screen.blit(line, (0, y))
 
     def open_chat(self):
         pygame.key.start_text_input()
@@ -130,10 +133,8 @@ class Chatmanager:
         self.game.open_chat = False
 
     def send(self, text, error=False):
-        pgt = PygameText(self.game, 0, 0, None, text,
-                         color_text="red" if error else "white", color_fond="black",
-                         height=HEIGHT_LINE*(text.count("\n") + 1), pad=PAD, alpha=ALPHA)
-        self.lines_surfaces.append(pgt)
+        surface = get_text(text, ALPHA, "red" if error else "white", "black", padx=PAD, pady=PAD)
+        self.lines_surfaces.append(surface)
 
     def tick(self):
         pressed = pygame.key.get_pressed()

@@ -1,6 +1,6 @@
 import pygame
 from .items.item import Item, get_item
-from .font import get_surface_line
+from .font import get_surface_from_ascii
 
 
 class Container:
@@ -97,14 +97,16 @@ class Stack:
 
     def get_img(self):
         item_img: pygame.Surface = self.item.img
-        item_surface = pygame.Surface((item_img.get_width()+3, item_img.get_height()))
+        item_surface = pygame.Surface((item_img.get_width(), item_img.get_height()))
         item_surface.fill("#123456")  # random color
         item_surface.set_colorkey("#123456")
 
         item_surface.blit(item_img, (0, 0))
         if self.size > 1:
-            text = get_surface_line(f"{self.size:>2}")
-            item_surface.blit(text, (item_img.get_width()-13, item_img.get_height()-8))
+            text = get_surface_from_ascii(f"{self.size:>2}")
+            text.set_colorkey("black")
+            x, y = item_img.get_width()-text.get_width(), item_img.get_height()-text.get_height()
+            item_surface.blit(text, (x, y))
         # print((item_img.get_width()-4, item_img.get_height()-4), item_surface.get_size(), text.get_size())
         # pygame.show(item_surface)
         return item_surface

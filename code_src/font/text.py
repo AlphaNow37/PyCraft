@@ -7,9 +7,10 @@ from .colors import clr, id_to_hex
 
 
 HEIGHTLINE = FONTSIZE + 1
+WIDTHCHAR = FONTSIZE - 4
 COLOUR_CHANGE_TOKEN = "§"
 
-def get_text(text, alpha=70, default_textcolor="white", background_color="black"):
+def get_text(text, alpha=70, default_textcolor="white", background_color="black", padx=0, pady=0):
     lines = [list(line) for line in text.splitlines()]
 
     # Get maximum width and parsing the colors
@@ -35,7 +36,7 @@ def get_text(text, alpha=70, default_textcolor="white", background_color="black"
 
     # Creating the surface
     height = len(lines)
-    surface = pygame.Surface((max_width*FONTSIZE, height*(FONTSIZE+1)-1))
+    surface = pygame.Surface((max_width*WIDTHCHAR+padx*2, height*HEIGHTLINE+padx*2))
     surface.fill(background_color)
 
     # Bliting all the characters
@@ -46,7 +47,7 @@ def get_text(text, alpha=70, default_textcolor="white", background_color="black"
             at = line[x]
             if len(at) == 1:
                 char_surface = get_surface_letter(at, textcolor)
-                surface.blit(char_surface, (x*FONTSIZE, y*(FONTSIZE+1)))
+                surface.blit(char_surface, (x*WIDTHCHAR+padx, y*HEIGHTLINE+pady))
                 x += 1
             else:
                 textcolor = at
@@ -56,5 +57,5 @@ def get_text(text, alpha=70, default_textcolor="white", background_color="black"
     surface.set_alpha(alpha)
     return surface
 
-pygame.show(get_text(f"aaa{clr:blue}bbb\n§1ccc", default_textcolor="red"))
-exit()
+# pygame.show(get_text(f"aaa{clr:blue}bbb\n§1ccc", default_textcolor="red"))
+# exit()
