@@ -7,7 +7,7 @@ from .colors import clr, id_to_hex
 
 
 HEIGHTLINE = FONTSIZE + 1
-WIDTHCHAR = FONTSIZE - 4
+WIDTHCHAR = FONTSIZE - 8
 COLOUR_CHANGE_TOKEN = "§"
 
 def get_text(text, alpha=70, default_textcolor="white", background_color="black", padx=0, pady=0):

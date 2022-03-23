@@ -1,7 +1,7 @@
 import pygame
 from .loader import unicode_letters, FONTSIZE, invalid_caracter, ascii_chars, ASCII_FONTSIZE
 
-WIDTHCHAR = FONTSIZE - 4
+WIDTHCHAR = FONTSIZE - 8
 
 def get_surface_from_ascii(line: str):
     surface = pygame.Surface((len(line)*(ASCII_FONTSIZE-2), ASCII_FONTSIZE))

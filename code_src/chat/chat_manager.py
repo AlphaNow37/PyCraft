@@ -39,15 +39,17 @@ class Chatmanager:
                     self.barre_index -= 1
 
             elif key == pygame.K_RETURN:
-                self.lasts_inputs.append(self.input)
                 if self.active_command is not None:
                     self.send(f">>> {self.input}")
                     try:
                         self.active_command.send(self.input)
                     except (StopIteration, RuntimeError):
                         self.active_command = None
-                else:
+                elif self.input:
                     self.send(f"[You] {self.input}")
+                else:
+                    return
+                self.lasts_inputs.append(self.input)
                 self.last_input_index = 0
                 if self.on_input:
                     self.finish_input(self.input)
@@ -133,6 +135,8 @@ class Chatmanager:
         self.game.open_chat = False
 
     def send(self, text, error=False):
+        if not text:
+            return
         surface = get_text(text, ALPHA, "red" if error else "white", "black", padx=PAD, pady=PAD)
         self.lines_surfaces.append(surface)
 
