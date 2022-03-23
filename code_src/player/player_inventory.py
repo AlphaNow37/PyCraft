@@ -35,6 +35,11 @@ class PlayerInventory:
         stack = self.hotbar[self.hand_position]
         return stack if stack is None else stack.item
 
+    def remove_one_in_hand(self):
+        self.hotbar[self.hand_position].drop(1)
+        if self.hotbar[self.hand_position].size == 0:
+            self.hotbar[self.hand_position] = None
+
     def get_mining_speed(self, name_outil):
         if self.game.is_admin:
             return float("inf")

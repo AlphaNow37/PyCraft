@@ -49,6 +49,8 @@ class BreakerPlacerManager:
                                 block.flip_x = x_side < 0.5
                             if block.support_y_flip:
                                 block.flip_y = y_side < 0.5
+                            if not self.game.is_admin:
+                                self.game.player_inventory.remove_one_in_hand()
                             self.map.set_case(x, y, block)
                             self.game.sound_manager.placed(block.breaked_sound)
             else:
