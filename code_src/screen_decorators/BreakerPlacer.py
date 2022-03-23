@@ -64,7 +64,7 @@ class BreakerPlacerManager:
                 else:
                     self.breaking = False
                 if self.breaking:
-                    self.rest_breaking_solidity -= self.game.player.get_mining_speed(block.outil)/25
+                    self.rest_breaking_solidity -= self.game.player_inventory.get_mining_speed(block.outil)/25
                     if self.rest_breaking_solidity <= 0:
                         self.map.destroy_case(x, y, do_drop=True)
                     else:

@@ -30,3 +30,19 @@ class PlayerInventory:
             if count:
                 count = self.upinventory.add_item(item, count, fillmode=fillmode)
         return count
+
+    def get_main_hand_item(self) -> "items.item.Item | None":
+        stack = self.hotbar[self.hand_position]
+        return stack if stack is None else stack.item
+
+    def get_mining_speed(self, name_outil):
+        if self.game.is_admin:
+            return float("inf")
+        in_main = self.get_main_hand_item()
+        if name_outil is None or in_main is None:
+            return 1
+        else:
+            if name_outil == in_main.item_type:
+                return in_main.efficiency
+            else:
+                return 1

@@ -108,15 +108,6 @@ class Player(BaseEntity):
         img = self.fragments["front"] if not self.sneaking else self.fragments["sneaking_front"]
         super().draw(img=img)
 
-    def get_mining_speed(self, name_outil):
-        if self.game.is_admin:
-            return float("inf")
-
-        if name_outil is None:
-            return 1
-        else:
-            return 1
-
     def jump(self):
         down = self.get_down_block()
         if down is not None:
