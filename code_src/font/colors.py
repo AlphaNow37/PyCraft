@@ -22,14 +22,18 @@ _colors = {
 id_to_hex = {hex(i)[2]: value for (i, value) in enumerate(_colors.values())}
 _name_to_id = {name: hex(i)[2] for (i, name) in enumerate(_colors)}
 
+
+def get_color_from_name(name):
+    if val := _name_to_id.get(name.lower()):
+        return "§#" + id_to_hex[val]
+    elif val := colour.COLOR_NAME_TO_RGB.get(name.lower()):
+        return "§" + colour.rgb2hex((c / 255 for c in val), force_long=True)
+    raise ValueError(f"{name!r} is an invalid color")
+
 class _ColorConverter:
     # Used for text=f"abc{clr:blue}def
     def __format__(self, format_spec: str):
-        if val := _name_to_id.get(format_spec.lower()):
-            return "§#" + id_to_hex[val]
-        elif val := colour.COLOR_NAME_TO_RGB.get(format_spec.lower()):
-            return "§" + colour.rgb2hex((c/255 for c in val), force_long=True)
-        raise ValueError(f"{format_spec!r} is an invalid color")
+        return get_color_from_name(format_spec)
 clr = _ColorConverter()
 
 if __name__ == '__main__':

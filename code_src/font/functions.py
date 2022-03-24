@@ -16,8 +16,13 @@ def get_surface_letter(letter: str, textcolor="white") -> pygame.Surface:
     if page_lst is None:
         char = invalid_caracter
     else:
-        char = page_lst[ord(letter)]
-    return char.to_surface(setcolor=textcolor, unsetcolor="#000000")
+        char = page_lst[x]
+    surface = char.to_surface(setcolor=textcolor, unsetcolor="#000000")
+    # if page_id > 5:
+    #     print(letter, hex(page_id), x, divmod(x, 16))
+    #     pygame.show(surface)
+    #     exit()
+    return surface
 
 def get_surface_line(phrase: str, textcolor="white", bg_color="black"):
     surface = pygame.Surface((WIDTHCHAR*len(phrase), FONTSIZE))
