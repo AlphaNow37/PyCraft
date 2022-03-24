@@ -32,7 +32,7 @@ class Player(BaseEntity):
         if not skin_dir.exists():
             succes = download_skin(skin_dir, self.username)
             if not succes:
-                self.game.chat_manager.send(f"Can't load the skin of {self.username}", error=True)
+                self.game.chat_manager.send(f"Can't load the skin of {self.username}", textcolor="red")
                 return False
         base_skin = pygame.image.load(str(skin_dir))
         fragments = self.fragments = get_img_from_skin(base_skin)

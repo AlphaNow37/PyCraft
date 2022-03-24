@@ -2,6 +2,7 @@ from ..responses import Send, CommandError, Error
 from ..command import register_command, decorate_command
 from ..token import OneValueToken, SpecialString
 from .... import Game
+from .. import clr
 
 _allow_exec = True
 
@@ -45,23 +46,22 @@ def exec_command(data, *, game: Game):
                           "\n'run', 'ok' or an empty line to run", name='Exec')
         line = line.strip()
         while line not in specials_worlds:
-            to_exec += line
+            to_exec += line + "\n"
             line = yield
             line = line.strip()
-
+    text = ""
+    result = ""
     try:
         try:
-            res = eval(to_exec, execs_globals)
-            if to_send:
-                raise Send(f"\n{''.join(to_send)}\n{res}", name="Exec")
-            raise Send(str(res), name="Exec")
+            result = eval(to_exec, execs_globals)
         except SyntaxError:
             exec(to_exec, execs_globals)
     except Exception as e:
-        if not isinstance(e, (Send, Error)):
-            raise CommandError(f"({e.__class__.__name__}){e}")
-        else:
-            raise e
+        if to_send:
+            text += "".join(to_send) + "§r"
+        text += f"{clr:red}({e.__class__.__name__}){e}"
     else:
         if to_send:
-            raise Send(f"\n{''.join(to_send)}", name="Exec")
+            text += "".join(to_send) + "§r"
+        text += str(result)
+    raise Send(text, name="Exec")

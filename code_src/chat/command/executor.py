@@ -6,7 +6,6 @@ from collections.abc import Generator
 
 
 def execute(input_command: str, game: Game):
-
     try:
         input_command = input_command.removeprefix("/")
         args = lexer_parser.lex_parse(input_command)
@@ -33,9 +32,9 @@ def send(response_esc, game):
     try:
         raise response_esc
     except responses.Error as e:
-        send(f"[{e.__class__.__name__}] {' '.join(e.args)}", error=True)
+        send(f"[{e.__class__.__name__}] {' '.join(e.args)}", textcolor=e.textcolor)
     except responses.Send as s:
-        send(f"[{s.name}] {' '.join(s.args)}")
+        send(f"[{s.name}] {' '.join(s.args)}", textcolor=s.textcolor)
     except AssertionError as e:
         error, *args = e.args[0]
-        send(f"[{error.__name__}] {' '.join(args)}", error=True)
+        send(f"[{error.__name__}] {' '.join(args)}", textcolor="red")

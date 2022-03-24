@@ -134,10 +134,10 @@ class Chatmanager:
         pygame.key.stop_text_input()
         self.game.open_chat = False
 
-    def send(self, text, error=False):
+    def send(self, text, textcolor="white"):
         if not text:
             return
-        surface = get_text(text, ALPHA, "red" if error else "white", "black", padx=PAD, pady=PAD)
+        surface = get_text(text, ALPHA, textcolor, "black", padx=PAD, pady=PAD)
         self.lines_surfaces.append(surface)
 
     def tick(self):
@@ -158,15 +158,15 @@ class Chatmanager:
 
     def finish_input(self, text):
         if text in ("...", "/", "stop"):
-            self.stop_input("Exiting", error=True)
+            self.stop_input("Exiting", textcolor="red")
         res = self.command_finish(text)
         match res:
             case True:
                 self.stop_input("Correct answers")
             case False:
-                self.send("[Input] Incorrect answers", error=True)
+                self.send("[Input] Incorrect answers", textcolor="red")
             case (False, str(text)):
-                self.send(f"[Input] {text}", error=True)
+                self.send(f"[Input] {text}", textcolor="red")
             case (True, str(text)):
                 self.stop_input(text)
             case None:
@@ -174,9 +174,9 @@ class Chatmanager:
             case _:
                 raise ValueError(f"Error: incorrect res for the finish command: {res}")
 
-    def stop_input(self, text=None, error=None):
+    def stop_input(self, text=None, textcolor="white"):
         if text is not None:
-            self.send(f"[Input] {text}", error=error)
+            self.send(f"[Input] {text}", textcolor=textcolor)
         self.close_chat()
         del self.command_finish
         self.on_input = False

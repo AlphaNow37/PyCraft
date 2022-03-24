@@ -1,5 +1,6 @@
 """regroupe tous ce qui touche aux commandes"""
 from .executor import execute
+from ...font import clr
 
 # initialize the commands
 import pathlib

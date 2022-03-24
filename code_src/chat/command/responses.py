@@ -1,6 +1,6 @@
 
 class Error(Exception):
-    pass
+    textcolor = "red"
 
 
 class CommandError(Error):
@@ -12,6 +12,7 @@ class ParamsError(Error):
 
 
 class Send(Exception):
-    def __init__(self, error, name="Send"):
+    def __init__(self, error, name="Send", textcolor="white"):
         self.args = (error, )
         self.name = name
+        self.textcolor = textcolor
