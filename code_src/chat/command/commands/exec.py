@@ -48,7 +48,7 @@ def exec_command(data, *, game: Game):
         while line not in specials_worlds:
             to_exec += line + "\n"
             line = yield
-            line = line.strip()
+            line = line.rstrip()
     text = ""
     result = ""
     try:

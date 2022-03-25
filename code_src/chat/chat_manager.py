@@ -139,7 +139,7 @@ class Chatmanager:
     def send(self, text, textcolor="white"):
         if not text:
             return
-        surface = get_text(text, ALPHA, textcolor, "black", padx=PAD, pady=PAD)
+        surface = get_text(text, ALPHA, textcolor, "black", padx=PAD, pady=PAD, maxlinesize=30)
         self.lines_surfaces.append(surface)
 
     def tick(self):
@@ -174,7 +174,7 @@ class Chatmanager:
             case None:
                 self.stop_input()
             case _:
-                raise ValueError(f"Error: incorrect res for the finish command: {res}")
+                raise ValueError(f"Error: incorrect res for the finish command: {res!r}")
 
     def stop_input(self, text=None, textcolor="white"):
         if text is not None:

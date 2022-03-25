@@ -18,8 +18,19 @@ basic_chars = {
     "r": "//",
 }
 
-def get_text(text, alpha=70, default_textcolor="white", background_color="black", padx=0, pady=0):
-    lines: list[list[str]] = [list(line) for line in text.splitlines()]
+def get_text(text, alpha=70,
+             default_textcolor="white", background_color="black",
+             padx=0, pady=0,
+             maxlinesize: int | None = None):
+    """Return a surface with the text.
+    Support color codes."""
+
+    # Applying the maximum size of a line
+    if maxlinesize is not None:
+        str_lines = _cut_text(text, maxlinesize)
+        lines: list[list[str]] = [list(line) for line in str_lines]
+    else:
+        lines: list[list[str]] = [list(line) for line in text.splitlines()]
 
     # Get maximum width and parsing the colors
     max_width = 0
@@ -108,5 +119,40 @@ def get_text(text, alpha=70, default_textcolor="white", background_color="black"
     surface.set_alpha(alpha)
     return surface
 
+
+def _cut_text(text: str, maxlinesize: int) -> list[str]:
+    """Add \n to have line with :maxlinesize: lenght"""
+    raw_lines = text.splitlines()
+    cutted_lines = []
+    for y, line in enumerate(raw_lines):
+        worlds = line.split()
+        x = 0
+        act_line = ""
+        while x < len(worlds):
+            world = worlds[x]
+            while world:
+                if len(act_line) + len(world) > maxlinesize:
+                    if act_line:
+                        cutted_lines.append(act_line)
+                        act_line = ""
+                    else:
+                        cutted_lines.append(world[:maxlinesize])
+                        world = world[maxlinesize:]
+                else:
+                    act_line += world
+                    if len(act_line) == maxlinesize:
+                        cutted_lines.append(act_line)
+                        act_line = ""
+                    else:
+                        act_line += " "
+                    world = None
+            x += 1
+        cutted_lines.append(act_line)
+    return [line.removesuffix(" ") for line in cutted_lines]
+
 # pygame.show(get_text(f"aaa{clr:blue}bbb\n§1ccc", default_textcolor="red"))
 # exit()
+_TESTING = False
+if _TESTING:
+    print(_cut_text("aaa\nbonjour tout le monde !!! abcdefghi", 30))
+    exit()
