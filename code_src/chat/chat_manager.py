@@ -123,6 +123,8 @@ class Chatmanager:
             y += 1
             line = pygame.transform.scale(line, (new_width, new_height))
             self.game.screen.blit(line, (0, y))
+            if y < 0:
+                break
 
     def open_chat(self):
         pygame.key.start_text_input()

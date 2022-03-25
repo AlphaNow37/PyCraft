@@ -2,6 +2,8 @@ from .. import token
 from ..responses import Send, ParamsError
 from .... import Game
 from .. import command
+from ....screen_decorators.skycolor import get_colors
+import colour
 
 
 times = {
@@ -16,7 +18,8 @@ times = {
 def get_time(game: Game):
     """Commande pour avoir le temps de la journée
     0=minuit 180=midi"""
-    raise Send(f"Time={game.time.get():.2f}", name="Time")
+    micro_time_text = f"§{colour.rgb2hex((c/255 for c in get_colors(game.time.get())[0]), force_long=True)}¤"
+    raise Send(f"Time={game.time.get():.2f}\n{micro_time_text}", name="Time")
 
 
 @command.decorate_command(nb_params=1, name="set")
