@@ -50,6 +50,7 @@ Pos:
 UserName: {player.username}
 Life: {player.life}/100
 Vue:
+    Zoom: {self.game.zoom}
     Angle: {round(self.game.player.vue_dir, 2)}
 {SEPARATOR}
 """.removesuffix("\n").removeprefix("\n")

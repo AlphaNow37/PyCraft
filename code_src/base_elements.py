@@ -2,6 +2,7 @@ import pygame
 import math
 
 from . import map
+from .constants import AVERAGE_COLOR_MINDISTANCE
 
 
 class BaseCarre:
@@ -14,6 +15,7 @@ class BaseCarre:
     img.fill((100, 0, 100))
     frame = 0
     imgs: list[pygame.Surface] | None = None
+    average_color = None  # When the camera is very unzoomed, we don't show the real image is this is not None
 
     width = 1
     height = 1
@@ -43,26 +45,39 @@ class BaseCarre:
         if y_self is None:
             y_self = self.y
         width_screen, height_screen = self.game.size_screen
-        x, y = self.get_screen_position(x_self, y_self)
+        # x, y = self.get_screen_position(x_self, y_self)
 
-        if img is None:
-            if self.imgs is None:
-                img = self.img
-            else:
-                img = self.imgs[self.frame if frame is None else frame]
+        x_cam, y_cam = self.game.camera_center
+        # width_screen, height_screen = self.game.size_screen
+        delta_x = x_self - x_cam
+        delta_y = y_self - y_cam
+        x = self.game.size_block * delta_x + width_screen / 2
+        y = self.game.size_block * delta_y + height_screen / 2
+
         if width is None:
             width = self.width
         if height is None:
             height = self.height
         width *= self.game.size_block
         height *= self.game.size_block
-        img = pygame.transform.scale(img, (int(width)+1, int(height)+1))
-        if self.flip_x or self.flip_y:
-            img = pygame.transform.flip(img, self.flip_x, self.flip_y)
-        img.set_alpha(self.alpha)
-
+        width = int(width) + 1
+        height = int(height) + 1
         y = height_screen - y - height
-        self.screen.blit(img, (x, y))
+
+        if self.game.zoom < AVERAGE_COLOR_MINDISTANCE or self.average_color is None or self.alpha < 255:
+            if img is None:
+                if self.imgs is None:
+                    img = self.img
+                else:
+                    img = self.imgs[self.frame if frame is None else frame]
+
+            img = pygame.transform.scale(img, (width, height))
+            if self.flip_x or self.flip_y:
+                img = pygame.transform.flip(img, self.flip_x, self.flip_y)
+            img.set_alpha(self.alpha)
+            self.screen.blit(img, (x, y))
+        else:
+            pygame.draw.rect(self.screen, self.average_color, [x, y, width, height])
 
     def get_rect(self) -> pygame.Rect:
         return pygame.Rect(self.x*100, self.y*100, self.width*100, self.height*100)

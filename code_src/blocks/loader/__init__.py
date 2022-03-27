@@ -1,4 +1,5 @@
-"""Package chargant le fichier blocks.yml"""
+"""Package chargant le fichier blocks.yml,
+et créant le dict blocks qui sert a autoset les attributs des objets Block"""
 import yaml
 import pygame
 from . import img_modifier
@@ -8,8 +9,23 @@ with open(SRC_ROOT / "blocks.yml") as file:
     blocks_loaded: dict[str, dict] = yaml.load(file, yaml.FullLoader)
 
 
-def parse_value(value: dict, name: str):
+def calculate_average_color(surface: pygame.Surface):
+    sums = [0]*3
+    nb_pixels = 0
+    for x in range(surface.get_width()):
+        for y in range(surface.get_height()):
+            color = surface.get_at((x, y))
+            if len(color) >= 4 and color[3] != 255:
+                continue
+            for c in range(3):
+                sums[c] += color[c]
+            nb_pixels += 1
+    if nb_pixels == 0:
+        return None
+    return [c_sum/nb_pixels for c_sum in sums]
 
+
+def parse_value(value: dict, name: str):
     color = value.pop("color", None)
     load_img = value.pop("load_img", True)
     if not load_img:
@@ -24,6 +40,8 @@ def parse_value(value: dict, name: str):
     if nb_frames is not None:
         value["imgs"], value["nb_frames"] = imgs, _ = img_modifier.cut_img(img, nb_frames)
         value["img"] = imgs[0]
+    if "img" in value:
+        value["average_color"] = calculate_average_color(value["img"])
     blocks[name] = value
     return value
 

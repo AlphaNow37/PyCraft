@@ -3,6 +3,7 @@ import pygame
 from ..constants import *
 from .. import interfaces
 from .keymap import KeyChangeError, KeyMapManager
+import cProfile
 
 """
 Event: gere les évenements du jeu
@@ -15,6 +16,7 @@ class EventManager:
         self.player = game.player
         self.f3_used = False
         self.key_manager = KeyMapManager()
+        self.profiling = False
 
     def events(self):
         """
@@ -55,7 +57,16 @@ class EventManager:
 
                 # Movements and other key events
                 elif event.type == pygame.KEYDOWN:
-                    if not self.game.open_chat:
+                    if event.key == pygame.K_F6:
+                        self.profiling = not self.profiling
+                        if self.profiling:
+                            self.profile = cProfile.Profile()
+                            self.profile.enable()
+                        else:
+                            self.profile.print_stats(sort="cumtime")
+                            del self.profile
+                        continue
+                    elif not self.game.open_chat:
                         if event.key in self.key_manager["chat"]:
                             self.game.chat_manager.open_chat()
                             chat_just_opened = True
