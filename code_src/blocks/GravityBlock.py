@@ -19,3 +19,9 @@ class GravityBlock(Block):
     def planned_update(self):
         if self.falling:
             self.update_from_voisin(0, -1)
+
+    @classmethod
+    def place_at(cls, name, game, x, y):
+        block = super().place_at(name, game, x, y)
+        block.update_from_voisin(0, -1)
+        return block

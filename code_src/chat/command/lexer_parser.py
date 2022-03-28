@@ -8,6 +8,7 @@ regex_arguments = re.compile(r"""((?P<enter>["']).*(?P=enter))|([^ ]+)""")
 regex_number = re.compile(r"-?[\d]*\.?[\d]")
 regex_block = re.compile(r"(minecraft:|pycraft:)?(?P<name>[a-zA-Z_]+)")
 regex_pos = re.compile(r"~[+-]?[0-9]*")
+regex_rel_dir = re.compile(r"\^[+-]?[0-9]*")
 regex_json = re.compile(r"(?P<arg>.+)(?P<json>{.*})")
 bools = {
     "no": False,
@@ -58,8 +59,15 @@ def lex_parse(input_str: str):
             if arg == "~":
                 nb = 0
             else:
-                nb = int(arg.strip("~+"))
+                nb = float(arg.strip("~+"))
             args.append(token.RelativePosition(nb, arg))
+            continue
+        elif regex_rel_dir.fullmatch(arg):
+            if arg == "^":
+                nb = 0
+            else:
+                nb = float(arg.strip("^+"))
+            args.append(token.RelDirectionPosition(nb, arg))
             continue
 
         args.append(token.String(arg.lower(), arg))

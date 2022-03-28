@@ -118,6 +118,11 @@ Class: {self.__class__.__name__}
 {_n.join(f'{name.title()}: {value}' for name, value in visu.items())}
 """.strip()
 
+    @classmethod
+    def place_at(cls, name, game: Game, x, y):
+        block = cls(name, game, x, y)
+        game.map.set_case(x, y, block)
+        return block
 
 def get_surface_color(color):
     surface = pygame.Surface((1, 1))

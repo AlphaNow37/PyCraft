@@ -1,4 +1,4 @@
-from ..responses import ParamsError, Send
+from ..responses import Send
 from ..command import with_register, decorate_command
 from .. import cast_pos
 from .... import Game
@@ -10,6 +10,6 @@ def tp(x, y, *, game: Game):
     """Teleporte le joueur en (x; y)
     /tp <x> <y>"""
     player = game.player
-    x, y = cast_pos.cast_pos([x, y], game, y_limitation=False)
+    x, y = cast_pos.cast_pos([x, y], game, y_limitation=False, caster=float)
     player.tp_to(x-0.5, y+player.height/4)
     raise Send(f"The player has been teleported to {x=} {y=}", name="Tp")

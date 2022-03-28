@@ -1,4 +1,4 @@
-from . import Game, decorate_command, Command, OneValueToken, ParamsError
+from . import Game, decorate_command, Command, OneValueToken
 import json
 import threading
 from .....roots import USER_ROOT

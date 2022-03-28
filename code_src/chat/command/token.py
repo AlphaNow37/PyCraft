@@ -49,7 +49,7 @@ class Number(OneValueToken):
     name = "Nb"
 
     def assert_good(self, value):
-        return isinstance(value, (float, int))
+        return isinstance(value, int | float)
 
 class Percent(Number):
     name = "P%"
@@ -75,7 +75,13 @@ class RelativePosition(OneValueToken):
     name = "Pos"
 
     def assert_good(self, value):
-        return isinstance(value, int)
+        return isinstance(value, int | float)
+
+class RelDirectionPosition(OneValueToken):
+    name = "Dir"
+
+    def assert_good(self, value):
+        return isinstance(value, int | float)
 
 
 none = object()

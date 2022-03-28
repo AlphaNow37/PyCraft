@@ -10,7 +10,7 @@ FLEURS_NAMES = [
 FLEURS_BLOCKS_NAMES = [f"fleur_{name}" for flor in FLEURS_NAMES for name in flor]
 
 BLOCKS = {
-    name.upper(): (name, {"class": val.pop("class")})
+    name.upper(): (name, {"class": val.get("class")})
     for name, val in block_loader.blocks.items()
 }
 
