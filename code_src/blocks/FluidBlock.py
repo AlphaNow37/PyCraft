@@ -11,6 +11,9 @@ class FluidBlock(Block):
         x = self.x+from_x
         y = self.y+from_y
         block = self.map.get_case(x, y)
+        bottom_block = self.map.get_case(self.x, self.y-1)
+        if (not bottom_block or bottom_block.air) and from_y != -1:
+            return
         if block and block.air:
             self.map.set_case(x, y, FluidBlock(self.name, self.game, x, y))
             self.map.to_planned_update.append([int(10/self.fluidity), x, y])
