@@ -20,6 +20,7 @@ class BasePausedInterface(AbcInterface):
         if self.title_text is not None:
             self.set_title(self.title_text)
         self.tick()
+        self.reload_widgets()
 
     def on_event(self, event: pygame.event.Event):
         if event.type == pygame.MOUSEWHEEL:
@@ -68,3 +69,6 @@ class BasePausedInterface(AbcInterface):
             self.close()
         else:
             self.game.interface = self.superior(self.game)
+
+    def reload_widgets(self):
+        self.widgets = []

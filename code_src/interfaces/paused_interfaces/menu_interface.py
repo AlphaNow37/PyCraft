@@ -1,19 +1,21 @@
 from .abc import BasePausedInterface
-from code_src.interfaces.paused_interfaces.widgets import Button, Widget
+from .widgets import Button, Widget
 from functools import partial
 from . import keys_interface
+from . import sounds_interface
 
 
 class MenuInterface(BasePausedInterface):
     title_text = "Menu :"
 
-    def __init__(self, game):
-        super().__init__(game)
+    def reload_widgets(self):
         self.widgets: list[Widget] = [
-            Button(game, i % 2, (i//2+1)*1.3, func, text=text, color_fond="grey", color_text="black")
+            Button(self.game, i % 2, i//2+1, func, text=text, color_fond="grey", color_text="black")
             for (i, (text, func)) in enumerate([
                 ("Keys", partial(self.change_interface, keys_interface.KeyInterface)),
-                ("reset", lambda: [game.reset_world(), self.change_interface(None)]),
+                ("Sounds", partial(self.change_interface, sounds_interface.SoundsInterface)),
+                ("", lambda: None),
+                ("reset", lambda: [self.game.reset_world(), self.change_interface(None)]),
                 ("save", self.save_world),
                 ("open", self.open_world),
             ])
