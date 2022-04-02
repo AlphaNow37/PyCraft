@@ -3,6 +3,7 @@ import pygame
 from ..constants import *
 from .. import interfaces
 from .keymap import KeyChangeError, KeyMapManager
+from .. import items
 import cProfile
 
 """
@@ -52,8 +53,19 @@ class EventManager:
                         self.game.size_block = get_blocks_size(self.game.size_screen, self.game.zoom)
 
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button <= 3:
+                    # If the click is on the hotbar
                     if hotbar.box.collidepoint(mouse_pos):
                         hotbar.event(event)
+                    # If the click is a middle click
+                    elif event.button == pygame.BUTTON_MIDDLE:
+                        x, y, _, _ = self.game.get_pos_from_screenpos(mouse_pos)
+                        block = self.game.map.get_case(x, y)
+                        if block is None or block.air:
+                            continue
+                        hotbar_cont = self.game.player_inventory.hotbar
+                        hand_position = self.game.player_inventory.hand_position
+                        if self.game.is_admin and self.game.player_inventory.get_main_hand_item() is None:
+                            hotbar_cont[hand_position] = items.item.get_item(block)
 
                 # Movements and other key events
                 elif event.type == pygame.KEYDOWN:

@@ -14,13 +14,13 @@ class BreakerPlacerManager:
     """Gere certaines interactions (placer et casser des blocks a la main)"""
     def __init__(self, game: Game):
         self.breaker = Breaker(game, 0, 0)
-        self.reset()
+        self.reset_breaking()
         self.game = game
         self.map = game.map
 
     def tick(self):
         if self.game.interface is not None:
-            self.reset()
+            self.reset_breaking()
             return
         left, _, right = pygame.mouse.get_pressed(3)
         mouse_pos = self.game.mouse_pos
@@ -42,7 +42,7 @@ class BreakerPlacerManager:
                     if ok:
                         x_side, y_side = self.game.block_side
                         item = self.game.player_inventory.get_main_hand_item()
-                        if item is not None and item.is_block:
+                        if item is not None and item.item_type == "block":
                             cls: type[Block] = get_cls(item.name)
                             block = cls.place_at(item.name, self.game, x, y)
                             if block is not False:
@@ -58,7 +58,7 @@ class BreakerPlacerManager:
                     if self.game.is_admin and left:
                         self.map.destroy_case(x, y)
                     else:
-                        self.reset()
+                        self.reset_breaking()
                 elif left and mouse_pos == self.breaking_pos and self.breaking:
                     pass
                 elif left:
@@ -78,9 +78,9 @@ class BreakerPlacerManager:
                             self.game.sound_manager.breaked(block.breaked_sound, sleep=True)
                             self.last_stage = self.stage
                         return
-        self.reset()
+        self.reset_breaking()
 
-    def reset(self):
+    def reset_breaking(self):
         self.breaking = False
         self.stage = 0
         self.breaking_pos = (None, None)

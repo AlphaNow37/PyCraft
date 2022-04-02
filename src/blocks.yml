@@ -86,7 +86,6 @@ _gen_block: &gen_block
     breaked_sound: gravel
   grass:
     <<: *gen_surface
-    load_img: false
     class: GRASS
     drop_value: dirt
 

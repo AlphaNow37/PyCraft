@@ -12,10 +12,10 @@ class DroppedItem(DirectedEntity):
     width = 19 * 3/100
     height = 16 * 3/100
 
-    def __init__(self, game, x, y, raw_item, direction=None, *, time_cant_be_taked=0, isblock=False, **kwargs):
+    def __init__(self, game, x, y, raw_item, direction=None, *, time_cant_be_taked=0, item_type=None, **kwargs):
         direction = random.randint(0, 360) if direction is None else direction
         super(DroppedItem, self).__init__(game, x, y, direction, **kwargs)
-        self.stack = container.Stack.new(raw_item, is_block=isblock)
+        self.stack = container.Stack.new(raw_item, item_type=item_type)
         img = self.stack.get_img()
         w, h = img.get_size()
         self.img = pygame.Surface((w*2, h*2))

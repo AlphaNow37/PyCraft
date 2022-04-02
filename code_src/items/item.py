@@ -1,5 +1,5 @@
 from .loader import items
-from ..blocks import blocks
+from ..blocks import blocks, Block
 
 class Item:
     """A dataclass"""
@@ -7,7 +7,6 @@ class Item:
     damages = 1
     efficiency = 1
     solidity = None
-    is_block = False
 
     def __init__(self, name, image, **kwargs):
         self.name = name
@@ -31,5 +30,7 @@ def get_item(item, **kwargs) -> Item:
         return Item(*item, **kwargs)
     elif isinstance(item, str):
         return Item(item, blocks[item]["img"], **kwargs)
+    elif isinstance(item, Block):
+        return Item(item.name, item.img, **kwargs, item_type="block")
     else:
         raise ValueError(item)
