@@ -45,13 +45,14 @@ class BreakerPlacerManager:
                         if item is not None and item.is_block:
                             cls: type[Block] = get_cls(item.name)
                             block = cls.place_at(item.name, self.game, x, y)
-                            if block.support_x_flip:
-                                block.flip_x = x_side < 0.5
-                            if block.support_y_flip:
-                                block.flip_y = y_side < 0.5
-                            if not self.game.is_admin:
-                                self.game.player_inventory.remove_one_in_hand()
-                            self.game.sound_manager.placed(block.breaked_sound)
+                            if block is not False:
+                                if block.support_x_flip:
+                                    block.flip_x = x_side < 0.5
+                                if block.support_y_flip:
+                                    block.flip_y = y_side < 0.5
+                                if not self.game.is_admin:
+                                    self.game.player_inventory.remove_one_in_hand()
+                                self.game.sound_manager.placed(block.breaked_sound)
             else:
                 if block.unbreakable:
                     if self.game.is_admin and left:
