@@ -17,8 +17,8 @@ class SupportedBlock(Block):
                     self.map.destroy_case(self.x, self.y, do_drop=True)
 
     @classmethod
-    def place_at(cls, name, game, x, y):
-        block = super().place_at(name, game, x, y)
+    def place_at(cls, name, game, x, y, **kwargs):
+        block = super().place_at(name, game, x, y, **kwargs)
         block.update_from_voisin(block.support_from_x, block.support_from_y)
         return block
 
@@ -36,7 +36,7 @@ class BigFlowerUp(Block):
         return [(x, y-1)]
 
     @classmethod
-    def place_at(cls, name: str, game, x, y):
+    def place_at(cls, name: str, game, x, y, **kwargs):
         if game.map.get_case(x, y+1) is None or not game.map.get_case(x, y+1).air:
             return False
         b2 = super().place_at(name, game, x, y + 1)

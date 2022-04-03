@@ -1,4 +1,3 @@
-import pygame
 from .. import base_elements
 from . import loader
 from .. import entity
@@ -120,23 +119,12 @@ Class: {self.__class__.__name__}
 """.strip()
 
     @classmethod
-    def place_at(cls, name, game: Game, x, y):
+    def place_at(cls, name, game: Game, x, y, **kwargs):
+        if not cls.revelated:  # For ores, for example
+            cls = cls.mro()[1]  # Preserv the super cls
         block = cls(name, game, x, y)
         game.map.set_case(x, y, block)
         return block
-
-def get_surface_color(color):
-    surface = pygame.Surface((1, 1))
-    surface.fill(color)
-    return surface
-
-
-def get_rectangle(height, total_height, color):
-    surface = pygame.Surface((1, height))
-    surface.fill(color)
-    total_surface = pygame.Surface((1, total_height))
-    total_surface.blit(surface, (0, total_height - height))
-    return total_surface
 
 
 blocks = loader.blocks
