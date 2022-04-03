@@ -44,6 +44,7 @@ class BaseEntity(BaseImageCentree):
             return False, (x, y)
 
     def verify_collision(self, x=None, y=None):
+        """Return True if there is a collision"""
         if not self.collision:
             return False
         if x is None:
@@ -96,7 +97,6 @@ class BaseEntity(BaseImageCentree):
     def life(self, value):
         self._life = value
         if value <= 0:
-            self.destroy()
             self.event("DEATH")
         else:
             self.event("LIFE_CHANGE")

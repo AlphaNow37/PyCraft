@@ -1,5 +1,6 @@
 import pygame
-from ..entity import BaseEntity, SubNodule
+from ..entity import BaseEntity
+from ..base_elements import RotatedImage
 import math
 from ..roots import SRC_ROOT, CACHE_ROOT, USER_ROOT
 from .skin_loader import get_img_from_skin, download_skin
@@ -28,13 +29,16 @@ class Player(BaseEntity):
         with open(USER_ROOT / "user.json") as file:
             user_data = json.load(file)
         self.username = user_data["username"]
-        skin_dir = CACHE_ROOT / ("skin_" + self.username + ".png")
-        if not skin_dir.exists():
-            succes = download_skin(skin_dir, self.username)
-            if not succes:
-                self.game.chat_manager.send(f"Can't load the skin of {self.username}", textcolor="red")
-                return False
-        base_skin = pygame.image.load(str(skin_dir))
+        if self.username is None:
+            skin_dir = SRC_ROOT / "entity" / "player.png"
+        else:
+            skin_dir = CACHE_ROOT / ("skin_" + self.username + ".png")
+            if not skin_dir.exists():
+                succes = download_skin(skin_dir, self.username)
+                if not succes:
+                    self.game.chat_manager.send(f"Can't load the skin of {self.username}", textcolor="red")
+                    return False
+        base_skin = pygame.image.load(skin_dir)
         fragments = self.fragments = get_img_from_skin(base_skin)
         self.fragments = fragments
         self.img = fragments["front"]
@@ -50,7 +54,7 @@ class Player(BaseEntity):
 
         self.sneaking = False
         threading.Thread(target=self.set_img).start()
-        self.head_subnodule = SubNodule(game, None, 0, 0.7, 0.5, 0.5, self)
+        self.head_subnodule = RotatedImage(game, 0, 0.7, None, 0.5, 0.5)
 
     def move(self, x, y):
         any_ = super().move(x, y)
@@ -74,7 +78,7 @@ class Player(BaseEntity):
         w, h = self.game.size_screen
         x1 = w/2
         y1 = h/2
-        y1 -= self.head_subnodule.rel_y * self.game.size_block
+        y1 -= self.head_subnodule.y * self.game.size_block
         x2, y2 = pygame.mouse.get_pos()
         if math.dist((x1, y1), (x2, y2)) < self.head_subnodule.width*2*self.game.size_block:
             self.mouse_player_dist = None
@@ -117,8 +121,11 @@ class Player(BaseEntity):
         assert not __, __
         img = self.fragments["front"] if not self.sneaking else self.fragments["sneaking_front"]
         super().draw(img=img)
+
+        head_x = self.x+self.head_subnodule.x
+        head_y = self.y+self.head_subnodule.y
         if self.mouse_player_dist is None:
-            self.head_subnodule.draw(img=self.fragments["head"]["front"], angle=0)
+            self.head_subnodule.draw(img=self.fragments["head"]["front"], angle=0, x_self=head_x, y_self=head_y)
             return
         angle = self.vue_dir
         face_on_right = angle > 0
@@ -135,7 +142,7 @@ class Player(BaseEntity):
             img = self.fragments["head_scroller"].subsurface([4+phase, 0, 8, 8])
         else:
             img = self.fragments["head_scroller"].subsurface([4, 0, 8, 8])
-        self.head_subnodule.draw(img=img, angle=angle)
+        self.head_subnodule.draw(img=img, angle=angle, x_self=head_x, y_self=head_y)
 
     def jump(self):
         down = self.get_down_block()

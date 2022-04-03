@@ -1,6 +1,7 @@
 import pygame
 import math
 
+from .tools import get_multiplier_from_angle
 from . import map
 from .constants import AVERAGE_COLOR_MINDISTANCE
 
@@ -121,3 +122,35 @@ class BaseImageCentree(BaseCarre):
 
     def get_int_pos(self):
         return [math.ceil(self.x)-1, int(self.y)]
+
+
+class RotatedImage(BaseImageCentree):
+    """
+    Classe Abstraite pouvant etre rotate
+    """
+    def __init__(self, game, x, y, image, width, height, angle=0, **kwargs):
+        super().__init__(game, 0, 0, **kwargs)
+        self.img = image
+        self.width = width
+        self.height = height
+        self.angle = angle
+        self.x = x
+        self.y = y
+
+    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None, angle=None):
+        assert frame is None, "Not implemented"
+        img: pygame.Surface = self.img if img is None else img
+        width = self.width if width is None else width
+        height = self.height if height is None else height
+        x = x_self if x_self is not None else self.x
+        y = y_self if y_self is not None else self.y
+        angle = self.angle if angle is None else angle
+        multpilier = get_multiplier_from_angle(angle)
+        img.set_colorkey((0, 0, 0))
+        img = pygame.transform.scale(img, (int(img.get_width()*10), int(img.get_height()*10)))
+        rotated_image = pygame.transform.rotate(img, angle)
+        width *= multpilier
+        height *= multpilier
+
+        super().draw(x, y, rotated_image, width, height)
+

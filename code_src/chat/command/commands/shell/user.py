@@ -1,4 +1,4 @@
-from . import Game, decorate_command, Command, OneValueToken
+from . import Game, decorate_command, Command, OneValueToken, none
 import json
 import threading
 from .....roots import USER_ROOT
@@ -6,6 +6,8 @@ user_path = USER_ROOT / "user.json"
 
 @decorate_command(nb_params=1)
 def set_username(new_name, *, game: Game):
+    if new_name is none:
+        new_name = None
     if isinstance(new_name, OneValueToken):
         new_name = new_name.base_value
     new_name: str

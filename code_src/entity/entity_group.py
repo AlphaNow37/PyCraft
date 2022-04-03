@@ -1,12 +1,14 @@
 from .. import Game
 from . import BaseEntity
 
+from .entities import neo_trex
+
 
 class EntityGroup:
     """Rassemble des entitéss"""
     def __init__(self, game: Game):
         self.game = game
-        self.entity_lst: list[BaseEntity] = []
+        self.entity_lst: list[BaseEntity] = [neo_trex.NeoTRex(game, 0, game.player.y)]
 
     def tick(self):
         for entity in self.entity_lst:
