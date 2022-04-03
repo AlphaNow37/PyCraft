@@ -112,7 +112,9 @@ class BaseImageCentree(BaseCarre):
             x_self = self.x
         if y_self is None:
             y_self = self.y
-        super().draw(x_self-self.width/2, y_self-self.height/2, img, width, height, frame)
+        width = width if width is not None else self.width
+        height = height if height is not None else self.height
+        super().draw(x_self-width/2, y_self-height/2, img, width, height, frame)
 
     def get_rect(self) -> pygame.Rect:
         return pygame.Rect((self.x-self.width/2)*100, (self.y-self.height/2)*100, self.width*100, self.height*100)

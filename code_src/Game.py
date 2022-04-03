@@ -120,7 +120,7 @@ class Game:
             self.mouse_pos = [x, y]
             self.block_side = [side_x, side_y]
 
-            self.player.update_vue_dir()
+            self.player.update_vue_dir_and_mouse_dist()
 
             self.player.tick()
             self.sc_deco.tick()

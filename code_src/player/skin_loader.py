@@ -25,6 +25,7 @@ def download_skin(skin_dir, username):
 
 def get_img_from_skin(skin: pygame.Surface) -> dict:
     """transform a minecraft skin into a PyCraft player surface"""
+    skin.set_alpha(255)
     # Creating fragments
     names_fragments: dict[str, list[list[int], int]] = {
         "head":
@@ -76,7 +77,7 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
 
     # Creating Front skin
     emplacements_front_skin = {
-        "head": (4, 0),
+        #"head": (4, 0),
         "body": (4, 9),
         "cou": (6, 8),
         "left_leg": (4, 21),
@@ -105,12 +106,11 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
                 sneaking_img.set_at((x, y * 2 + y_inc), front_skin.get_at((x, y)))
     fragments["sneaking_front"] = sneaking_img
 
-    # Creating the left of the player
-    left = pygame.Surface((8, 32))
-    left.blit(fragments["head"]["left"], (0, 0))
-    left.blit(fragments["body"]["left"], (1, 8))
-    left.blit(fragments["body"]["left"], (1, 20))
-    fragments["left"] = left
-    fragments["left"] = fragments["body"]["left"]
+    # Creating the head scroller
+    fragments["head_scroller"] = head_scroller = pygame.Surface((16, 8))
+    head_scroller.fill((0, 0, 1))
+    head_scroller.set_colorkey((0, 0, 1, 0))
+    head_scroller.blit(skin.subsurface([4, 8, 16, 8]), (0, 0))
+    head_scroller.blit(skin.subsurface([36, 8, 16, 8]), (0, 0))
 
     return fragments

@@ -1,5 +1,5 @@
 import pygame
-from ..entity import BaseEntity
+from ..entity import BaseEntity, SubNodule
 import math
 from ..roots import SRC_ROOT, CACHE_ROOT, USER_ROOT
 from .skin_loader import get_img_from_skin, download_skin
@@ -44,9 +44,13 @@ class Player(BaseEntity):
         super(Player, self).__init__(game, 0, 0)
         self.tp_to(0.5, y)
         self.spawnpoint = [0.5, y]
+
         self.vue_dir = 0
+        self.mouse_player_dist = 0
+
         self.sneaking = False
         threading.Thread(target=self.set_img).start()
+        self.head_subnodule = SubNodule(game, None, 0, 0.7, 0.5, 0.5, self)
 
     def move(self, x, y):
         any_ = super().move(x, y)
@@ -66,11 +70,17 @@ class Player(BaseEntity):
     def get_distance(self, x, y):
         return math.dist((self.x, self.y), (x, y))
 
-    def update_vue_dir(self):
-        x1, y1 = self.game.size_screen
-        x1 /= 2
-        y1 /= 2
+    def update_vue_dir_and_mouse_dist(self):
+        w, h = self.game.size_screen
+        x1 = w/2
+        y1 = h/2
+        y1 -= self.head_subnodule.rel_y * self.game.size_block
         x2, y2 = pygame.mouse.get_pos()
+        if math.dist((x1, y1), (x2, y2)) < self.head_subnodule.width*2*self.game.size_block:
+            self.mouse_player_dist = None
+        else:
+            self.mouse_player_dist = math.dist((0, 0), (abs(x2 - x1)/w*2, abs(y2 - y1)/h*2)) * 1.2
+            self.mouse_player_dist = min(1, self.mouse_player_dist)
         x2 -= x1
         y2 -= y1
         if x2 < 0:
@@ -97,7 +107,7 @@ class Player(BaseEntity):
     def set_sneaking(self, value: bool):
         self.sneaking = value
         if self.sneaking:
-            self.height = 1.5
+            self.height = 1.45
         else:
             self.height = 1.9
             self.y += 0.2
@@ -107,6 +117,25 @@ class Player(BaseEntity):
         assert not __, __
         img = self.fragments["front"] if not self.sneaking else self.fragments["sneaking_front"]
         super().draw(img=img)
+        if self.mouse_player_dist is None:
+            self.head_subnodule.draw(img=self.fragments["head"]["front"], angle=0)
+            return
+        angle = self.vue_dir
+        face_on_right = angle > 0
+        if abs(angle) < 35:
+            phasing = False
+        elif abs(angle) > 145:
+            angle -= 180
+            phasing = False
+        else:
+            angle = angle + (-90 if face_on_right else -270)
+            phasing = True
+        if phasing and self.mouse_player_dist:
+            phase = self.mouse_player_dist * 4 * (-1 if face_on_right else 1)
+            img = self.fragments["head_scroller"].subsurface([4+phase, 0, 8, 8])
+        else:
+            img = self.fragments["head_scroller"].subsurface([4, 0, 8, 8])
+        self.head_subnodule.draw(img=img, angle=angle)
 
     def jump(self):
         down = self.get_down_block()
@@ -148,5 +177,3 @@ class Player(BaseEntity):
     @property
     def name(self):
         return self.username
-
-
