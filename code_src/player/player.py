@@ -124,7 +124,7 @@ class Player(BaseEntity):
         face_on_right = angle > 0
         if abs(angle) < 35:
             phasing = False
-        elif abs(angle) > 145:
+        elif abs(angle) > 155:
             angle -= 180
             phasing = False
         else:

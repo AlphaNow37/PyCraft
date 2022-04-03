@@ -5,6 +5,10 @@ import pygame
 
 
 class SubNodule(BaseImageCentree):
+    """
+    A sub-nodule is a surface that can to be rotated around its center.
+    It it used to create part of an entity, as player head.
+    """
     def __init__(self, game, image, rel_x, rel_y, width, height, superentitie, angle=0, **kwargs):
         super().__init__(game, 0, 0, **kwargs)
         self.img = image
