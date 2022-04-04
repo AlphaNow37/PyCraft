@@ -1,33 +1,35 @@
 from .. import token
 from ..responses import Send, ParamsError
 from .... import Game
+from ....constants import GameMode
 from .. import command
-
 
 @command.decorate_command(nb_params=0, name="get")
 def get_gamemode(game: Game):
     """Commande pour connaitre son mode de jeu"""
-    raise Send(f"Gamemode {game.gamemode}", name="Gamemode")
+    raise Send(f"Gamemode {game.gamemode.name}", name="Gamemode")
 
 
-@command.decorate_command(nb_params=1, name="set")
-def set_gamemode(new_gamemode, game: Game):
+@command.decorate_command(nb_params=(0, 1), name="set")
+def set_gamemode(new_gamemode=None, *, game: Game):
     """Commande pour modifier le son mode de jeu
     set <SURVIVAL-0-s | CREATIVE-1-c | SPECTATOR-2-sp>
+    set sans paramètres <-> get
     """
     match new_gamemode:
+        case None:
+            return get_gamemode(game=game)
         case str(g) | token.String(g) | token.SpecialString(g) if g.upper() in ("SURVIVAL", "S"):
-            gamemode = "SURVIVAL"
+            gamemode = GameMode.SURVIVAL
         case str(g) | token.String(g) | token.SpecialString(g) if g.upper() in ("CREATIVE", "C"):
-            gamemode = "CREATIVE"
+            gamemode = GameMode.CREATIVE
         case str(g) | token.String(g) | token.SpecialString(g) if g.upper() in ("SPECTATOR", "SP"):
-            gamemode = "SPECTATOR"
-        case int(0) | token.Number(0):
-            gamemode = "SURVIVAL"
-        case int(1) | token.Number(1):
-            gamemode = "CREATIVE"
-        case int(2) | token.Number(2):
-            gamemode = "SPECTATOR"
+            gamemode = GameMode.SPECTATOR
+        case int(n) | token.Number(n):
+            try:
+                gamemode = GameMode(n)
+            except ValueError:
+                raise ParamsError("Invalide new gamemode")
         case _:
             raise ParamsError("Invalide new gamemode")
     game.change_gamemode(gamemode)

@@ -59,7 +59,7 @@ Vue:
         return f"""
 FPS: {round(self.game.clock.get_fps(), 2)}/20
 Render Distance: {self.game.zoom}
-Gamemode: {self.game.gamemode}
+Gamemode: {self.game.gamemode.name}
 Time: {round(self.game.time)}/360 -> {self.get_time_periode()}
 Raining: {self.game.raining}
 {SEPARATOR}

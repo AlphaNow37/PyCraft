@@ -5,7 +5,7 @@ import math
 from ..roots import SRC_ROOT, CACHE_ROOT, USER_ROOT
 from .skin_loader import get_img_from_skin, download_skin
 from .. import Game
-from ..constants import GRAVITY
+from ..constants import GRAVITY, GameMode
 
 import json
 import threading
@@ -62,7 +62,7 @@ class Player(BaseEntity):
         return any_
 
     def tick(self):
-        self.fall = not self.game.gamemode == "SPECTATOR"
+        self.fall = not self.game.gamemode == GameMode.SPECTATOR
         self.collision = self.fall
         super(Player, self).tick()
 

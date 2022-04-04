@@ -14,6 +14,7 @@ from .sounds import SoundManager
 from .player import player_inventory
 from .screen_decorators.Property import Property
 from .screen_decorators import ScreenDecorator
+from .constants import GameMode
 
 
 _PROFILING = False
@@ -167,7 +168,7 @@ class Game:
         self.raining: Property = w_manager.raining
         self.next_rain: Property = w_manager.next_rain
 
-        self.change_gamemode("SURVIVAL" if 0 else "SPECTATOR")
+        self.change_gamemode(GameMode.SURVIVAL if 0 else GameMode.SPECTATOR)
 
     def save_world(self, name="save"):
         if "." in name or "/" in name or "\\" in name:
@@ -209,9 +210,9 @@ class Game:
         self.map.set_little_data(little_map_data)
         print("open")
 
-    def change_gamemode(self, new_gamemode):
+    def change_gamemode(self, new_gamemode: GameMode):
         self.gamemode = new_gamemode
-        self.is_admin = self.gamemode in ["CREATIVE", "SPECTATOR"]
+        self.is_admin = self.gamemode in [GameMode.CREATIVE, GameMode.SPECTATOR]
 
     def test_id(self, test_id):
         assert _TESTING

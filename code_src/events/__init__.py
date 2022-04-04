@@ -1,6 +1,6 @@
 from .. import Game
 import pygame
-from ..constants import *
+from ..constants import GameMode
 from .. import interfaces
 from .keymap import KeyChangeError, KeyMapManager
 from .. import items
@@ -124,7 +124,7 @@ class EventManager:
 
         if self.game.interface is None and not self.game.open_chat:
             if self.key_manager.is_pressed(pressed, "jump"):
-                if self.game.gamemode == "SPECTATOR":
+                if self.game.gamemode == GameMode.SPECTATOR:
                     self.player.move(0, 1)
                 else:
                     self.player.jump()
@@ -134,7 +134,8 @@ class EventManager:
                 self.f3_used = False
 
     def change_gamemode(self):
-        self.game.change_gamemode(GAMEMODES[(GAMEMODES.index(self.game.gamemode) + 1) % len(GAMEMODES)])
+        act_n = int(self.game.gamemode)
+        self.game.change_gamemode(GameMode((act_n + 1) % len(GameMode)))
 
     def handle_player_moves(self, pressed):
         if self.key_manager.is_pressed(pressed, "left"):
@@ -144,7 +145,7 @@ class EventManager:
         if self.key_manager.is_pressed(pressed, "right"):
             self.player.move(1, 0)
         if self.key_manager.is_pressed(pressed, "sneak") != self.player.sneaking:
-            if self.game.gamemode != "SPECTATOR":
+            if self.game.gamemode != GameMode.SPECTATOR:
                 self.player.set_sneaking(pressed[pygame.K_LSHIFT] or pressed[pygame.K_s])
 
 def get_blocks_size(size_screen, zoom):
