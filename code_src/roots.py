@@ -11,7 +11,7 @@ CACHE_ROOT = ROOT / "cache"  # Where cached files (as skins) are
 if not CACHE_ROOT.exists():
     CACHE_ROOT.mkdir()
 
-USER_ROOT = ROOT / "user"  # Where userdata (username, keymap, ...) is
+USER_ROOT = ROOT / "user"  # Where userdatas (username, keymap, ...) are
 
 SAVE_ROOT = ROOT / "saves"  # Where saves are
 if not SAVE_ROOT.exists():

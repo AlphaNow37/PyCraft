@@ -1,19 +1,22 @@
 """
 PyCraft
-Par AlphaNow
+By AlphaNow
 
-LIRE README.md
+READ README.md
 """
+
+# Auto install system
 import subprocess
-from sys import version_info, stderr
+from sys import version, stderr
 
-
-for name, pipname in [("pygame",)*2, ("requests",)*2, ("yaml", "PyYaml"), ("pyperclip", )*2]:
+version_name = version.split(" ")[0]
+for importname, pipname in [("pygame",)*2, ("requests",)*2, ("yaml", "PyYaml"), ("pyperclip", )*2]:
     try:
-        __import__(name)
+        __import__(importname)
     except ImportError:
-        subprocess.run(f"py -3.{version_info.minor} -m pip install {pipname}")
+        subprocess.run(f"py -3.{version_name} -m pip install {pipname}")
 
+# PyGame setup
 import pygame
 pygame.init()
 
@@ -22,7 +25,10 @@ try:
 except ImportError:
     pass
 
+# Load the modules / the assets
 import code_src
+
+# Launch the game
 try:
     code_src.Game()
 except KeyboardInterrupt:
