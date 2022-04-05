@@ -84,7 +84,7 @@ class EventManager:
                             chat_just_opened = True
                         elif event.key == pygame.K_n or (event.key == pygame.K_F3 and pressed[pygame.K_n]):
                             if pressed[pygame.K_F3]:
-                                self.change_gamemode()
+                                self.next_gamemode()
                                 self.f3_used = True
                         elif event.key == pygame.K_TAB:
                             self.game.interface = interfaces.MenuInterface(self.game)
@@ -133,7 +133,7 @@ class EventManager:
             if not pressed[pygame.K_F3]:
                 self.f3_used = False
 
-    def change_gamemode(self):
+    def next_gamemode(self):
         act_n = int(self.game.gamemode)
         self.game.change_gamemode(GameMode((act_n + 1) % len(GameMode)))
 

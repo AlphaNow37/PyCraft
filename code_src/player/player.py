@@ -129,19 +129,22 @@ class Player(BaseEntity):
             return
         angle = self.vue_dir
         face_on_right = angle > 0
+        face_on_bottom = abs(angle) < 90
         if abs(angle) < 35:
-            phasing = False
+            direction = "vertical"
         elif abs(angle) > 155:
             angle -= 180
-            phasing = False
+            direction = "vertical"
         else:
             angle = angle + (-90 if face_on_right else -270)
-            phasing = True
-        if phasing and self.mouse_player_dist:
+            direction = "horizontal"
+        scroller = self.fragments["head_scroller"][direction]
+        if direction == "horizontal":
             phase = self.mouse_player_dist * 4 * (-1 if face_on_right else 1)
-            img = self.fragments["head_scroller"].subsurface([4+phase, 0, 8, 8])
+            img = scroller.subsurface([4+phase, 0, 8, 8])
         else:
-            img = self.fragments["head_scroller"].subsurface([4, 0, 8, 8])
+            phase = self.mouse_player_dist * 2 * (-1 if face_on_bottom else 1)
+            img = scroller.subsurface([0, 2 + phase, 8, 8])
         self.head_subnodule.draw(img=img, angle=angle, x_self=head_x, y_self=head_y)
 
     def jump(self):

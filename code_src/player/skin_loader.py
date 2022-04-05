@@ -107,10 +107,21 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
     fragments["sneaking_front"] = sneaking_img
 
     # Creating the head scroller
-    fragments["head_scroller"] = head_scroller = pygame.Surface((16, 8))
-    head_scroller.fill((0, 0, 1))
-    head_scroller.set_colorkey((0, 0, 1, 0))
-    head_scroller.blit(skin.subsurface([4, 8, 16, 8]), (0, 0))
-    head_scroller.blit(skin.subsurface([36, 8, 16, 8]), (0, 0))
+    fragments["head_scroller"] = head_scroller = {}
+    head_scroller["horizontal"] = horizontal_scroller = pygame.Surface((16, 8))
+    horizontal_scroller.fill((0, 0, 1))
+    horizontal_scroller.set_colorkey((0, 0, 1, 0))
+    horizontal_scroller.blit(skin.subsurface([4, 8, 16, 8]), (0, 0))
+    horizontal_scroller.blit(skin.subsurface([36, 8, 16, 8]), (0, 0))
+
+    # Creating the head scroller
+    head_scroller["vertical"] = vertical_scroller = pygame.Surface((8, 12))
+    vertical_scroller.fill((0, 0, 1))
+    vertical_scroller.set_colorkey((0, 0, 1, 0))
+    vertical_scroller.blit(skin.subsurface([8, 6, 8, 10]), (0, 0))
+    vertical_scroller.blit(skin.subsurface([40, 6, 8, 10]), (0, 0))
+    # This two surface must be flipped
+    vertical_scroller.blit(pygame.transform.flip(skin.subsurface([16, 6, 8, 2]), False, True), (0, 10))
+    vertical_scroller.blit(pygame.transform.flip(skin.subsurface([48, 6, 8, 2]), False, True), (0, 10))
 
     return fragments
