@@ -1,6 +1,7 @@
 from ..base_elements import BaseImageCentree
 from ..constants import *
 from ..tools import get_propertie_at
+from .entity_ia import EntityIA
 
 
 class BaseEntity(BaseImageCentree):
@@ -15,10 +16,13 @@ class BaseEntity(BaseImageCentree):
     name = "An entity"
     does_send_death_msg = False
 
+    ia_cls = EntityIA
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._life = self.base_life
         self.was_destroyed = False
+        self.ia: EntityIA = self.ia_cls(self.game, self)
 
     def move(self, x, y) -> tuple[bool, tuple[float | int, ...]]:
         if self.collision:
@@ -78,6 +82,7 @@ class BaseEntity(BaseImageCentree):
             self.life -= 5
             if self.was_destroyed and self.does_send_death_msg:
                 self.send_death_message(f"{self.name} fall into the void")
+        self.ia.tick()
 
     def get_down_block(self):
         x, y = self.get_int_pos()

@@ -6,6 +6,7 @@ from ..roots import SRC_ROOT, CACHE_ROOT, USER_ROOT
 from .skin_loader import get_img_from_skin, download_skin
 from .. import Game
 from ..constants import GRAVITY, GameMode
+from .ia import PlayerIA
 
 import json
 import threading
@@ -23,6 +24,9 @@ class Player(BaseEntity):
     base_life = 100
 
     does_send_death_msg = True
+
+    ia_cls = PlayerIA
+    ia: PlayerIA
 
     def set_img(self):
         """Charge le skin du joueur"""

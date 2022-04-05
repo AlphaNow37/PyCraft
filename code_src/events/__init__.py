@@ -138,15 +138,8 @@ class EventManager:
         self.game.change_gamemode(GameMode((act_n + 1) % len(GameMode)))
 
     def handle_player_moves(self, pressed):
-        if self.key_manager.is_pressed(pressed, "left"):
-            self.player.move(-1, 0)
-        if self.key_manager.is_pressed(pressed, "sneak"):
-            self.player.move(0, -1)
-        if self.key_manager.is_pressed(pressed, "right"):
-            self.player.move(1, 0)
-        if self.key_manager.is_pressed(pressed, "sneak") != self.player.sneaking:
-            if self.game.gamemode != GameMode.SPECTATOR:
-                self.player.set_sneaking(pressed[pygame.K_LSHIFT] or pressed[pygame.K_s])
+        self.game.player.ia.handle_player_inputs(pressed, self.key_manager.is_pressed)
+
 
 def get_blocks_size(size_screen, zoom):
     width_sc, height_sc = size_screen
