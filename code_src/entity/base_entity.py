@@ -1,4 +1,4 @@
-from ..base_elements import BaseImageCentree
+from ..base_elements import BaseImageCentree, RotatedImage
 from ..constants import *
 from ..tools import get_propertie_at
 from .entity_ia import EntityIA
@@ -10,7 +10,6 @@ class BaseEntity(BaseImageCentree):
     speed = 0.5
     act_speed_y = 0
     destroy_after = None
-    base_life = 100
     group = None
 
     name = "An entity"
@@ -20,7 +19,6 @@ class BaseEntity(BaseImageCentree):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._life = self.base_life
         self.was_destroyed = False
         self.ia: EntityIA = self.ia_cls(self.game, self)
 
@@ -64,12 +62,7 @@ class BaseEntity(BaseImageCentree):
             any_, new_falling_speed = self.move(0, self.act_speed_y)
             self.act_speed_y = new_falling_speed[1]
             if any_:
-                speed = self.act_speed_y
-                if speed < -1.5:
-                    self.life -= (-speed - 0.5) * 15
-                    if self.was_destroyed and self.does_send_death_msg:
-                        self.send_death_message(f"{self.name} hits the ground too hard")
-                        self.was_destroyed = False
+                self.event("FALLING_COLLISION", self.act_speed_y)
                 self.act_speed_y = 0
         else:
             self.act_speed_y = 0
@@ -79,9 +72,7 @@ class BaseEntity(BaseImageCentree):
             else:
                 self.destroy_after -= 1
         if self.y < -50:
-            self.life -= 5
-            if self.was_destroyed and self.does_send_death_msg:
-                self.send_death_message(f"{self.name} fall into the void")
+            self.event("VOID_DAMAGE")
         self.ia.tick()
 
     def get_down_block(self):
@@ -94,6 +85,46 @@ class BaseEntity(BaseImageCentree):
             group = self.group or self.game.entities
             group.remove(self)
 
+    def event(self, name: str, *args):
+        if name == "DEATH":
+            self.destroy()
+        elif name == "VOID_DAMAGE":
+            self.destroy()
+
+    def send_death_message(self, message: str):
+        self.game.chat_manager.send(f"[Death] {message}")
+
+
+class Mob(BaseEntity):
+    base_life = 100
+    parts: list[RotatedImage] = []
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._life = self.base_life
+
+    def event(self, name: str, *args):
+        if name == "VOID_DAMAGE":
+            self.life -= 5
+            if self.was_destroyed and self.does_send_death_msg:
+                self.send_death_message(f"{self.name} fall into the void")
+        elif name == "FALLING_COLLISION":
+            speed, = args
+            if speed < -1.5:
+                self.life -= (-speed - 0.5) * 15
+                if self.was_destroyed and self.does_send_death_msg:
+                    self.send_death_message(f"{self.name} hits the ground too hard")
+                    self.was_destroyed = False
+        else:
+            super().event(name, *args)
+
+    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None):
+        super().draw(x_self, y_self, img, width, height, frame)
+        x = x_self if x_self is not None else self.x
+        y = y_self if y_self is not None else self.y
+        for part in self.parts:
+            part.draw(x+part.x, y+part.y)
+
     @property
     def life(self):
         return self._life
@@ -105,10 +136,3 @@ class BaseEntity(BaseImageCentree):
             self.event("DEATH")
         else:
             self.event("LIFE_CHANGE")
-
-    def event(self, name: str, *args):
-        if name == "DEATH":
-            self.destroy()
-
-    def send_death_message(self, message: str):
-        self.game.chat_manager.send(f"[Death] {message}")

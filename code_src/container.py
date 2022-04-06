@@ -1,6 +1,6 @@
 import pygame
 from .items.item import Item, get_item
-from .font import get_surface_from_ascii
+from .font import render_ascii
 
 
 class Container:
@@ -103,7 +103,7 @@ class Stack:
 
         item_surface.blit(item_img, (0, 0))
         if self.size > 1:
-            text = get_surface_from_ascii(f"{self.size:>2}")
+            text = render_ascii(f"{self.size:>2}")
             text.set_colorkey("black")
             x, y = item_img.get_width()-text.get_width(), item_img.get_height()-text.get_height()
             item_surface.blit(text, (x, y))

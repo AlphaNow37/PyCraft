@@ -128,16 +128,15 @@ class RotatedImage(BaseImageCentree):
     """
     Classe Abstraite pouvant etre rotate
     """
-    def __init__(self, game, x, y, image, width, height, angle=0, **kwargs):
-        super().__init__(game, 0, 0, **kwargs)
-        self.img = image
-        self.width = width
-        self.height = height
+    def __init__(self, game, x, y, angle=0, center=None, do_freeze_img=False, **kwargs):
+        super().__init__(game, x, y, **kwargs)
         self.angle = angle
-        self.x = x
-        self.y = y
+        self.center = center
+        if do_freeze_img:  # Faster
+            self.img = self.get_centered_img(self.img, self.center)
+            self.center = None
 
-    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None, angle=None):
+    def draw(self, x_self=None, y_self=None, img=None, width=None, height=None, frame=None, angle=None, center=None):
         assert frame is None, "Not implemented"
         img: pygame.Surface = self.img if img is None else img
         width = self.width if width is None else width
@@ -146,11 +145,31 @@ class RotatedImage(BaseImageCentree):
         y = y_self if y_self is not None else self.y
         angle = self.angle if angle is None else angle
         multpilier = get_multiplier_from_angle(angle)
+        if not (self.center is center is None):  # Slower
+            img = self.get_centered_img(img, center if center is not None else self.center)
         img.set_colorkey((0, 0, 0))
         img = pygame.transform.scale(img, (int(img.get_width()*10), int(img.get_height()*10)))
         rotated_image = pygame.transform.rotate(img, angle)
         width *= multpilier
         height *= multpilier
-
         super().draw(x, y, rotated_image, width, height)
 
+    @staticmethod
+    def get_centered_img(uncentered_img, center):
+        x_center, y_center = center
+        img_width, img_height = uncentered_img.get_size()
+        if x_center * 2 < img_width:
+            left = img_width - 2 * x_center
+            new_width = 2 * img_width - 2 * x_center
+        else:
+            left = 0
+            new_width = 2 * x_center
+        if y_center < img_height / 2:
+            top = img_height - 2 * y_center
+            new_height = 2 * img_height - 2 * y_center
+        else:
+            top = 0
+            new_height = 2 * y_center
+        centered_img = pygame.Surface((new_width, new_height))
+        centered_img.blit(uncentered_img, (left, top))
+        return centered_img

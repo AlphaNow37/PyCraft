@@ -2,7 +2,6 @@ import requests
 import base64
 import json
 from urllib import request
-import sys
 
 import pygame
 
@@ -11,7 +10,7 @@ def download_skin(skin_dir, username):
     """Download the skin and return False if there is an error, True otherwith"""
     try:
         resp_to_get_uuid = requests.get(f"https://api.mojang.com/users/profiles/minecraft/{username}")
-        uuid = resp_to_get_uuid.json()["id"]
+        uuid = resp_to_get_uuid.json()["id"]  # If this fail, the username is probably not valid
         resp_to_get_skin = requests.get(f"https://sessionserver.mojang.com/session/minecraft/profile/{uuid}")
         value_encoded = resp_to_get_skin.json()["properties"][0]["value"]
         value_decoded = base64.b64decode(value_encoded, )
@@ -19,8 +18,7 @@ def download_skin(skin_dir, username):
         request.urlretrieve(url_skin, skin_dir)
         return True
     except Exception as e:
-        print("Erreur dans le chargement du skin :\n", str(e), file=sys.stderr)
-        return False
+        raise Warning(f"Error while downloading skin: {e}")
 
 
 def get_img_from_skin(skin: pygame.Surface) -> dict:
@@ -77,7 +75,6 @@ def get_img_from_skin(skin: pygame.Surface) -> dict:
 
     # Creating Front skin
     emplacements_front_skin = {
-        #"head": (4, 0),
         "body": (4, 9),
         "cou": (6, 8),
         "left_leg": (4, 21),

@@ -1,5 +1,5 @@
 import pygame
-from ..entity import BaseEntity
+from ..entity import Mob
 from ..base_elements import RotatedImage
 import math
 from ..roots import SRC_ROOT, CACHE_ROOT, USER_ROOT
@@ -7,15 +7,19 @@ from .skin_loader import get_img_from_skin, download_skin
 from .. import Game
 from ..constants import GRAVITY, GameMode
 from .ia import PlayerIA
+from ..font import render_line
 
 import json
 import threading
 
-class Player(BaseEntity):
+class Player(Mob):
     """Classe auquel appartient uniquement le joueur"""
-    username = "None"
+
+    # Load default skin
+    username = None
     fragments: dict[str, dict[str, pygame.Surface] | pygame.Surface]
     fragments = get_img_from_skin(pygame.image.load(SRC_ROOT / "entity" / "player.png"))
+    username_overlay = None
 
     height = 1.9
     width = height / fragments["front"].get_height() * fragments["front"].get_width()
@@ -29,13 +33,17 @@ class Player(BaseEntity):
     ia: PlayerIA
 
     def set_img(self):
-        """Charge le skin du joueur"""
+        """Charge le skin du joueur, toujours lancé dans un thread
+        :return bool: True si le skin a été chargé, False sinon
+        """
         with open(USER_ROOT / "user.json") as file:
             user_data = json.load(file)
         self.username = user_data["username"]
         if self.username is None:
             skin_dir = SRC_ROOT / "entity" / "player.png"
         else:
+            self.username_overlay = render_line(self.username, "white", "black")
+
             skin_dir = CACHE_ROOT / ("skin_" + self.username + ".png")
             if not skin_dir.exists():
                 succes = download_skin(skin_dir, self.username)
@@ -58,7 +66,7 @@ class Player(BaseEntity):
 
         self.sneaking = False
         threading.Thread(target=self.set_img).start()
-        self.head_subnodule = RotatedImage(game, 0, 0.7, None, 0.5, 0.5)
+        self.head_subnodule = RotatedImage(game, 0, 0.7, width=0.5, height=0.5)
 
     def move(self, x, y):
         any_ = super().move(x, y)
@@ -123,9 +131,20 @@ class Player(BaseEntity):
     def draw(self, *_, **__):
         assert not _, _
         assert not __, __
+
+        # draw the body
         img = self.fragments["front"] if not self.sneaking else self.fragments["sneaking_front"]
         super().draw(img=img)
 
+        # draw the username overlay
+        if self.username_overlay is not None:
+            y = self.game.size_screen[1]/2 - self.head_subnodule.height * self.game.size_block * 3
+            height = 0.25 * self.game.size_block
+            width = height * self.username_overlay.get_width() / self.username_overlay.get_height()
+            resized_overlay = pygame.transform.scale(self.username_overlay, (int(width), int(height)))
+            self.screen.blit(resized_overlay, (self.game.size_screen[0]/2 - width/2, y))
+
+        # draw the head
         head_x = self.x+self.head_subnodule.x
         head_y = self.y+self.head_subnodule.y
         if self.mouse_player_dist is None:

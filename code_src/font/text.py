@@ -2,7 +2,7 @@ import string
 
 import pygame
 from .loader import FONTSIZE
-from .functions import get_surface_letter
+from .functions import render_letter
 from .colors import clr, id_to_hex, get_color_from_name
 
 
@@ -89,7 +89,7 @@ def get_text(text, alpha=70,
             if len(at) == 1:  # Bliting the char
                 left = x*WIDTHCHAR+padx
                 top = y*HEIGHTLINE+pady
-                char_surface = get_surface_letter(at, textcolor)
+                char_surface = render_letter(at, textcolor)
                 surface.blit(char_surface, (left, top))
                 if barre:
                     y_ = top+FONTSIZE//2

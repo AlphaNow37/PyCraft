@@ -4,7 +4,7 @@ import pygame
 from . import command
 import pyperclip
 from typing import Generator
-from ..font import get_text, FONTSIZE, get_surface_line
+from ..font import get_text, FONTSIZE, render_line
 
 
 class Chatmanager:
@@ -97,7 +97,7 @@ class Chatmanager:
 
     def update_input(self):
         self.inputs_surfaces = [
-            get_surface_line(f">>>{self.input[:self.barre_index]}{char}{self.input[self.barre_index:]}",
+            render_line(f">>>{self.input[:self.barre_index]}{char}{self.input[self.barre_index:]}",
                              "white", "black")
             for char in ["|", " "]
         ]
