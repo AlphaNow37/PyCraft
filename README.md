@@ -1,6 +1,8 @@
 # PyCraft
 > **PyCraft** is a 2d minecraft game with the python library pygame.
 
+![](pycraft_video-ezgif.com-optimize.gif)
+
 ## Features
 - Infinite 2D world, with procedural generation and various biomes/structures
 - Support for chat commands, for colouring characters and copy/paste
@@ -13,7 +15,6 @@
 - Optimised code using cProfile
 - Most features are highly customisable, by modifiing yaml saves
 
-![](pycraft_video.gif)
 
 ## Run it
 
