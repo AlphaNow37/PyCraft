@@ -23,9 +23,12 @@
 > Please give me feedback ! :-)
 
 > ### Used librairies:
-> `PyGame`
-> `requests`
-> `yaml`
-> `pyperclip`
+> `PyGame`, a lightweight game library.
+
+> `requests`, for calls to the Mojang's apis
+
+> `yaml`, for configurations
+
+> `pyperclip`: for copy/pasting
 
 ###  _By AlphaNow_
